@@ -1,0 +1,10 @@
+# 資料格式守則
+# 目標：repo 永遠保持細（估算 < 8 MB / 年），唔會被每日 report 撐爆。
+*.csv   text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+# 明確禁止入 repo 嘅大檔（保險索）
+*.xlsx  binary
+*.png   binary
+*.zip   binary
+*.gz    binary

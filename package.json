@@ -1,0 +1,15 @@
+{
+  "name": "quant-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "4 份每日量化報告（HK/US quant + Sentinel + Sentinel PMFX）交叉分析 dashboard",
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "engine": "node scripts/engine.mjs",
+    "build": "node scripts/build.mjs",
+    "all": "node scripts/sync.mjs && node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "serve": "node scripts/serve.mjs"
+  }
+}
