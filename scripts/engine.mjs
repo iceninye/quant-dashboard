@@ -87,6 +87,9 @@ export function sideOf(action) {          // +1 做多, -1 做空, 0 無方向
 export function quality(row) {
   const fails = [];
   const rr = n(row.rr), ev = n(row.net_ev), sp = n(row.stop_pct);
+  // Pending Data 佔位行（動態觀察名單數據不足）：全 0 值 + rr_valid 被錯誤設成 true
+  if (/^Pending$/i.test((row.action || '').trim())) fails.push('Pending Data（動態觀察名單數據不足）');
+  else if (n(row.close) === 0 || n(row.entry) === 0) fails.push('價格為 0（無有效報價）');
   if (String(row.err) === '1') fails.push('引擎異常 (error 欄非空)');
   if (String(row.rrv) !== '1') fails.push('RR 無效 (rr_valid=false)');
   if (String(row.net_rrv) !== '1') fails.push('淨 RR 無效 (net_rr_valid=false)');

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T17:40:34.302Z",
+ "generatedAt": "2026-10-16T17:50:15.134Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-16",
@@ -537,6 +537,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -573,6 +574,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -609,6 +611,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -645,6 +648,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -681,6 +685,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -717,6 +722,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -753,6 +759,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -789,6 +796,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -825,6 +833,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
@@ -861,6 +870,7 @@
    "score": 0,
    "tier": "EXCLUDED",
    "why": [
+    "Pending Data（動態觀察名單數據不足）",
     "淨 RR 無效 (net_rr_valid=false)",
     "無止損價",
     "RR < 1",
