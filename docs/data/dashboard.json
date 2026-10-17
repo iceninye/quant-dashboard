@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17T08:48:15.888Z",
+ "generatedAt": "2026-10-17T09:20:27.387Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-17",
@@ -34692,6 +34692,9 @@
   "sdExcess": null,
   "t": null,
   "needed": null,
+  "inconclusive": false,
+  "chainBad": [],
+  "future": [],
   "mismatches": [],
   "lateCount": 0
  },

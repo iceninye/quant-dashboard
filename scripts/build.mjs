@@ -116,7 +116,9 @@ ${D.factors.map((f) => f.byH.map((h, i) => `<tr><td>${i ? '' : esc(f.label)}</td
 <div class="kv"><span>平均每期超額</span><b class="${(FW.meanExcess || 0) > 0 ? 'good' : 'bad'}">${pct(FW.meanExcess)}</b></div>
 <div class="kv"><span>t</span><b>${fmt(FW.t)}</b></div>
 <div class="kv"><span>補記（late）</span><b>${FW.lateCount}</b></div></div>
-${FW.mismatches.length ? `<p class="warn">⚠ 紀錄同重算唔一致：${FW.mismatches.join('、')}（有人改過紀錄或數據）</p>` : ''}
+${FW.mismatches.length ? `<p class="warn">⚠ 紀錄同重算唔一致：${FW.mismatches.map((m) => `${m.date}（${{ 'log-edited': '輸入冇變但名單變 = 紀錄被改', restated: '名單同輸入都變 = 上游 restate 或兩邊被改', 'input-restated': '名單冇變但 mdd 值變咗 = 上游 restate' }[m.kind]}）`).join('、')}</p>` : ''}
+${FW.chainBad.length || FW.future.length ? `<p class="warn">⚠ 紀錄鏈驗證失敗：${[...FW.chainBad, ...FW.future.map((d) => d + '（未來日期）')].join('、')}</p>` : ''}
+${FW.inconclusive ? '<p class="warn">平均超額 ≤ 0：所需期數唔計（INCONCLUSIVE）。</p>' : ''}
 <div class="scroll"><table><thead><tr><th>簽名日</th><th>入場</th><th>出場</th><th>狀態</th><th>毛回報</th><th>成本</th><th>淨回報</th><th>等權</th><th>超額</th></tr></thead><tbody>
 ${FW.periods.slice().reverse().map((p) => `<tr><td>${p.signalDate}</td><td>${p.entry || '—'}</td><td>${p.exit || '—'}</td><td class="dim">${{ 'pending-entry': '等入場日', open: '持有中', settled: '已結算' }[p.status]}</td>
 <td>${pct(p.gross)}</td><td class="dim">${pct(p.cost)}</td><td>${pct(p.net)}</td><td class="dim">${pct(p.bench)}</td><td class="${(p.excess || 0) > 0 ? 'good' : 'bad'}">${pct(p.excess)}</td></tr>`).join('')}

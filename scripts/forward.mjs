@@ -9,10 +9,25 @@
 //   對手 : 同日兩端都有價嘅全部標的等權（唔扣成本）
 // 訊號只用訊號日當日數據，所以遲咗 build 都可以重現；`built_at` 同 `late` 記低有冇事後補。
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import { parseCsv, toCsv, num } from './lib/csv.mjs';
 
 export const RULE = { version: 'hk-lowmdd-v1', liveFrom: '2026-10-16', top: 10, stepDays: 28, costBps: 30, minNames: 30 };
-export const LOG_COLS = ['signal_date', 'rule', 'tickers', 'built_at', 'late'];
+export const LOG_COLS = ['signal_date', 'rule', 'tickers', 'mdd_hash', 'built_at', 'late', 'prev_hash', 'hash'];
+const sha = (x) => crypto.createHash('sha256').update(x).digest('hex').slice(0, 16);
+// 輸入指紋：頭 N 隻嘅 ticker:mdd（排序後）。用嚟分「上游 restate」同「紀錄被改」
+export const mddHash = (rows, date, tickers) => {
+  const m = new Map(rows.filter((r) => r.date === date).map((r) => [r.ticker, r.mdd]));
+  return sha(tickers.slice().sort().map((t) => `${t}:${Number(m.get(t)).toFixed(6)}`).join('|'));
+};
+// 鏈：hash = sha(prev_hash | 全部欄位)；任何一欄被改、行被插入／刪走都會斷鏈。
+// 只防意外同無心改動；有人重算整條鏈就要靠 git history 做最終錨點。
+export const rowHash = (r, prev) => sha([prev, r.signal_date, r.rule, r.tickers, r.mdd_hash, r.built_at, r.late].join('|'));
+export function verifyChain(rows) {
+  let prev = '', bad = [];
+  rows.forEach((r) => { if (r.prev_hash !== prev || r.hash !== rowHash(r, prev)) bad.push(r.signal_date); prev = r.hash; });
+  return bad;
+}
 const DAY = 86400000;
 const addDays = (d, k) => new Date(Date.parse(d) + k * DAY).toISOString().slice(0, 10);
 const diffDays = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / DAY);
@@ -50,7 +65,11 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
     if (c > 0) (px.get(r.date) || px.set(r.date, new Map()).get(r.date)).set(r.ticker, c);
   }
   const sigs = signalDates(dates, rule);
-  const have = new Map(existing.map((r) => [r.signal_date, r]));
+  const chainBad = verifyChain(existing);
+  const lastDate = dates.at(-1) || '';
+  const future = existing.filter((r) => r.signal_date > lastDate).map((r) => r.signal_date);
+  const have = new Map(existing.filter((r) => r.rule === rule.version).map((r) => [r.signal_date, r]));
+  let tail = existing.length ? existing.at(-1).hash : '';
   const newRows = [];
   const mismatches = [];
   const items = [];
@@ -58,8 +77,15 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
     const t = pick(hkRows, s.date, rule);
     if (!t) continue;
     const logged = have.get(s.date);
-    if (logged) { if (logged.tickers !== t.join(' ')) mismatches.push(s.date); }
-    else newRows.push({ signal_date: s.date, rule: rule.version, tickers: t.join(' '), built_at: builtAt, late: diffDays(s.date, builtAt) > 4 ? '1' : '0' });
+    const mh = mddHash(hkRows, s.date, t);
+    if (logged) {
+      const sameT = logged.tickers === t.join(' '), sameH = logged.mdd_hash === mh;
+      // 名單同輸入都變 / 淨輸入變 = 上游 restate（或兩邊一齊被改）；輸入唔變但名單變 = 紀錄被改
+      if (!sameT || !sameH) mismatches.push({ date: s.date, kind: sameT ? 'input-restated' : sameH ? 'log-edited' : 'restated' });
+    } else {
+      const r = { signal_date: s.date, rule: rule.version, tickers: t.join(' '), mdd_hash: mh, built_at: builtAt, late: diffDays(s.date, builtAt) > 4 ? '1' : '0', prev_hash: tail };
+      r.hash = rowHash(r, tail); tail = r.hash; newRows.push(r);
+    }
     items.push({ date: s.date, tickers: logged ? logged.tickers.split(' ') : t, late: logged ? logged.late === '1' : diffDays(s.date, builtAt) > 4 });
   }
   const entryOf = (d) => dates.find((x) => x > d) || null;
@@ -91,7 +117,10 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
     meanExcess: r4(m), sdExcess: r4(sd),
     t: sd ? Math.round(100 * m / sd * Math.sqrt(ex.length)) / 100 : null,
     // 6 年回測每期超額 +1.16%、sd 約 5.45% → |t|=2 需約 89 期；以現時 forward 平均／sd 推算只作參考
-    needed: m && sd ? Math.ceil((2 * sd / Math.abs(m)) ** 2) : null,
+    // 平均超額 ≤ 0 → 唔計（inconclusive），免得負值畀出睇落合理嘅期數
+    needed: m > 0 && sd ? Math.ceil((2 * sd / m) ** 2) : null,
+    inconclusive: m !== null && m <= 0,
+    chainBad, future,
     mismatches, lateCount: items.filter((x) => x.late).length,
   };
   return { summary, newRows };
@@ -100,7 +129,9 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
 export function appendLog(file, newRows) {
   if (!newRows.length) return;
   fs.mkdirSync(file.replace(/[/\\][^/\\]*$/, ''), { recursive: true });
-  const exists = fs.existsSync(file) && fs.readFileSync(file, 'utf8').trim().length > 0;
+  const cur = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+  const exists = cur.trim().length > 0;
   const body = toCsv(LOG_COLS, newRows);
-  fs.appendFileSync(file, exists ? body.split('\n').slice(1).join('\n') : body);
+  // 檔尾冇換行就先補一個，否則新行會黏落最後一行
+  fs.appendFileSync(file, (exists && !cur.endsWith('\n') ? '\n' : '') + (exists ? body.split('\n').slice(1).join('\n') : body));
 }

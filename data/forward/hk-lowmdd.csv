@@ -1,2 +1,2 @@
-signal_date,rule,tickers,built_at,late
-2026-10-16,hk-lowmdd-v1,0002.HK 2388.HK 0941.HK 1398.HK 3988.HK 0939.HK 0003.HK 0006.HK 0270.HK 0066.HK,2026-10-17,0
+signal_date,rule,tickers,mdd_hash,built_at,late,prev_hash,hash
+2026-10-16,hk-lowmdd-v1,0002.HK 2388.HK 0941.HK 1398.HK 3988.HK 0939.HK 0003.HK 0006.HK 0270.HK 0066.HK,7fdb2f4bee726d26,2026-10-17,0,,47b22b25233e26f6
