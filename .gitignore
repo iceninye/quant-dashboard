@@ -2,3 +2,20 @@ node_modules/
 .DS_Store
 *.log
 /tmp/
+
+# Python 產物 — 唔應該入 repo
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 環境變數（真值永不入 repo，只保留 .env.example）
+.env
+.env.local
+
+# 原始報告（守則：只 push 壓縮後結構化數據）
+*.xlsx
+*.png
+*.zip
+*.gz
