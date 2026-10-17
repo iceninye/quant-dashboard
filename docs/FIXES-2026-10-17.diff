@@ -1,0 +1,98 @@
+--- src/core.py.bak-20261017	2026-10-17 08:59:02.898432830 +0800
++++ src/core.py	2026-10-17 08:59:11.510526810 +0800
+@@ -253,6 +253,12 @@
+     if col is None:
+         return None
+     s = df[col].astype(float).dropna()
++    # 【Fix 2b】幫 benchmark 補 DatetimeIndex（beta/alpha 嘅 index intersection 需要）
++    if "Date" in df.columns and len(s) == len(df):
++        try:
++            s = pd.Series(s.to_numpy(), index=pd.to_datetime(df["Date"], errors="coerce")).dropna()
++        except Exception:
++            pass
+     return s if len(s) > 0 else None
+ 
+ def save_df(df: pd.DataFrame, path: str | Path):
+@@ -400,7 +406,12 @@
+             return {}
+         ret = close.pct_change().dropna()
+         ann = 252
+-        n_days = (close.index[-1] - close.index[0]).days
++        # 【Fix 2】index 唔一定係日期；RangeIndex 相減會得 int，冇 .days
++        if isinstance(close.index, pd.DatetimeIndex) and len(close) > 1:
++            n_days = max(int((close.index[-1] - close.index[0]).days), 1)
++        else:
++            # fallback：交易日 → 日曆日（252 交易日 ≈ 365 日）
++            n_days = max(int(round((len(close) - 1) * 365.0 / 252.0)), 1)
+         total_ret = float(close.iloc[-1] / close.iloc[0] - 1)
+         ann_ret = float((1 + total_ret) ** (365.0 / n_days) - 1) if n_days > 0 else 0.0
+         ann_vol = float(ret.std() * np.sqrt(ann))
+@@ -987,7 +998,14 @@
+     sim_steps: int = 300,
+     seed: int = 42,
+ ) -> dict:
+-    close = hist["Close"].astype(float).dropna()
++    # 【Fix 1】用真實日期做 index：metrics() 同 beta 都要 DatetimeIndex
++    # 原本 hist 係 reset_index(drop=True) → RangeIndex → (index[-1]-index[0]).days 會 AttributeError
++    if "Date" in hist.columns:
++        _idx = pd.to_datetime(hist["Date"], errors="coerce")
++        close = pd.Series(hist["Close"].astype(float).to_numpy(), index=_idx).dropna()
++        close = close[~close.index.isna()]
++    else:
++        close = hist["Close"].astype(float).dropna()
+     m     = metrics(close, benchmark)
+     if not m:
+         return {}
+@@ -1023,16 +1041,19 @@
+         target = last
+ 
+     # ─── 止蝕計算 ───
++    # 【Fix 3】最低止損距離：避免 clamp 之後止損貼住 entry（risk≈0 → RR 爆表到 90+）
++    min_dist = max(0.005 * entry, 0.5 * a if pd.notna(a) else 0.02 * entry)
+     if vote["action"] == "沽":
+         atr_stop = entry + 1.5 * a if pd.notna(a) else entry * 1.08
+         res_stop = (res * 1.01) if pd.notna(res) else entry * 1.08
+         stop     = min(atr_stop, res_stop)
+-        stop     = max(stop, entry * 1.001)
++        stop     = max(stop, entry * 1.001, entry + min_dist)
+     else:
+         atr_stop = entry - 1.5 * a if pd.notna(a) else entry * 0.92
+         sup_stop = (sup * 0.99) if pd.notna(sup) else entry * 0.92
+         stop     = max(min(atr_stop, sup_stop), entry * 0.01)
+-        stop     = min(stop, entry * 0.999)
++        stop     = min(stop, entry * 0.999, entry - min_dist)
++        stop     = max(stop, entry * 0.01)
+ 
+     risk   = max(abs(entry - stop), 1e-12)
+     reward = max(abs(target - entry), 0.0)
+@@ -1062,7 +1083,7 @@
+     opp += 2.0 if vote["action"] == "買" else 1.0 if vote["action"] == "沽" else 0.0
+     opp += 1.0 if pd.notna(rr) and rr >= 2.0 else 0.0
+     opp += 1.0 if m.get("sharpe", 0) > 1.0 else 0.0
+-    opp += 1.0 if m.get("max_drawdown", 0) > -0.15 else 0.0
++    opp += 1.0 if m.get("max_drawdown", -1.0) > -0.15 else 0.0  # 【Fix 4a】default -1：缺數據唔加分
+     opp += 1.0 if rs < 30 or rs > 70 else 0.0
+     opp += 0.5 if abs(vote["vote_score"]) > 1.5 else 0.0
+ 
+@@ -1078,7 +1099,7 @@
+     _net_rr, _net_ev = calculate_net_rr_ev(entry, target, stop, vote["action"], success * 100)
+     net_rr = _net_rr
+     net_ev = _net_ev
+-    net_rr_valid = net_rr >= 0.5
++    net_rr_valid = bool(rr_valid and pd.notna(net_rr) and net_rr >= 0.5)  # 【Fix 5】同 rr_valid 一致化
+ 
+     return {
+         "ticker":       ticker,
+@@ -1273,7 +1294,12 @@
+                 'success_rate': 0, 'reward_risk': 0,
+                 'entry_price': 0, 'target_price': 0, 'stop_loss': 0,
+                 'last_price': 0, 'expected_value': 0,
+-                'vote_score': 0, 'vote_count': 0, 'rr_valid': True,
++                'vote_score': 0, 'vote_count': 0,
++                # 【Fix 4b】0/0 唔係 valid；原本 True 會令下游以為有有效訊號
++                'rr_valid': False,
++                'source': next((w['source'] for w in _wl if w['ticker'] == pt), ''),
++                'quant_sharpe': next((w['sharpe'] for w in _wl if w['ticker'] == pt), None),
++                'error': 'insufficient_history',
+             } for pt in _wl_pending])
+             df = pd.concat([df, pending_df], ignore_index=True)

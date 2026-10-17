@@ -1,8 +1,8 @@
 {
- "generatedAt": "2026-10-16T17:50:15.134Z",
+ "generatedAt": "2026-10-17T01:03:45.244Z",
  "dates": {
   "hk": "2026-10-16",
-  "us": "2026-10-16",
+  "us": "2026-10-17",
   "sen": "2026-10-16"
  },
  "pmfxDate": "2026-10-17",
@@ -715,8 +715,8 @@
    "rrv": true,
    "cons": -0.25,
    "notes": [
-    "Sharpe 排 85%ile",
-    "月回報 -5.2%"
+    "Sharpe 排 86%ile",
+    "月回報 -4.4%"
    ],
    "risk": null,
    "score": 0,
@@ -750,10 +750,10 @@
    "sharpe": null,
    "err": false,
    "rrv": true,
-   "cons": -0.75,
+   "cons": -0.25,
    "notes": [
     "Sharpe 排 95%ile",
-    "月回報 2.5%"
+    "月回報 -1.9%"
    ],
    "risk": null,
    "score": 0,
@@ -787,10 +787,10 @@
    "sharpe": null,
    "err": false,
    "rrv": true,
-   "cons": -0.75,
+   "cons": -0.25,
    "notes": [
     "Sharpe 排 100%ile",
-    "月回報 0.4%"
+    "月回報 -5.1%"
    ],
    "risk": null,
    "score": 0,
@@ -826,8 +826,8 @@
    "rrv": true,
    "cons": -0.25,
    "notes": [
-    "Sharpe 排 98%ile",
-    "月回報 -10.4%"
+    "Sharpe 排 96%ile",
+    "月回報 -18.3%"
    ],
    "risk": null,
    "score": 0,
@@ -864,7 +864,7 @@
    "cons": -0.25,
    "notes": [
     "Sharpe 排 97%ile",
-    "月回報 -13.5%"
+    "月回報 -20.4%"
    ],
    "risk": null,
    "score": 0,

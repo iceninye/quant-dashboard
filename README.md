@@ -41,6 +41,15 @@ docs/data/dashboard.json                         # 完整引擎輸出（供程�
 scripts/{sync,engine,build,check}.mjs + lib/{csv,sources}.mjs
 ```
 
+## 文件
+
+| 檔案 | 內容 |
+|---|---|
+| [docs/REPORTS.md](docs/REPORTS.md) | **四份報告完整結構**：cron、目錄樹、每個 CSV 嘅欄位字典、已知問題 |
+| [docs/PIPELINE.md](docs/PIPELINE.md) | 系統全景：產生層 4 個 Python project + 分析層 JS，每隻函數嘅行號同作用 |
+| [docs/FIXES.md](docs/FIXES.md) | 2026-10-17 Sentinel PMFX 修復記錄：3 個 root cause、5 處改動、前後實測數字、rollback |
+| [docs/APP.md](docs/APP.md) | 本 dashboard 嘅運作流程同設計取態 |
+
 ## 免責
 
 所有數字係模型輸出（Monte Carlo / 策略投票 / 統計指標），**未經交易驗證**，唔構成投資建議。
