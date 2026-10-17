@@ -17,7 +17,13 @@ const pct = (v, d = 2) => (v === null || v === undefined ? '—' : (v * 100).toF
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const FT = 2;  // 同 factors.mjs FCFG.tPass
-const PN = D.pmfxNew, FW = D.forward;
+const PN = D.pmfxNew, FW = D.forward, V2 = D.forwardV2;
+const V2pair = (() => {
+  if (!V2) return { n: 0 };
+  const m = new Map(V2.periods.filter((p) => p.excess !== undefined).map((p) => [p.signalDate, p.excess]));
+  const d = FW.periods.filter((p) => p.excess !== undefined && m.has(p.signalDate)).map((p) => p.excess - m.get(p.signalDate));
+  return { n: d.length, diff: d.length ? d.reduce((a, b) => a + b, 0) / d.length : null };
+})();
 const pmOpen = PN.settled >= PN.needed;
 const pass = D.factors.filter((f) => f.grade === 'pass' && f.market !== 'sentinel');
 const watch = D.factors.filter((f) => f.grade === 'watch' && f.market !== 'sentinel');
@@ -123,6 +129,13 @@ ${FW.inconclusive ? '<p class="warn">平均超額 ≤ 0：所需期數唔計（I
 ${FW.periods.slice().reverse().map((p) => `<tr><td>${p.signalDate}</td><td>${p.entry || '—'}</td><td>${p.exit || '—'}</td><td class="dim">${{ 'pending-entry': '等入場日', open: '持有中', settled: '已結算' }[p.status]}</td>
 <td>${pct(p.gross)}</td><td class="dim">${pct(p.cost)}</td><td>${pct(p.net)}</td><td class="dim">${pct(p.bench)}</td><td class="${(p.excess || 0) > 0 ? 'good' : 'bad'}">${pct(p.excess)}</td></tr>`).join('')}
 </tbody></table></div>
+<div class="card" style="margin-top:10px"><b>影子紀錄 v2（trailing 252 日 MDD，<code>hk-lowmdd-252-v1</code>）</b>
+${V2 ? `<div class="grid"><div class="kv"><span>已簽期數</span><b>${V2.periods.length}</b></div><div class="kv"><span>已結算</span><b>${V2.settled}</b></div>
+<div class="kv"><span>平均每期超額</span><b class="${(V2.meanExcess || 0) > 0 ? 'good' : 'bad'}">${pct(V2.meanExcess)}</b></div>
+<div class="kv"><span>v1 − v2（同期）</span><b>${V2pair.n ? pct(V2pair.diff) + '（' + V2pair.n + ' 期）' : '—'}</b></div></div>
+${V2.chainBad.length || V2.future.length ? `<p class="warn">⚠ v2 紀錄鏈驗證失敗：${[...V2.chainBad, ...V2.future].join('、')}</p>` : ''}
+<p class="note">v2 名單係本機用 prices 檔簽名，repo 重算唔到，所以只驗鏈完整性，唔驗名單。影子紀錄，不入觀察 / 通過。</p>`
+: '<p class="dim">未有簽名。由本機行 <code>node scripts/sign_v2.mjs --prices &lt;prices_*.csv&gt; --apply</code> 簽。</p>'}</div>
 <p class="note">統計力：回測每期超額 sd 約 5%，要 |t| = 2 約需 89 期（≈ 7.4 年）。12 個月只有約 13 期，所以頭幾年只可以講「方向一致 / 唔一致」，<b>唔可以講驗證通過</b>。
 注意：呢度用 repo 嘅 <code>mdd</code> 欄（約 2 年回撤），同 <code>docs/WFO.md</code> 用嘅 trailing W（63/126/252 日）係兩個唔同嘅訊號定義。</p></div>
 

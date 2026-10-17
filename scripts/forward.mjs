@@ -13,6 +13,9 @@ import crypto from 'node:crypto';
 import { parseCsv, toCsv, num } from './lib/csv.mjs';
 
 export const RULE = { version: 'hk-lowmdd-v1', liveFrom: '2026-10-16', top: 10, stepDays: 28, costBps: 30, minNames: 30 };
+// 影子紀錄 v2：訊號改用 trailing 252 日最大回撤（對應 WFO 6 年樣本 4 個 fold 全部揀中嘅 W）。
+// repo 得約 63 個港股交易日，算唔到，所以由本機 prices 檔簽名（scripts/sign_v2.mjs）；其餘規則同 v1 完全一樣。
+export const RULE_V2 = { ...RULE, version: 'hk-lowmdd-252-v1', window: 252 };
 export const LOG_COLS = ['signal_date', 'rule', 'tickers', 'mdd_hash', 'built_at', 'late', 'prev_hash', 'hash'];
 const sha = (x) => crypto.createHash('sha256').update(x).digest('hex').slice(0, 16);
 // 輸入指紋：頭 N 隻嘅 ticker:mdd（排序後）。用嚟分「上游 restate」同「紀錄被改」
@@ -52,6 +55,57 @@ export function pick(rows, date, rule = RULE) {
   return day.sort((a, b) => num(b.mdd) - num(a.mdd) || (a.ticker < b.ticker ? -1 : 1)).slice(0, rule.top).map((r) => r.ticker);
 }
 
+function priceIndex(hkRows) {
+  const px = new Map();
+  for (const r of hkRows) {
+    const c = num(r.close);
+    if (c > 0) (px.get(r.date) || px.set(r.date, new Map()).get(r.date)).set(r.ticker, c);
+  }
+  return px;
+}
+
+// 只評估紀錄入面已簽嘅名單（唔重算訊號）：用喺 v2 呢類 repo 內重算唔到訊號嘅紀錄
+export function evaluateLogged(hkRows, logRows, rule = RULE_V2) {
+  const dates = [...new Set(hkRows.map((r) => r.date))].sort();
+  const mine = logRows.filter((r) => r.rule === rule.version).sort((a, b) => (a.signal_date < b.signal_date ? -1 : 1));
+  const items = mine.map((r) => ({ date: r.signal_date, tickers: r.tickers.split(' '), late: r.late === '1' }));
+  const future = logRows.filter((r) => r.signal_date > (dates.at(-1) || '')).map((r) => r.signal_date);
+  return summarize(dates, priceIndex(hkRows), items, rule, { chainBad: verifyChain(logRows), future, mismatches: [], unverifiable: true });
+}
+
+// 由本機 prices 寬表（首欄日期、其餘欄 ticker，已復權）簽 trailing-window MDD 名單。
+// 只用簽名日及之前嘅數據；universe = 簽名日 repo 內有收市價嘅港股 ∩ prices 檔欄位（時點一致，冇倖存者偏差）。
+// MDD 係比例，整份歷史乘同一常數（之後除息嘅復權）唔影響結果，所以用較遲嘅快照簽舊日期亦重現到。
+export function signWindowed(wide, hkRows, existing = [], builtAt = new Date().toISOString().slice(0, 10), rule = RULE_V2) {
+  const dcol = Object.keys(wide[0] || {})[0];
+  const rows = wide.map((r) => ({ ...r, __d: String(r[dcol]).slice(0, 10) })).sort((a, b) => (a.__d < b.__d ? -1 : 1));
+  const dates = [...new Set(hkRows.map((r) => r.date))].sort();
+  const have = new Set(existing.filter((r) => r.rule === rule.version).map((r) => r.signal_date));
+  let tail = existing.length ? existing.at(-1).hash : '';
+  const newRows = [], skipped = [];
+  for (const s of signalDates(dates, rule)) {
+    if (have.has(s.date)) continue;
+    const upto = rows.filter((r) => r.__d <= s.date);
+    if (upto.at(-1)?.__d !== s.date) { skipped.push({ date: s.date, reason: 'prices 檔冇簽名日當日數據' }); continue; }
+    const win = upto.slice(-rule.window);
+    if (win.length < rule.window) { skipped.push({ date: s.date, reason: `prices 只有 ${win.length} 日，唔夠 ${rule.window}` }); continue; }
+    const live = new Set(hkRows.filter((r) => r.date === s.date && num(r.close) > 0).map((r) => r.ticker));
+    const mdds = [];
+    for (const t of live) {
+      const ps = win.map((r) => num(r[t]));
+      if (ps.some((x) => !(x > 0))) continue;                      // 窗口內有缺 → 唔入選，唔補值
+      let peak = 0, mn = 0;
+      for (const x of ps) { peak = Math.max(peak, x); mn = Math.min(mn, x / peak - 1); }
+      mdds.push({ date: s.date, ticker: t, mdd: mn });
+    }
+    if (mdds.length < rule.minNames) { skipped.push({ date: s.date, reason: `可計 MDD 嘅股票只有 ${mdds.length}` }); continue; }
+    const top = mdds.sort((a, b) => b.mdd - a.mdd || (a.ticker < b.ticker ? -1 : 1)).slice(0, rule.top).map((x) => x.ticker);
+    const r = { signal_date: s.date, rule: rule.version, tickers: top.join(' '), mdd_hash: mddHash(mdds, s.date, top), built_at: builtAt, late: diffDays(s.date, builtAt) > 4 ? '1' : '0', prev_hash: tail };
+    r.hash = rowHash(r, tail); tail = r.hash; newRows.push(r);
+  }
+  return { newRows, skipped };
+}
+
 export function readLog(file) {
   return fs.existsSync(file) ? parseCsv(fs.readFileSync(file, 'utf8')) : [];
 }
@@ -59,11 +113,7 @@ export function readLog(file) {
 // 純計算：返回 { summary, newRows }；唔寫檔
 export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOString().slice(0, 10), rule = RULE) {
   const dates = [...new Set(hkRows.map((r) => r.date))].sort();
-  const px = new Map();
-  for (const r of hkRows) {
-    const c = num(r.close);
-    if (c > 0) (px.get(r.date) || px.set(r.date, new Map()).get(r.date)).set(r.ticker, c);
-  }
+  const px = priceIndex(hkRows);
   const sigs = signalDates(dates, rule);
   const chainBad = verifyChain(existing);
   const lastDate = dates.at(-1) || '';
@@ -88,6 +138,13 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
     }
     items.push({ date: s.date, tickers: logged ? logged.tickers.split(' ') : t, late: logged ? logged.late === '1' : diffDays(s.date, builtAt) > 4 });
   }
+  const summary = summarize(dates, px, items, rule, { chainBad, future, mismatches });
+  return { summary, newRows };
+}
+
+
+// 由簽名清單計每期回報同統計（forwardLog 同 evaluateLogged 共用）
+function summarize(dates, px, items, rule, extra) {
   const entryOf = (d) => dates.find((x) => x > d) || null;
   let prev = null;
   const periods = items.map((it, i) => {
@@ -112,7 +169,7 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
   const ex = done.map((p) => p.excess);
   const m = ex.length ? ex.reduce((s, x) => s + x, 0) / ex.length : null;
   const sd = ex.length > 1 ? Math.sqrt(ex.reduce((s, x) => s + (x - m) ** 2, 0) / (ex.length - 1)) : null;
-  const summary = {
+  return {
     rule, settled: done.length, periods,
     meanExcess: r4(m), sdExcess: r4(sd),
     t: sd ? Math.round(100 * m / sd * Math.sqrt(ex.length)) / 100 : null,
@@ -120,10 +177,8 @@ export function forwardLog(hkRows, existing = [], builtAt = new Date().toISOStri
     // 平均超額 ≤ 0 → 唔計（inconclusive），免得負值畀出睇落合理嘅期數
     needed: m > 0 && sd ? Math.ceil((2 * sd / m) ** 2) : null,
     inconclusive: m !== null && m <= 0,
-    chainBad, future,
-    mismatches, lateCount: items.filter((x) => x.late).length,
+    ...extra, lateCount: items.filter((x) => x.late).length,
   };
-  return { summary, newRows };
 }
 
 export function appendLog(file, newRows) {

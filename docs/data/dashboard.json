@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17T12:08:07.343Z",
+ "generatedAt": "2026-10-17T12:15:02.856Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-17",
@@ -34698,6 +34698,7 @@
   "mismatches": [],
   "lateCount": 0
  },
+ "forwardV2": null,
  "pmfxNew": {
   "since": "2026-10-17",
   "settled": 0,

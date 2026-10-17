@@ -144,6 +144,40 @@ const F2 = await import('./factors.mjs');
   ok(crash.get('C').px[0] === 100, '單日 −42%（唔係整數比例）唔當拆股');
 }
 
+console.log('Forward v2（trailing 252 影子紀錄）');
+{
+  const rule = { ...FW.RULE_V2, liveFrom: '2026-01-05', top: 5, window: 12, minNames: 30 };
+  const start = Date.parse('2026-01-05'), hk = [], dts = [];
+  for (let d = 0; d < 80; d++) {
+    const dt = new Date(start + d * 86400000);
+    if ([0, 6].includes(dt.getUTCDay())) continue;
+    dts.push(dt.toISOString().slice(0, 10));
+  }
+  const wide = [];
+  dts.forEach((date, di) => {
+    const w = { date: date + ' 00:00:00' };
+    for (let i = 0; i < 40; i++) {
+      const t = 'T' + String(i).padStart(2, '0') + '.HK';
+      // i 越細回撤越淺：每隔幾日跌 i% 再回升
+      const p = 100 * (1 + 0.001 * di) * (1 - (di % 7 === 3 ? 0.002 * i : 0));
+      w[t] = String(p);
+      hk.push({ date, ticker: t, close: String(p), mdd: '' });
+    }
+    wide.push(w);
+  });
+  const a = FW.signWindowed(wide, hk, [], '2026-04-01', rule);
+  ok(a.newRows.length >= 2 && a.newRows[0].tickers.startsWith('T00.HK'), `簽 ${a.newRows.length} 期，最淺回撤 T00 排頭`);
+  ok(FW.verifyChain(a.newRows).length === 0 && a.newRows[0].rule === rule.version, 'v2 hash 鏈完整');
+  ok(FW.signWindowed(wide, hk, a.newRows, '2026-04-01', rule).newRows.length === 0, '重簽冪等');
+  const scaled = wide.map((w) => Object.fromEntries(Object.entries(w).map(([k, v]) => [k, k === 'date' ? v : String(Number(v) * 0.93)])));
+  ok(FW.signWindowed(scaled, hk, [], '2026-04-01', rule).newRows.map((r) => r.tickers).join('|') === a.newRows.map((r) => r.tickers).join('|'), '整份歷史乘常數（之後除息復權）名單不變');
+  const short = FW.signWindowed(wide.slice(-10), hk, [], '2026-04-01', rule);
+  ok(short.newRows.length === 0 && short.skipped.length >= 1, 'prices 唔夠日數 → 跳過並講原因');
+  const ev = FW.evaluateLogged(hk, a.newRows, rule);
+  ok(ev.periods.length === a.newRows.length && ev.unverifiable && ev.chainBad.length === 0, '評估已簽名單（唔重算）');
+  ok(FW.evaluateLogged(hk, a.newRows.map((r, i) => (i ? r : { ...r, tickers: 'X.HK' })), rule).chainBad.length >= 1, '改名單斷鏈');
+}
+
 console.log('引擎輸出');
 const res = E.run();
 ok(res.quality.total > 0, `PMFX 標的數 ${res.quality.total}`);

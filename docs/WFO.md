@@ -46,3 +46,14 @@ Power：港股 6 年樣本要 |t| = 2 需約 89 個持有期（≈ 7.4 年），
 - 每月用「當日 universe」嘅 `prices_<日>.csv` 逐月累積，唔好回填歷史名單。
 - 約 12 個月後再跑一次，睇超額 t 有冇站穩。**但 12 個月只得約 25 期**（21 日一期），遠低於 power 要求嘅 89 期 → 到時只可以講「方向一致／唔一致」，仍然唔可以講「驗證通過」。
 - 在此之前，Dashboard 只將佢列為「觀察名單」（見 `docs/index.html` §1）。
+
+## 影子紀錄 v2（trailing 252）
+
+`hk-lowmdd-252-v1`：訊號改用 trailing 252 日最大回撤（6 年樣本 4 個 fold 全部揀中 252），其餘規則同 forward log v1 一樣。repo 只有約 63 個港股交易日，算唔到，所以由本機用 prices 檔簽名：
+
+```
+node scripts/sign_v2.mjs --prices <prices_*.csv>          # dry-run
+node scripts/sign_v2.mjs --prices <prices_*.csv> --apply  # 寫 data/forward/hk-lowmdd-252.csv，之後開 PR
+```
+
+簽名日 = 2026-10-16 起每 28 日曆日；Dashboard §3 只驗鏈完整性並顯示 v1 − v2 同期差，**不入觀察／通過**。v1 同 v2 高度相關，並行累積唔會縮短所需期數（約 89 期）。
