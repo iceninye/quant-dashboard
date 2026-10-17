@@ -11,10 +11,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, num } from './lib/csv.mjs';
 import { priceSeries, validateFactors, picksFor } from './factors.mjs';
-import { forwardLog, readLog, appendLog } from './forward.mjs';
+import { forwardLog, readLog, appendLog, evaluateLogged } from './forward.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FORWARD_FILE = path.join(ROOT, 'data', 'forward', 'hk-lowmdd.csv');
+const FORWARD_V2_FILE = path.join(ROOT, 'data', 'forward', 'hk-lowmdd-252.csv');
 const PMFX_FIXED_FROM = '2026-10-17';
 export const CFG = {
   minStopPct: 0.3,     // 止損距離 < 0.3% 視為退化（今日 BTC-USD 得 0.1%）
@@ -325,6 +326,8 @@ export function run() {
   const factors = validateFactors(fam, priceMap(fam));
   const pmLatest = new Map(pmRows.map((r) => [r.ticker, r]));
   const fl = forwardLog(fam.hk, readLog(FORWARD_FILE));
+  const fv2 = readLog(FORWARD_V2_FILE);
+  const forwardV2 = fv2.length ? evaluateLogged(fam.hk, fv2) : null;   // 影子紀錄：只評估已簽名單
   // PMFX 修正後（2026-10-17 起）嘅乾淨訊號結算樣本；結算夠 needed 個先重新評估
   const newT = tracking.filter((x) => x.date >= PMFX_FIXED_FROM && x.clean && ['target', 'stop', 'timeout'].includes(x.outcome));
   const r5s = newT.filter((x) => x.r5 !== null).map((x) => x.r5);
@@ -341,7 +344,7 @@ export function run() {
     trackingStats: { clean: stat(byTier('clean')), all: stat(tracking) },
     audit: audit(fam, tracking),
     series: buildSeries(fam),
-    factors, picks, forward: fl.summary, forwardNew: fl.newRows, pmfxNew,
+    factors, picks, forward: fl.summary, forwardNew: fl.newRows, forwardV2, pmfxNew,
     dataAudit: dataAudit(fam),
   };
 }
