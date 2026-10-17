@@ -3,7 +3,11 @@
 //   node scripts/backfill_prices.mjs --prices ... --apply                                                # 寫 data/backfill/closes.csv
 // 只補「repo 內該 ticker 該日冇有效收市價」嘅日子，範圍限於 repo 現有日期區間；已有嘅 repo 數據永遠優先，唔覆蓋。
 // 補嘅只係收市價（畀前向回報用），唔係 mdd / sharpe 等訊號欄，所以唔會令缺口期出現新訊號。
-// 先用重疊日比對：同 repo 收市價偏差太大（復權口徑唔同）就拒絕。
+// prices 檔係「整份按快照日復權」，repo 係「每日未復權收市」，所以同一隻股票兩邊差一個比例（股息 / 拆股累積）。
+// 逐隻股票用缺口前後最近嘅重疊日計比例 r = repo / prices：
+//   前後比例一致（差 ≤ 0.3%）→ 缺口內冇股息 / 拆股，將 prices 乘 r 換成 repo 基準，先補；
+//   前後比例唔一致（缺口內有除息或拆股）或缺任何一邊重疊 → 呢隻呢日唔補。
+// 整體要有 ≥ 60% 有缺口嘅股票能補，同 ≥ 30 個重疊點，否則拒絕。
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,45 +16,60 @@ import { loadAll } from './engine.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const BACKFILL_FILE = path.join(ROOT, 'data', 'backfill', 'closes.csv');
-const COLS = ['date', 'ticker', 'close', 'source'];
-export const LIMITS = { medianAbs: 0.002, p95Abs: 0.01 };
+const COLS = ['date', 'ticker', 'close', 'source', 'scale'];
+export const LIMITS = { ratioTol: 0.003, minOverlap: 30, minAccepted: 0.6 };
 
 export function readBackfill(file = BACKFILL_FILE) {
   return fs.existsSync(file) ? parseCsv(fs.readFileSync(file, 'utf8')) : [];
 }
 
-// 純計算：wide（parseCsv 結果）+ repo 行 + 現有 backfill → { add, overlap, rejected }
+// 純計算：wide（parseCsv 結果）+ repo 行 + 現有 backfill → { add, overlap, perTicker, rejected, range }
 export function planBackfill(wide, repoRows, existing = [], source = 'prices') {
-  const have = new Map();                 // ticker|date → repo 收市價
+  const repo = new Map();                 // ticker → Map(date → close)
   let first = '9999', last = '';
   for (const r of repoRows) {
     if (r.date < first) first = r.date;
     if (r.date > last) last = r.date;
     const c = num(r.close);
-    if (c > 0) have.set(r.ticker + '|' + r.date, c);
+    if (c > 0) (repo.get(r.ticker) || repo.set(r.ticker, new Map()).get(r.ticker)).set(r.date, c);
   }
-  const done = new Set(existing.map((r) => r.ticker + '|' + r.date));
   const dcol = Object.keys(wide[0] || {})[0];
-  const diffs = [], add = [];
+  const file = new Map();                 // ticker → Map(date → close)
   for (const row of wide) {
     const date = String(row[dcol]).slice(0, 10);
     if (date < first || date > last) continue;
     for (const [k, v] of Object.entries(row)) {
-      if (k === dcol) continue;
-      const c = num(v);
-      if (!(c > 0)) continue;
-      const key = k + '|' + date, r = have.get(key);
-      if (r) diffs.push(Math.abs(c / r - 1));
-      else if (!done.has(key)) add.push({ date, ticker: k, close: String(c), source });
+      const c = k === dcol ? null : num(v);
+      if (c > 0) (file.get(k) || file.set(k, new Map()).get(k)).set(date, c);
     }
   }
-  diffs.sort((a, b) => a - b);
-  const q = (p) => (diffs.length ? diffs[Math.min(diffs.length - 1, Math.floor(p * diffs.length))] : null);
-  const overlap = { n: diffs.length, medianAbs: q(0.5), p95Abs: q(0.95), max: diffs.at(-1) ?? null };
-  const rejected = overlap.n < 30 ? '重疊日少於 30 個，無法核對復權口徑'
-    : overlap.medianAbs > LIMITS.medianAbs || overlap.p95Abs > LIMITS.p95Abs ? `重疊日偏差過大（median ${(100 * overlap.medianAbs).toFixed(3)}%、p95 ${(100 * overlap.p95Abs).toFixed(3)}%）`
+  const done = new Set(existing.map((r) => r.ticker + '|' + r.date));
+  const add = [], perTicker = [];
+  let overlapN = 0;
+  for (const [t, fm] of file) {
+    const rm = repo.get(t);
+    if (!rm) continue;
+    const ov = [...fm.keys()].filter((d) => rm.has(d)).sort();           // 重疊日（升序）
+    overlapN += ov.length;
+    const todo = [...fm.keys()].filter((d) => !rm.has(d) && !done.has(t + '|' + d)).sort();
+    if (!todo.length) continue;
+    let ok = 0, skipped = 0;
+    for (const d of todo) {
+      const b = ov.filter((x) => x < d).at(-1), a = ov.find((x) => x > d);
+      if (!b || !a) { skipped++; continue; }
+      const rb = rm.get(b) / fm.get(b), ra = rm.get(a) / fm.get(a);
+      if (Math.abs(rb / ra - 1) > LIMITS.ratioTol) { skipped++; continue; }
+      const scale = (rb + ra) / 2;
+      add.push({ date: d, ticker: t, close: (fm.get(d) * scale).toFixed(4), source, scale: scale.toFixed(6) });
+      ok++;
+    }
+    perTicker.push({ ticker: t, ok, skipped });
+  }
+  const withGap = perTicker.length, accepted = perTicker.filter((x) => x.ok > 0).length;
+  const rejected = overlapN < LIMITS.minOverlap ? '重疊日少於 30 個，無法核對'
+    : withGap && accepted / withGap < LIMITS.minAccepted ? `只有 ${accepted}/${withGap} 隻股票前後比例一致，低於 ${100 * LIMITS.minAccepted}%`
     : null;
-  return { add, overlap, rejected, range: [first, last] };
+  return { add, overlap: { n: overlapN }, perTicker, accepted, withGap, rejected, range: [first, last] };
 }
 
 if (process.argv[1] && process.argv[1].endsWith('backfill_prices.mjs')) {
@@ -60,8 +79,8 @@ if (process.argv[1] && process.argv[1].endsWith('backfill_prices.mjs')) {
   const fam = loadAll();
   const plan = planBackfill(parseCsv(fs.readFileSync(f, 'utf8')), [...fam.hk, ...fam.us], readBackfill(), path.basename(f));
   const dates = [...new Set(plan.add.map((r) => r.date))].sort();
-  console.log(`repo 區間 ${plan.range.join(' → ')} | 重疊 ${plan.overlap.n} 點 median ${plan.overlap.medianAbs === null ? '—' : (100 * plan.overlap.medianAbs).toFixed(4) + '%'} p95 ${plan.overlap.p95Abs === null ? '—' : (100 * plan.overlap.p95Abs).toFixed(4) + '%'}`);
-  console.log(`可補 ${plan.add.length} 行 / ${dates.length} 日（${dates[0] || '—'} → ${dates.at(-1) || '—'}）`);
+  console.log(`repo 區間 ${plan.range.join(' → ')} | 重疊 ${plan.overlap.n} 點 | 有缺口嘅股票 ${plan.withGap}，可補 ${plan.accepted}`);
+  console.log(`可補 ${plan.add.length} 行 / ${dates.length} 日（${dates[0] || '—'} → ${dates.at(-1) || '—'}）；跳過（缺口內有除息 / 拆股，或缺前後重疊）${plan.perTicker.reduce((a, x) => a + x.skipped, 0)} 點`);
   if (plan.rejected && !process.argv.includes('--force')) { console.error('拒絕：' + plan.rejected); process.exit(1); }
   if (!process.argv.includes('--apply')) { console.log('dry-run，冇寫檔。加 --apply 先寫入。'); process.exit(0); }
   fs.mkdirSync(path.dirname(BACKFILL_FILE), { recursive: true });

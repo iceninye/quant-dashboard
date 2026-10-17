@@ -19,7 +19,22 @@ const days = (a, b) => (Date.parse(b) - Date.parse(a)) / DAY;
 const maxSpan = (H) => H * 1.4 + 5;
 
 // ticker → { dates: [...], px: [...] }（已排序）
-export function priceSeries(rows) {
+// 拆股調整：repo 嘅 close 係「當日未復權收市」，拆股日會跳一個整數比例（例：APH 2026-09 −48.9% ≈ 2:1）。
+// 單日跌幅 > 30% 而且前價 / 後價 ≈ 整數 k（2–10，±7%）→ 當拆股，將之前價格除以 k。
+// 只處理正向拆股；股息唔調整（price return，高息股回報會被低估）。events 有傳入就記低偵測結果。
+const SPLIT_K = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+export function adjustSplits(ticker, arr, events) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const q = arr[i - 1][1] / arr[i][1];
+    if (q < 1.43) continue;                                  // 即跌幅 < 30%
+    const k = SPLIT_K.find((x) => Math.abs(q / x - 1) <= 0.07);
+    if (!k) continue;
+    for (let j = 0; j < i; j++) arr[j][1] /= k;
+    events?.push({ ticker, from: arr[i - 1][0], to: arr[i][0], k });
+  }
+}
+
+export function priceSeries(rows, events = null) {
   const m = new Map();
   for (const r of rows) {
     const c = n(r.close);
@@ -29,6 +44,7 @@ export function priceSeries(rows) {
   }
   for (const [k, arr] of m) {
     arr.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+    adjustSplits(k, arr, events);
     m.set(k, { dates: arr.map((x) => x[0]), px: arr.map((x) => x[1]) });
   }
   return m;
