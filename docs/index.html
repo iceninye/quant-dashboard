@@ -35,377 +35,395 @@ footer{margin-top:26px;color:var(--dim);font-size:12.5px;border-top:1px solid va
 code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4px;font-size:12.5px}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉分析</span></h1>
-<div class="sub">PMFX 訊號日 <b>2026-10-17</b> · 生成 17/10/2026 上午9:09:25 HKT ·
+<div class="sub">PMFX 訊號日 <b>2026-10-17</b> · 生成 17/10/2026 上午9:10:52 HKT ·
 HK 2026-10-16 · US 2026-10-17 · Sentinel 2026-10-16</div>
 
-<p class="warn"><b>⚠️ 今日冇一個標的通過 quality gate（0/34）</b><br>
-34 個標的中：引擎異常 24 · RR 無效 12 · 止損退化（&lt;0.3%）13。
-下面嘅 EV 數字係「未過關」，只可作參考，<b>唔可以直接跟隨</b>。詳見 §2 Gate 階梯同 §5 數據質量。</p>
+
 
 <h2><span class="n">1</span>今日機會排行</h2>
 <div class="card"><div class="grid">
-<div class="kv"><span>通過 gate</span><b class="bad">0/34</b></div>
-<div class="kv"><span>引擎異常</span><b class="bad">24</b></div>
-<div class="kv"><span>RR 無效</span><b class="bad">12</b></div>
-<div class="kv"><span>止損退化</span><b class="bad">13</b></div>
+<div class="kv"><span>通過 gate</span><b class="good">17/36</b></div>
+<div class="kv"><span>引擎異常</span><b class="bad">0</b></div>
+<div class="kv"><span>RR 無效</span><b class="bad">19</b></div>
+<div class="kv"><span>止損退化</span><b class="bad">0</b></div>
 </div></div>
 <table><thead><tr><th>標的</th><th>方向</th><th>net_ev</th><th>RR</th><th>止損%</th><th>目標%</th><th>共識</th><th>Sentinel</th><th>Grade</th></tr></thead><tbody>
 <tr>
 <td class="tk">BTC-USD<div class="dim" style="font-size:11.5px">比特幣 (BTC)</div></td>
 <td class="bad">沽</td>
-<td>6943.20</td><td>132.79</td>
-<td class="bad">-0.10</td>
-<td>13.28</td>
+<td>6604.34</td><td>11.64</td>
+<td class="">1.14</td>
+<td>13.29</td>
 <td class="bad">-0.25</td>
 <td class="dim">red</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sentinel 強烈減持 red ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 止損退化 (-0.10% &lt; 0.3%)</span></td></tr><tr>
+notes: Sentinel 強烈減持 red ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</span></td></tr><tr>
 <td class="tk">GC=F<div class="dim" style="font-size:11.5px">黃金期貨 (GC)</div></td>
 <td class="bad">沽</td>
-<td>232.31</td><td>90.57</td>
-<td class="bad">-0.10</td>
+<td>241.88</td><td>11.06</td>
+<td class="">0.82</td>
 <td>9.06</td>
 <td class="bad">-0.25</td>
 <td class="dim">orange</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sentinel 建議減持 orange ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 止損退化 (-0.10% &lt; 0.3%)</span></td></tr><tr>
+notes: Sentinel 建議減持 orange ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</span></td></tr><tr>
 <td class="tk">2840.HK<div class="dim" style="font-size:11.5px">SPDR金ETF (2840)</div></td>
 <td class="bad">沽</td>
-<td>195.57</td><td>38.65</td>
-<td class="bad">-0.24</td>
-<td>9.35</td>
+<td>182.02</td><td>15.32</td>
+<td class="">0.61</td>
+<td>9.34</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 止損退化 (-0.24% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</span></td></tr><tr>
 <td class="tk">PL=F<div class="dim" style="font-size:11.5px">鉑金期貨 (PL)</div></td>
 <td class="bad">沽</td>
-<td>170.33</td><td>9.31</td>
-<td class="bad">-1.73</td>
+<td>171.66</td><td>10.27</td>
+<td class="">1.57</td>
 <td>16.11</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-1.73% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</span></td></tr><tr>
 <td class="tk">PA=F<div class="dim" style="font-size:11.5px">鈀金期貨 (PA)</div></td>
 <td class="bad">沽</td>
-<td>122.10</td><td>7.86</td>
-<td class="bad">-2.19</td>
+<td>128.32</td><td>7.68</td>
+<td class="">2.24</td>
 <td>17.22</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tC">C</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-2.19% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">STX<div class="dim" style="font-size:11.5px">STX</div></td>
+<td class="bad">沽</td>
+<td>107.97</td><td>2.17</td>
+<td class="">9.78</td>
+<td>21.25</td>
+<td class="bad">-1.25</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 96%ile · 月回報 -18.3% ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">WDC<div class="dim" style="font-size:11.5px">WDC</div></td>
+<td class="bad">沽</td>
+<td>62.22</td><td>2.62</td>
+<td class="">8.68</td>
+<td>22.69</td>
+<td class="bad">-1.25</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 97%ile · 月回報 -20.4% ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">LRCX<div class="dim" style="font-size:11.5px">LRCX</div></td>
+<td class="bad">沽</td>
+<td>38.35</td><td>3.05</td>
+<td class="">6.42</td>
+<td>19.56</td>
+<td class="bad">-1.25</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 95%ile · 月回報 -1.9% ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">ZW=F<div class="dim" style="font-size:11.5px">小麥期貨 (Wheat)</div></td>
+<td class="bad">沽</td>
+<td>34.33</td><td>2.77</td>
+<td class="">3.46</td>
+<td>9.59</td>
+<td class="bad">-1.00</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
 <td class="tk">CL=F<div class="dim" style="font-size:11.5px">原油期貨 (WTI)</div></td>
 <td class="good">買</td>
-<td>9.91</td><td>2.98</td>
-<td class="">6.44</td>
+<td>9.12</td><td>2.97</td>
+<td class="">6.48</td>
 <td>19.23</td>
 <td class="good">1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tB">B</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空)</span></td></tr><tr>
+notes: —</td></tr><tr>
+<td class="tk">1347.HK<div class="dim" style="font-size:11.5px">1347.HK</div></td>
+<td class="bad">沽</td>
+<td>14.33</td><td>2.80</td>
+<td class="">9.14</td>
+<td>25.61</td>
+<td class="bad">-1.25</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 92%ile · 月回報 -29.1% ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">JNJ<div class="dim" style="font-size:11.5px">JNJ</div></td>
+<td class="bad">沽</td>
+<td>9.88</td><td>2.74</td>
+<td class="">2.70</td>
+<td>7.40</td>
+<td class="bad">-1.25</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 86%ile · 月回報 -4.4% ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
 <td class="tk">SI=F<div class="dim" style="font-size:11.5px">白銀期貨 (SI)</div></td>
 <td class="bad">沽</td>
-<td>6.77</td><td>6.10</td>
-<td class="bad">-3.04</td>
+<td>6.74</td><td>6.07</td>
+<td class="">3.06</td>
 <td>18.56</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tC">C</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-3.04% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">2269.HK<div class="dim" style="font-size:11.5px">2269.HK</div></td>
+<td class="bad">沽</td>
+<td>5.73</td><td>3.26</td>
+<td class="">5.70</td>
+<td>18.60</td>
+<td class="bad">-1.25</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 93%ile · 月回報 -2.1% ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
 <td class="tk">SLV<div class="dim" style="font-size:11.5px">白銀ETF (SLV)</div></td>
 <td class="bad">沽</td>
-<td>5.66</td><td>5.09</td>
-<td class="bad">-3.47</td>
-<td>17.67</td>
+<td>5.33</td><td>5.07</td>
+<td class="">3.49</td>
+<td>17.70</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tC">C</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-3.47% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
 <td class="tk">AUDJPY=X<div class="dim" style="font-size:11.5px">澳元/日圓 (AUD/JPY)</div></td>
 <td class="bad">沽</td>
-<td>2.44</td><td>6.73</td>
-<td class="bad">-0.59</td>
+<td>2.41</td><td>6.03</td>
+<td class="">0.66</td>
 <td>4.00</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tC">C</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-0.59% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
 <td class="tk">DX-Y.NYB<div class="dim" style="font-size:11.5px">美元指數 (DXY)</div></td>
 <td class="good">買</td>
-<td>1.10</td><td>2.48</td>
-<td class="">1.05</td>
+<td>1.13</td><td>2.72</td>
+<td class="">0.96</td>
 <td>2.62</td>
 <td class="good">1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tA">A</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空)</span></td></tr><tr>
+notes: —</td></tr><tr>
 <td class="tk">EURJPY=X<div class="dim" style="font-size:11.5px">歐元/日圓 (EUR/JPY)</div></td>
 <td class="bad">沽</td>
-<td>2.18</td><td>2.66</td>
-<td class="bad">-1.05</td>
+<td>2.24</td><td>2.92</td>
+<td class="">0.96</td>
 <td>2.79</td>
 <td class="bad">-1.00</td>
 <td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
+<td class="tC">C</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-1.05% &lt; 0.3%)</span></td></tr><tr>
-<td class="tk">AUDUSD=X<div class="dim" style="font-size:11.5px">澳元/美元 (AUD/USD)</div></td>
-<td class="bad">沽</td>
-<td>0.01</td><td>3.16</td>
-<td class="bad">-1.15</td>
-<td>3.62</td>
-<td class="bad">-1.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-1.15% &lt; 0.3%)</span></td></tr><tr>
-<td class="tk">EURUSD=X<div class="dim" style="font-size:11.5px">歐元/美元 (EUR/USD)</div></td>
-<td class="bad">沽</td>
-<td>0.01</td><td>2.73</td>
-<td class="bad">-1.00</td>
-<td>2.72</td>
-<td class="bad">-1.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-1.00% &lt; 0.3%)</span></td></tr><tr>
-<td class="tk">NZDUSD=X<div class="dim" style="font-size:11.5px">紐元/美元 (NZD/USD)</div></td>
-<td class="bad">沽</td>
-<td>0.01</td><td>4.92</td>
-<td class="bad">-0.74</td>
-<td>3.62</td>
-<td class="bad">-1.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-0.74% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
 <td class="tk">EURGBP=X<div class="dim" style="font-size:11.5px">歐元/英鎊 (EUR/GBP)</div></td>
 <td class="bad">沽</td>
 <td>0.01</td><td>2.68</td>
-<td class="bad">-0.62</td>
-<td>1.67</td>
+<td class="">0.62</td>
+<td>1.66</td>
 <td class="bad">-1.00</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">EURUSD=X<div class="dim" style="font-size:11.5px">歐元/美元 (EUR/USD)</div></td>
+<td class="bad">沽</td>
+<td>0.01</td><td>2.73</td>
+<td class="">0.99</td>
+<td>2.72</td>
+<td class="bad">-1.00</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">AUDUSD=X<div class="dim" style="font-size:11.5px">澳元/美元 (AUD/USD)</div></td>
+<td class="bad">沽</td>
+<td>0.01</td><td>3.16</td>
+<td class="">1.15</td>
+<td>3.62</td>
+<td class="bad">-1.00</td>
+<td class="dim">—</td>
+<td class="tC">C</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">跨報告共識為負 → 只作反向觀察</span></td></tr><tr>
+<td class="tk">USDCHF=X<div class="dim" style="font-size:11.5px">美元/瑞郎 (USD/CHF)</div></td>
+<td class="dim">觀望</td>
+<td>-0.00</td><td>0.00</td>
+<td class="">1.34</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 止損退化 (-0.62% &lt; 0.3%)</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">GBPUSD=X<div class="dim" style="font-size:11.5px">英鎊/美元 (GBP/USD)</div></td>
+<td class="dim">觀望</td>
+<td>-0.01</td><td>0.00</td>
+<td class="">1.97</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">USDCAD=X<div class="dim" style="font-size:11.5px">美元/加元 (USD/CAD)</div></td>
+<td class="dim">觀望</td>
+<td>-0.01</td><td>0.00</td>
+<td class="">2.00</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">NZDUSD=X<div class="dim" style="font-size:11.5px">紐元/美元 (NZD/USD)</div></td>
+<td class="dim">觀望</td>
+<td>-0.01</td><td>0.00</td>
+<td class="">2.18</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">HG=F<div class="dim" style="font-size:11.5px">銅期貨 (HG)</div></td>
+<td class="dim">觀望</td>
+<td>-0.07</td><td>0.00</td>
+<td class="">2.21</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">NG=F<div class="dim" style="font-size:11.5px">天然氣期貨 (NG)</div></td>
+<td class="dim">觀望</td>
+<td>-0.14</td><td>0.00</td>
+<td class="">9.93</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">CADJPY=X<div class="dim" style="font-size:11.5px">加元/日圓 (CAD/JPY)</div></td>
+<td class="dim">觀望</td>
+<td>-0.85</td><td>0.00</td>
+<td class="">1.93</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">2388.HK<div class="dim" style="font-size:11.5px">2388.HK</div></td>
+<td class="dim">觀望</td>
+<td>-0.92</td><td>0.00</td>
+<td class="">4.30</td>
+<td>0.00</td>
+<td class="bad">-0.25</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: Sharpe 排 99%ile · 月回報 -2.1% ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">USDJPY=X<div class="dim" style="font-size:11.5px">美元/日圓 (USD/JPY)</div></td>
+<td class="dim">觀望</td>
+<td>-0.96</td><td>0.00</td>
+<td class="">1.59</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">GBPJPY=X<div class="dim" style="font-size:11.5px">英鎊/日圓 (GBP/JPY)</div></td>
+<td class="dim">觀望</td>
+<td>-1.76</td><td>0.00</td>
+<td class="">2.10</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
+<td class="dim">—</td>
+<td class="tX">EXCLUDED</td></tr>
+<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
 <td class="tk">0005.HK<div class="dim" style="font-size:11.5px">0005.HK</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
+<td class="dim">觀望</td>
+<td>-3.32</td><td>0.00</td>
+<td class="">5.70</td>
+<td>0.00</td>
 <td class="bad">-0.25</td>
 <td class="dim">green</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 100%ile · 月回報 -6.2% · Sentinel 可加倉 green ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">1347.HK<div class="dim" style="font-size:11.5px">1347.HK</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 92%ile · 月回報 -29.1% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">2269.HK<div class="dim" style="font-size:11.5px">2269.HK</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 93%ile · 月回報 -2.1% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
+notes: Sharpe 排 100%ile · 月回報 -6.2% · Sentinel 可加倉 green ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
 <td class="tk">2359.HK<div class="dim" style="font-size:11.5px">2359.HK</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
+<td class="dim">觀望</td>
+<td>-5.76</td><td>0.00</td>
+<td class="">7.41</td>
+<td>0.00</td>
 <td class="bad">-0.75</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 98%ile · 月回報 1.1% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">2388.HK<div class="dim" style="font-size:11.5px">2388.HK</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
+notes: Sharpe 排 98%ile · 月回報 1.1% ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+<td class="tk">ZC=F<div class="dim" style="font-size:11.5px">玉米期貨 (Corn)</div></td>
+<td class="dim">觀望</td>
+<td>-6.70</td><td>0.00</td>
+<td class="">3.63</td>
+<td>0.00</td>
+<td class="dim">0.00</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 99%ile · 月回報 -2.1% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">JNJ<div class="dim" style="font-size:11.5px">JNJ</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 86%ile · 月回報 -4.4% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">LRCX<div class="dim" style="font-size:11.5px">LRCX</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 95%ile · 月回報 -1.9% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
 <td class="tk">MU<div class="dim" style="font-size:11.5px">MU</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
+<td class="dim">觀望</td>
+<td>-25.89</td><td>0.00</td>
+<td class="">7.61</td>
+<td>0.00</td>
 <td class="bad">-0.25</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 100%ile · 月回報 -5.1% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">STX<div class="dim" style="font-size:11.5px">STX</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 96%ile · 月回報 -18.3% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">WDC<div class="dim" style="font-size:11.5px">WDC</div></td>
-<td class="dim">Pending</td>
-<td>—</td><td>0.00</td>
-<td class="">—</td>
-<td>—</td>
-<td class="bad">-0.25</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: Sharpe 排 97%ile · 月回報 -20.4% ｜ 排除原因: <span class="bad">Pending Data（動態觀察名單數據不足） / 淨 RR 無效 (net_rr_valid=false) / 無止損價 / RR &lt; 1 / 無 net_ev</span></td></tr><tr>
-<td class="tk">USDCHF=X<div class="dim" style="font-size:11.5px">美元/瑞郎 (USD/CHF)</div></td>
-<td class="dim">觀望</td>
-<td>-0.00</td><td>0.00</td>
-<td class="">1.44</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">GBPUSD=X<div class="dim" style="font-size:11.5px">英鎊/美元 (GBP/USD)</div></td>
-<td class="dim">觀望</td>
-<td>-0.01</td><td>0.00</td>
-<td class="">1.92</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">USDCAD=X<div class="dim" style="font-size:11.5px">美元/加元 (USD/CAD)</div></td>
-<td class="dim">觀望</td>
-<td>-0.01</td><td>0.00</td>
-<td class="">2.15</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">HG=F<div class="dim" style="font-size:11.5px">銅期貨 (HG)</div></td>
-<td class="dim">觀望</td>
-<td>-0.08</td><td>0.00</td>
-<td class="">2.54</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">NG=F<div class="dim" style="font-size:11.5px">天然氣期貨 (NG)</div></td>
-<td class="dim">觀望</td>
-<td>-0.14</td><td>0.00</td>
-<td class="">10.01</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">CADJPY=X<div class="dim" style="font-size:11.5px">加元/日圓 (CAD/JPY)</div></td>
-<td class="dim">觀望</td>
-<td>-0.83</td><td>0.00</td>
-<td class="">1.88</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">USDJPY=X<div class="dim" style="font-size:11.5px">美元/日圓 (USD/JPY)</div></td>
-<td class="dim">觀望</td>
-<td>-1.00</td><td>0.00</td>
-<td class="">1.64</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
-<td class="tk">GBPJPY=X<div class="dim" style="font-size:11.5px">英鎊/日圓 (GBP/JPY)</div></td>
-<td class="dim">觀望</td>
-<td>-1.77</td><td>0.00</td>
-<td class="">2.11</td>
-<td>0.00</td>
-<td class="dim">0.00</td>
-<td class="dim">—</td>
-<td class="tX">EXCLUDED</td></tr>
-<tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
+notes: Sharpe 排 100%ile · 月回報 -5.1% ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr><tr>
 <td class="tk">XAUUSD=X<div class="dim" style="font-size:11.5px">黃金現貨 (Gold)</div></td>
 <td class="dim">觀望</td>
-<td>-45.11</td><td>0.00</td>
-<td class="">2.45</td>
+<td>-44.06</td><td>0.00</td>
+<td class="">2.40</td>
 <td>0.00</td>
 <td class="dim">0.00</td>
 <td class="dim">—</td>
 <td class="tX">EXCLUDED</td></tr>
 <tr><td colspan="9" class="dim" style="text-align:left;font-size:12px;padding-top:0">
-notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr>
+notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</span></td></tr>
 </tbody></table>
 
 <h2><span class="n">2</span>Gate 階梯 — 過濾器真係有效嗎？</h2>
 <div class="card"><table><thead><tr><th>累加 gate</th><th>訊號數</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
-<tr><td>全部有 EV 訊號</td><td>1510</td><td>680</td>
-<td class="good">51.2%</td>
-<td>5.20%</td><td>2.93%</td></tr><tr><td>net_ev &gt; 0</td><td>1510</td><td>680</td>
-<td class="good">51.2%</td>
-<td>5.20%</td><td>2.93%</td></tr><tr><td>+ rr_valid</td><td>1311</td><td>565</td>
-<td class="bad">47.3%</td>
-<td>4.17%</td><td>1.85%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td>774</td><td>332</td>
-<td class="bad">36.1%</td>
-<td>3.91%</td><td>2.11%</td></tr><tr><td>+ 引擎無 error</td><td>0</td><td>0</td>
+<tr><td>全部有 EV 訊號</td><td>1516</td><td>623</td>
+<td class="good">53%</td>
+<td>4.98%</td><td>3.16%</td></tr><tr><td>net_ev &gt; 0</td><td>1516</td><td>623</td>
+<td class="good">53%</td>
+<td>4.98%</td><td>3.16%</td></tr><tr><td>+ rr_valid</td><td>1316</td><td>508</td>
+<td class="bad">49%</td>
+<td>4.04%</td><td>2.28%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td>789</td><td>293</td>
+<td class="bad">41%</td>
+<td>3.91%</td><td>2.77%</td></tr><tr><td>+ 引擎無 error</td><td>17</td><td>0</td>
 <td class="bad">—</td>
-<td>—</td><td>—</td></tr><tr><td>+ 止損 ≤ 5%</td><td>0</td><td>0</td>
+<td>—</td><td>—</td></tr><tr><td>+ 止損 ≤ 5%</td><td>11</td><td>0</td>
 <td class="bad">—</td>
 <td>—</td><td>—</td></tr>
 </tbody></table>
@@ -417,35 +435,47 @@ notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 
 <tr><td>每日 net_ev 頭 1 名</td>
 <td>65</td><td>35</td><td class="bad">48.6%</td>
 <td>5.17%</td><td>2.50%</td></tr><tr><td>每日 net_ev 尾 1 名</td>
-<td>65</td><td>21</td><td class="bad">33.3%</td>
+<td>65</td><td>20</td><td class="bad">35%</td>
 <td>1.27%</td><td>0.31%</td></tr><tr><td>全部做多</td>
-<td>776</td><td>332</td><td class="bad">36.1%</td>
-<td>3.92%</td><td>2.12%</td></tr><tr><td>全部做空</td>
-<td>734</td><td>348</td><td class="good">65.5%</td>
-<td>6.68%</td><td>4.08%</td></tr>
+<td>776</td><td>293</td><td class="bad">41%</td>
+<td>3.92%</td><td>2.77%</td></tr><tr><td>全部做空</td>
+<td>740</td><td>330</td><td class="good">63.6%</td>
+<td>6.19%</td><td>3.71%</td></tr>
 </tbody></table>
 <p class="note">頭 1 名 vs 尾 1 名如果冇明顯差距 → <b>排名本身冇預測力</b>，唔應該用「EV 最高」做揀股理由。</p></div>
 
 <h2><span class="n">4</span>前向追蹤（訊號之後實際發生咩事）</h2>
 <div class="card"><div class="grid">
-<div class="kv"><span>追蹤訊號總數</span><b>1510</b></div>
-<div class="kv"><span>已結算（到目標/止損）</span><b>680</b></div>
-<div class="kv"><span>命中目標</span><b class="good">348</b></div>
-<div class="kv"><span>觸及止損</span><b class="bad">332</b></div>
-<div class="kv"><span>整體勝率</span><b>51.2%</b></div>
-<div class="kv"><span>平均 5 日回報</span><b>5.20%</b></div>
+<div class="kv"><span>追蹤訊號總數</span><b>1516</b></div>
+<div class="kv"><span>已結算（到目標/止損）</span><b>623</b></div>
+<div class="kv"><span>命中目標</span><b class="good">330</b></div>
+<div class="kv"><span>觸及止損</span><b class="bad">293</b></div>
+<div class="kv"><span>整體勝率</span><b>53%</b></div>
+<div class="kv"><span>平均 5 日回報</span><b>4.98%</b></div>
 </div>
 <details><summary>睇最近 40 條訊號嘅結果</summary>
 <table><thead><tr><th>日期</th><th>標的</th><th>方向</th><th>結果</th><th>第幾日</th><th>1日</th><th>5日</th><th>20日</th><th>乾淨</th></tr></thead><tbody>
-<tr><td>2026-10-17</td><td class="tk">SLV</td>
+<tr><td>2026-10-17</td><td class="tk">ZW=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">SI=F</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">WDC</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">PL=F</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">STX</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">SLV</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">SI=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">PL=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
@@ -453,11 +483,15 @@ notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">NZDUSD=X</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">LRCX</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">GC=F</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">JNJ</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">GC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
@@ -465,23 +499,23 @@ notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">EURJPY=X</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">EURJPY=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">EURGBP=X</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">EURGBP=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">DX-Y.NYB</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">DX-Y.NYB</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">CL=F</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">CL=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">BTC-USD</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">BTC-USD</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
@@ -489,127 +523,111 @@ notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">AUDJPY=X</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">AUDJPY=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">2840.HK</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">2840.HK</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">ZW=F</td>
+<td><span class="dim">✘</span></td></tr><tr><td>2026-10-17</td><td class="tk">2269.HK</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td><td>—</td>
+<td>✔</td></tr><tr><td>2026-10-17</td><td class="tk">1347.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
+<td>✔</td></tr><tr><td>2026-10-16</td><td class="tk">ZW=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>6.58%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">ZC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td><td>—</td>
+<td>—</td><td>5.27%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">WDC</td>
 <td class="bad">空</td>
-<td class="good">target</td>
-<td>1</td><td>100.00%</td><td>—</td><td>—</td>
+<td class="dim">pending</td>
+<td>—</td><td>17.26%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">USDCAD=X</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>0.68%</td><td>—</td><td>—</td>
+<td>—</td><td>0.53%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">STX</td>
 <td class="bad">空</td>
-<td class="good">target</td>
-<td>1</td><td>100.00%</td><td>—</td><td>—</td>
+<td class="dim">pending</td>
+<td>—</td><td>16.29%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">SLV</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>10.81%</td><td>—</td><td>—</td>
+<td>—</td><td>10.53%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">SI=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>11.00%</td><td>—</td><td>—</td>
+<td>—</td><td>11.38%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">PL=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>9.39%</td><td>—</td><td>—</td>
+<td>—</td><td>9.25%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">PA=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>9.99%</td><td>—</td><td>—</td>
+<td>—</td><td>10.27%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">NZDUSD=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.02%</td><td>—</td><td>—</td>
+<td>—</td><td>0.96%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">NG=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>17.02%</td><td>—</td><td>—</td>
+<td>—</td><td>16.91%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">LRCX</td>
 <td class="bad">空</td>
-<td class="good">target</td>
-<td>1</td><td>100.00%</td><td>—</td><td>—</td>
+<td class="dim">pending</td>
+<td>—</td><td>13.90%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">JNJ</td>
 <td class="bad">空</td>
-<td class="good">target</td>
-<td>1</td><td>100.00%</td><td>—</td><td>—</td>
+<td class="dim">pending</td>
+<td>—</td><td>5.30%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">GC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>6.09%</td><td>—</td><td>—</td>
+<td>—</td><td>6.10%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">EURUSD=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.39%</td><td>—</td><td>—</td>
+<td>—</td><td>1.24%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">EURJPY=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.66%</td><td>—</td><td>—</td>
+<td>—</td><td>1.56%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">EURGBP=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.18%</td><td>—</td><td>—</td>
+<td>—</td><td>1.08%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">DX-Y.NYB</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.23%</td><td>—</td><td>—</td>
+<td>—</td><td>1.14%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">CL=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>9.85%</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">AUDUSD=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>1.54%</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">AUDJPY=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>1.97%</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">2840.HK</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>6.31%</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">2269.HK</td>
-<td class="bad">空</td>
-<td class="good">target</td>
-<td>1</td><td>100.00%</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">1347.HK</td>
-<td class="bad">空</td>
-<td class="good">target</td>
-<td>1</td><td>100.00%</td><td>—</td><td>—</td>
-<td><span class="dim">✘</span></td></tr><tr><td>2026-10-15</td><td class="tk">ZC=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>5.04%</td><td>—</td><td>—</td>
+<td>—</td><td>12.00%</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr>
 </tbody></table></details></div>
 
 <h2><span class="n">5</span>數據質量趨勢（每日）</h2>
 <div class="card">
 <div class="dim" style="font-size:12.5px">每日「引擎異常」訊號數（紅 = 有異常，藍 = 乾淨）</div>
-<div class="spark"><i class="e" style="height:100%" title="2026-06-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-06-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-06-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-19: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-27: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-21: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-22: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-23: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-05: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-08: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-16: 36/36 異常"></i><i class="e" style="height:71%" title="2026-10-17: 24/34 異常"></i></div>
+<div class="spark"><i class="e" style="height:100%" title="2026-06-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-06-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-06-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-19: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-27: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-21: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-22: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-23: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-05: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-08: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-16: 36/36 異常"></i><i class="" style="height:2%" title="2026-10-17: 0/36 異常"></i></div>
 <div class="dim" style="font-size:12.5px;margin-top:8px">每日「止損退化」訊號數</div>
-<div class="spark"><i class="e" style="height:47%" title="2026-06-26: 17/36 退化"></i><i class="e" style="height:44%" title="2026-06-29: 16/36 退化"></i><i class="e" style="height:44%" title="2026-06-30: 16/36 退化"></i><i class="e" style="height:39%" title="2026-07-01: 14/36 退化"></i><i class="e" style="height:28%" title="2026-07-06: 10/36 退化"></i><i class="e" style="height:25%" title="2026-07-10: 9/36 退化"></i><i class="e" style="height:19%" title="2026-07-15: 7/36 退化"></i><i class="e" style="height:31%" title="2026-07-16: 11/36 退化"></i><i class="e" style="height:17%" title="2026-07-31: 6/36 退化"></i><i class="e" style="height:22%" title="2026-08-03: 8/36 退化"></i><i class="e" style="height:33%" title="2026-08-04: 12/36 退化"></i><i class="e" style="height:22%" title="2026-08-07: 8/36 退化"></i><i class="e" style="height:22%" title="2026-08-10: 8/36 退化"></i><i class="e" style="height:14%" title="2026-08-11: 5/36 退化"></i><i class="e" style="height:17%" title="2026-08-12: 6/36 退化"></i><i class="e" style="height:19%" title="2026-08-13: 7/36 退化"></i><i class="e" style="height:17%" title="2026-08-14: 6/36 退化"></i><i class="e" style="height:17%" title="2026-08-17: 6/36 退化"></i><i class="e" style="height:14%" title="2026-08-18: 5/36 退化"></i><i class="e" style="height:14%" title="2026-08-19: 5/36 退化"></i><i class="e" style="height:17%" title="2026-08-24: 6/36 退化"></i><i class="e" style="height:17%" title="2026-08-25: 6/36 退化"></i><i class="e" style="height:11%" title="2026-08-26: 4/36 退化"></i><i class="e" style="height:8%" title="2026-08-27: 3/36 退化"></i><i class="e" style="height:6%" title="2026-08-28: 2/36 退化"></i><i class="e" style="height:6%" title="2026-08-31: 2/36 退化"></i><i class="e" style="height:8%" title="2026-09-01: 3/36 退化"></i><i class="e" style="height:14%" title="2026-09-02: 5/36 退化"></i><i class="e" style="height:19%" title="2026-09-03: 7/36 退化"></i><i class="e" style="height:25%" title="2026-09-04: 9/36 退化"></i><i class="e" style="height:22%" title="2026-09-07: 8/36 退化"></i><i class="e" style="height:22%" title="2026-09-09: 8/36 退化"></i><i class="e" style="height:22%" title="2026-09-10: 8/36 退化"></i><i class="e" style="height:33%" title="2026-09-11: 12/36 退化"></i><i class="e" style="height:39%" title="2026-09-14: 14/36 退化"></i><i class="e" style="height:36%" title="2026-09-15: 13/36 退化"></i><i class="e" style="height:28%" title="2026-09-16: 10/36 退化"></i><i class="e" style="height:36%" title="2026-09-17: 13/36 退化"></i><i class="e" style="height:22%" title="2026-09-18: 8/36 退化"></i><i class="e" style="height:22%" title="2026-09-21: 8/36 退化"></i><i class="e" style="height:14%" title="2026-09-22: 5/36 退化"></i><i class="e" style="height:28%" title="2026-09-23: 10/36 退化"></i><i class="e" style="height:36%" title="2026-09-24: 13/36 退化"></i><i class="e" style="height:33%" title="2026-09-25: 12/36 退化"></i><i class="e" style="height:42%" title="2026-09-28: 15/36 退化"></i><i class="e" style="height:47%" title="2026-09-29: 17/36 退化"></i><i class="e" style="height:44%" title="2026-09-30: 16/36 退化"></i><i class="e" style="height:47%" title="2026-10-01: 17/36 退化"></i><i class="e" style="height:53%" title="2026-10-02: 19/36 退化"></i><i class="e" style="height:53%" title="2026-10-05: 19/36 退化"></i><i class="e" style="height:50%" title="2026-10-06: 18/36 退化"></i><i class="e" style="height:53%" title="2026-10-07: 19/36 退化"></i><i class="e" style="height:50%" title="2026-10-08: 18/36 退化"></i><i class="e" style="height:50%" title="2026-10-09: 18/36 退化"></i><i class="e" style="height:56%" title="2026-10-12: 20/36 退化"></i><i class="e" style="height:58%" title="2026-10-13: 21/36 退化"></i><i class="e" style="height:56%" title="2026-10-14: 20/36 退化"></i><i class="e" style="height:56%" title="2026-10-15: 20/36 退化"></i><i class="e" style="height:56%" title="2026-10-16: 20/36 退化"></i><i class="e" style="height:38%" title="2026-10-17: 13/34 退化"></i></div>
+<div class="spark"><i class="e" style="height:47%" title="2026-06-26: 17/36 退化"></i><i class="e" style="height:44%" title="2026-06-29: 16/36 退化"></i><i class="e" style="height:44%" title="2026-06-30: 16/36 退化"></i><i class="e" style="height:39%" title="2026-07-01: 14/36 退化"></i><i class="e" style="height:28%" title="2026-07-06: 10/36 退化"></i><i class="e" style="height:25%" title="2026-07-10: 9/36 退化"></i><i class="e" style="height:19%" title="2026-07-15: 7/36 退化"></i><i class="e" style="height:31%" title="2026-07-16: 11/36 退化"></i><i class="e" style="height:17%" title="2026-07-31: 6/36 退化"></i><i class="e" style="height:22%" title="2026-08-03: 8/36 退化"></i><i class="e" style="height:33%" title="2026-08-04: 12/36 退化"></i><i class="e" style="height:22%" title="2026-08-07: 8/36 退化"></i><i class="e" style="height:22%" title="2026-08-10: 8/36 退化"></i><i class="e" style="height:14%" title="2026-08-11: 5/36 退化"></i><i class="e" style="height:17%" title="2026-08-12: 6/36 退化"></i><i class="e" style="height:19%" title="2026-08-13: 7/36 退化"></i><i class="e" style="height:17%" title="2026-08-14: 6/36 退化"></i><i class="e" style="height:17%" title="2026-08-17: 6/36 退化"></i><i class="e" style="height:14%" title="2026-08-18: 5/36 退化"></i><i class="e" style="height:14%" title="2026-08-19: 5/36 退化"></i><i class="e" style="height:17%" title="2026-08-24: 6/36 退化"></i><i class="e" style="height:17%" title="2026-08-25: 6/36 退化"></i><i class="e" style="height:11%" title="2026-08-26: 4/36 退化"></i><i class="e" style="height:8%" title="2026-08-27: 3/36 退化"></i><i class="e" style="height:6%" title="2026-08-28: 2/36 退化"></i><i class="e" style="height:6%" title="2026-08-31: 2/36 退化"></i><i class="e" style="height:8%" title="2026-09-01: 3/36 退化"></i><i class="e" style="height:14%" title="2026-09-02: 5/36 退化"></i><i class="e" style="height:19%" title="2026-09-03: 7/36 退化"></i><i class="e" style="height:25%" title="2026-09-04: 9/36 退化"></i><i class="e" style="height:22%" title="2026-09-07: 8/36 退化"></i><i class="e" style="height:22%" title="2026-09-09: 8/36 退化"></i><i class="e" style="height:22%" title="2026-09-10: 8/36 退化"></i><i class="e" style="height:33%" title="2026-09-11: 12/36 退化"></i><i class="e" style="height:39%" title="2026-09-14: 14/36 退化"></i><i class="e" style="height:36%" title="2026-09-15: 13/36 退化"></i><i class="e" style="height:28%" title="2026-09-16: 10/36 退化"></i><i class="e" style="height:36%" title="2026-09-17: 13/36 退化"></i><i class="e" style="height:22%" title="2026-09-18: 8/36 退化"></i><i class="e" style="height:22%" title="2026-09-21: 8/36 退化"></i><i class="e" style="height:14%" title="2026-09-22: 5/36 退化"></i><i class="e" style="height:28%" title="2026-09-23: 10/36 退化"></i><i class="e" style="height:36%" title="2026-09-24: 13/36 退化"></i><i class="e" style="height:33%" title="2026-09-25: 12/36 退化"></i><i class="e" style="height:42%" title="2026-09-28: 15/36 退化"></i><i class="e" style="height:47%" title="2026-09-29: 17/36 退化"></i><i class="e" style="height:44%" title="2026-09-30: 16/36 退化"></i><i class="e" style="height:47%" title="2026-10-01: 17/36 退化"></i><i class="e" style="height:53%" title="2026-10-02: 19/36 退化"></i><i class="e" style="height:53%" title="2026-10-05: 19/36 退化"></i><i class="e" style="height:50%" title="2026-10-06: 18/36 退化"></i><i class="e" style="height:53%" title="2026-10-07: 19/36 退化"></i><i class="e" style="height:50%" title="2026-10-08: 18/36 退化"></i><i class="e" style="height:50%" title="2026-10-09: 18/36 退化"></i><i class="e" style="height:56%" title="2026-10-12: 20/36 退化"></i><i class="e" style="height:58%" title="2026-10-13: 21/36 退化"></i><i class="e" style="height:56%" title="2026-10-14: 20/36 退化"></i><i class="e" style="height:56%" title="2026-10-15: 20/36 退化"></i><i class="e" style="height:56%" title="2026-10-16: 20/36 退化"></i><i class="" style="height:2%" title="2026-10-17: 0/36 退化"></i></div>
 <table style="margin-top:10px"><thead><tr><th>日期</th><th>標的數</th><th>通過 gate</th><th>異常</th><th>退化</th><th>買 / 沽</th><th>最高 net_ev</th></tr></thead><tbody>
-<tr><td>2026-10-17</td><td>34</td><td>0</td>
-<td class="bad">24</td><td class="bad">13</td>
-<td>2 / 13</td><td>—</td></tr><tr><td>2026-10-16</td><td>36</td><td>0</td>
+<tr><td>2026-10-17</td><td>36</td><td>17</td>
+<td class="dim">0</td><td class="dim">0</td>
+<td>2 / 19</td><td>128.32</td></tr><tr><td>2026-10-16</td><td>36</td><td>0</td>
 <td class="bad">36</td><td class="bad">20</td>
 <td>4 / 20</td><td>—</td></tr><tr><td>2026-10-15</td><td>36</td><td>0</td>
 <td class="bad">36</td><td class="bad">20</td>
@@ -647,7 +665,7 @@ notes: — ｜ 排除原因: <span class="bad">引擎異常 (error 欄非空) / 
 <b>方法論</b>：數據來自 4 個每日報告（HK quant / US quant / Sentinel / Sentinel PMFX），只取「瘦身投影」，唔 copy 原始檔。<br>
 機會來源 <b>只有 PMFX</b>（唯一提供 entry / target / stop / 期望值）；quant Sharpe、動量、Sentinel 風險只作加成或扣分。<br>
 <b>每個 gate 都會用前向追蹤驗證</b>：訊號之後用實際價格計 1/5/20 日回報，睇有冇觸及目標或止損。<br>
-<span class="bad">⚠️ 今日 0 個標的通過 gate — 呢個 dashboard 唔會建議你跟任何訊號。</span><br>
+
 <b>免責</b>：以上全部係模型輸出（Monte Carlo / 策略投票 / 統計指標），<b>未經交易驗證</b>，唔構成投資建議。Past performance ≠ future results。
 </footer>
 </body></html>

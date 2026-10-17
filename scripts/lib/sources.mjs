@@ -120,15 +120,16 @@ export function pmfxRows(file, iso) {
       target: r(x.target_price, 6),
       stop: r(x.stop_loss, 6),
       rr: r(x.reward_risk, 4),
-      rrv: /^true$/i.test((x.rr_valid || '').trim()) ? 1 : 0,
+      rrv: /^(true|1)$/i.test((x.rr_valid || '').trim()) ? 1 : 0,   // PMFX 寫 True/False，舊檔可能 1/0
       net_rr: r(x.net_rr, 4),
-      net_rrv: /^true$/i.test((x.net_rr_valid || '').trim()) ? 1 : 0,
+      net_rrv: /^(true|1)$/i.test((x.net_rr_valid || '').trim()) ? 1 : 0,   // 欄名係 net_rr_valid（唔係 net_rrv_valid）
       ev: r(x.expected_value, 4),
       net_ev: r(x.net_ev, 4),
       atr: r(x.atr14, 6),
       stop_pct: (() => {
+        // 冇符號嘅止損距離：做空嘅 stop 高於 entry，用 signed 會被 gate 當「止損退化」錯殺
         const e = num(x.entry_price), s = num(x.stop_loss);
-        return e && s && e > 0 ? ((e - s) / e * 100).toFixed(3) : '';
+        return e && s && e > 0 ? (Math.abs(e - s) / e * 100).toFixed(3) : '';
       })(),
       rank: x.rank,
       source: x.source || '',

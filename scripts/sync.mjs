@@ -14,6 +14,13 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => {
 }));
 const DAYS = Number(args.days || 120);
 const DRY = !!args.dry;
+// --refresh          → 重寫窗口內所有已存在日期（上游報告修好後重跑用）
+// --refresh=<iso,..> → 只重寫指定日期（例：--refresh=2026-10-17）
+const REFRESH_RAW = args.refresh;
+const REFRESH_ALL = REFRESH_RAW === true;
+const REFRESH_DATES = !REFRESH_ALL && typeof REFRESH_RAW === 'string'
+  ? new Set(REFRESH_RAW.split(',').map((s) => s.trim()).filter(Boolean)) : null;
+const REFRESHING = REFRESH_ALL || !!REFRESH_DATES;
 
 const COLS = {
   hk:       ['date','ticker','close','sharpe','cagr','vol','mdd','week','month','beta','var95'],
@@ -40,7 +47,7 @@ function loadShards(family) {
   }
   return present;
 }
-function appendRows(family, rows) {
+function appendRows(family, rows, replaceDates = null) {
   const byMonth = new Map();
   for (const r of rows) {
     const m = S.monthOf(r.date);
@@ -52,16 +59,18 @@ function appendRows(family, rows) {
     const file = FILES[family](m);
     fs.mkdirSync(path.dirname(file), { recursive: true });
     const existing = fs.existsSync(file) ? parseCsv(fs.readFileSync(file, 'utf8')) : [];
-    const have = new Set(existing.map((r) => r.date + '|' + r.ticker));
+    const kept = replaceDates ? existing.filter((r) => !replaceDates.has(r.date)) : existing;
+    const replaced = kept.length !== existing.length ? `${existing.length - kept.length} 行覆蓋` : '';
+    const have = new Set(kept.map((r) => r.date + '|' + r.ticker));
     const fresh = rs.filter((r) => !have.has(r.date + '|' + r.ticker));
-    if (!fresh.length) { stats.push([m, 0]); continue; }
-    const merged = [...existing, ...fresh].sort((a, b) =>
+    if (!fresh.length) { stats.push([m, 0, replaced]); continue; }
+    const merged = [...kept, ...fresh].sort((a, b) =>
       (a.date + a.ticker).localeCompare(b.date + b.ticker));
     if (!DRY) {
       fs.mkdirSync(path.dirname(file), { recursive: true });
       fs.writeFileSync(file, toCsv(COLS[family], merged));
     }
-    stats.push([m, fresh.length]);
+    stats.push([m, fresh.length, replaced]);
   }
   return stats;
 }
@@ -70,15 +79,17 @@ const report = [];
 function doFamily(family, dateMap, rowFn, label) {
   const dates = S.listDates(dateMap, DAYS);
   const present = loadShards(family);
-  const todo = dates.filter((d) => !present.has(d));
+  const todo = REFRESHING ? dates : dates.filter((d) => !present.has(d));
   const rows = [];
   for (const d of todo) {
     try { rows.push(...rowFn(dateMap.get(d), d)); }
     catch (e) { console.error(`  ⚠️  ${label} ${d}: ${e.message}`); }
   }
-  const stats = rows.length ? appendRows(family, rows) : [];
+  const replace = REFRESH_ALL ? new Set(todo) : REFRESH_DATES;
+  const stats = rows.length ? appendRows(family, rows, replace) : [];
   report.push([label, dates.length, todo.length, rows.length, stats]);
-  console.log(`${label}: 來源 ${dates.length} 日, 新 ${todo.length} 日, ${rows.length} 行${DRY ? ' (dry)' : ''}`);
+  const rf = REFRESHING ? ' [refresh]' : '';
+  console.log(`${label}: 來源 ${dates.length} 日, 新 ${todo.length} 日, ${rows.length} 行${DRY ? ' (dry)' : ''}${rf}`);
 }
 
 console.log(`=== sync（最近 ${DAYS} 日）===`);
