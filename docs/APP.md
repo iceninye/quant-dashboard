@@ -33,6 +33,17 @@
 | Gate 階梯審計 | 分開「filter 有用」同「filter 只係過度擬合」 |
 | 只 push 瘦身數據 | 原始 report / xlsx / PNG 唔入 repo（防爆倉） |
 
+## 指標定義（避免誤讀）
+
+| 欄／欄名 | 實際意思 |
+|---|---|
+| `avgR5` / `avgR20`（Gate 階梯、rank edge）| **方向調整後嘅百分比回報**：做多 `(price−entry)/entry`、做空反號；5 / 20 個交易日。**唔係 R-multiple** |
+| `winRate` | 已結算訊號中「先觸及目標」嘅比例（20 個交易日內；先觸及止損算輸）|
+| `net_ev` | **單位係標的價位**，唔可以跨資產比較（FX 0.01 vs BTC 6604）→ 跨資產要用 `net_rr` |
+| `stopPct` | 止損距離**絕對值**（做空嘅 stop 高於 entry，冇取絕對值會變負數）|
+| `opp` | PMFX `opportunity_score`（0-10）|
+| `score` | 本 dashboard 加權分（唔可以同 `opp` 直接比）|
+
 ## 已知數據問題（要留意）
 
 1. **PMFX `error` 欄**：2026-10-16 嘅 run 36/36 行都有 `'int' object has no attribute 'days'`；10-17 有 24/34。代表引擎逐個標的都 throw，數值可信度成疑。
