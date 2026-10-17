@@ -1,6 +1,7 @@
 # 系統全景（產生層 + 分析層）
 
-> 📁 **原始碼已收錄**：本 repo `src/<project>/` 有四個 project 嘅完整 Python 快照（2026-10-17，共 24 檔）。見 [src/README.md](../src/README.md)。
+> 📁 **原始碼已收錄**：repo 根目錄 `src/<project>/` 有四個 project 嘅完整 Python 快照（2026-10-17，共 24 檔）。
+> GitHub 上睇：<https://github.com/iceninye/quant-dashboard/tree/main/src>　（注意：Pages 只發布 `docs/`，所以 `src/` 只喺 GitHub 睇得到）
 
 ## 兩層架構
 

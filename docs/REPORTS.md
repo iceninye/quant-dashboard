@@ -5,7 +5,7 @@
 
 ## 總覽
 
-> 📁 四個 project 嘅 Python 原始碼快照：`src/<project>/`（2026-10-17）。
+> 📁 四個 project 嘅 Python 原始碼快照：repo 根目錄 `src/<project>/`（2026-10-17）→ <https://github.com/iceninye/quant-dashboard/tree/main/src>
 
 | # | 報告 | Cron（HKT） | 入口 | 計算耗時 | 發送 |
 |---|---|---|---|---|---|

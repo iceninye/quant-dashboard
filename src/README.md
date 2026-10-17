@@ -39,5 +39,7 @@ python3 -m venv .venv-pmfx && .venv-pmfx/bin/pip install -r requirements.txt
 .venv-pmfx/bin/python verify_fix.py           # 只讀回歸測試（2026-10-17 修復用）
 ```
 
-詳細結構 / 欄位字典 / 函數行號 → [../docs/PIPELINE.md](../docs/PIPELINE.md)、[../docs/REPORTS.md](../docs/REPORTS.md)
-2026-10-17 修復記錄 → [../docs/FIXES.md](../docs/FIXES.md)
+詳細結構 / 欄位字典 / 函數行號 → [docs/PIPELINE.md](../docs/PIPELINE.md)、[docs/REPORTS.md](../docs/REPORTS.md)
+2026-10-17 修復記錄 → [docs/FIXES.md](../docs/FIXES.md)
+
+（網上版：<https://iceninye.github.io/quant-dashboard/PIPELINE.md>）
