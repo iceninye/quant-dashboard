@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, num } from './lib/csv.mjs';
+import { priceSeries, validateFactors, picksFor } from './factors.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CFG = {
@@ -156,12 +157,7 @@ export function forwardTrack(fam) {
   const pm = byDate(fam.pmfx);
   const dates = Object.keys(pm).sort();
   const px = new Map();                    // ticker → [[date, close], ...]
-  for (const d of dates) for (const r of pm[d]) {
-    const c = n(r.close);
-    if (c === null) continue;
-    if (!px.has(r.ticker)) px.set(r.ticker, []);
-    px.get(r.ticker).push([d, c]);
-  }
+  for (const [t, ser] of priceMap(fam)) px.set(t, ser.dates.map((d, i) => [d, ser.px[i]]));
   const cost = CFG.costPct / 100;
   const out = [];
   for (let i = 0; i < dates.length; i++) {
@@ -207,6 +203,61 @@ export function forwardTrack(fam) {
     }
   }
   return out;
+}
+
+// ---------- 價格來源 ----------
+// HK / US quant 嘅收市價優先：PMFX 有約 4% 行嘅 close 係上一行數據（只跑咗 07:15 嗰次），
+// 用佢做前向追蹤會造出一日假波動。PMFX 只補 quant 冇嘅標的（FX、期貨、加密）。
+export function priceMap(fam) {
+  const m = priceSeries(fam.pmfx || []);
+  for (const [t, s] of priceSeries([...(fam.hk || []), ...(fam.us || [])])) m.set(t, s);
+  return m;
+}
+
+// ---------- 數據核對：每次 build 都重算，結果放上 dashboard ----------
+export function dataAudit(fam) {
+  const issues = [];
+  const fams = ['hk', 'us', 'sentinel', 'pmfx', 'macro'];
+  const cov = fams.map((f) => {
+    const ds = [...new Set(fam[f].map((r) => r.date))].sort();
+    const gaps = [];
+    for (let i = 1; i < ds.length; i++) {
+      const g = (Date.parse(ds[i]) - Date.parse(ds[i - 1])) / 86400000;
+      if (g > 7) gaps.push({ from: ds[i - 1], to: ds[i], days: g });
+    }
+    const dup = fam[f].length - new Set(fam[f].map((r) => r.date + '|' + (r.ticker || ''))).size;
+    const cols = fam[f].length ? Object.keys(fam[f][0]).filter((c) => c !== 'date') : [];
+    const empty = cols.filter((c) => fam[f].every((r) => r[c] === ''));
+    return { fam: f, rows: fam[f].length, days: ds.length, first: ds[0] || null, last: ds.at(-1) || null, gaps, dup, empty };
+  });
+  for (const c of cov) {
+    for (const g of c.gaps) issues.push({ level: 'warn', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日數據；跨越呢段嘅持有期唔計` });
+    if (c.dup) issues.push({ level: 'bad', fam: c.fam, msg: `${c.dup} 行重複 (date, ticker)` });
+    if (c.empty.length) issues.push({ level: 'warn', fam: c.fam, msg: `欄位全空：${c.empty.join(', ')}` });
+  }
+  // PMFX close vs quant close（同日同標的）
+  const q = new Map();
+  for (const r of [...fam.hk, ...fam.us]) q.set(r.date + '|' + r.ticker, n(r.close));
+  let both = 0, off = 0;
+  const offDates = new Set();
+  for (const r of fam.pmfx) {
+    const a = n(r.close), b = q.get(r.date + '|' + r.ticker);
+    if (a === null || b === null || b === undefined) continue;
+    both++;
+    if (Math.abs(a / b - 1) > 0.01) { off++; offDates.add(r.date); }
+  }
+  if (off) issues.push({ level: 'warn', fam: 'pmfx', msg: `${off}/${both} 行 close 同 quant 相差 > 1%（${[...offDates].sort().join('、')}），係上一行數據；前向追蹤已改用 quant 收市價` });
+  const pmErr = fam.pmfx.filter((r) => r.err === '1');
+  if (pmErr.length) {
+    const ds = [...new Set(pmErr.map((r) => r.date))].sort();
+    issues.push({ level: 'bad', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}），呢段 PMFX 數值唔可信` });
+  }
+  const usNull = fam.us.filter((r) => r.close === '');
+  if (usNull.length) {
+    const ds = [...new Set(usNull.map((r) => r.date))];
+    issues.push({ level: 'warn', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}）` });
+  }
+  return { coverage: cov, issues };
 }
 
 // ---------- 組裝 ----------
@@ -255,6 +306,9 @@ export function run() {
     clean: scored.filter((x) => x.tier !== 'EXCLUDED').length,
   };
   const macro = fam.macro.filter((r) => r.date === latestDate(fam.macro))[0] || null;
+  const factors = validateFactors(fam, priceMap(fam));
+  const pmLatest = new Map(pmRows.map((r) => [r.ticker, r]));
+  const picks = picksFor(fam, factors, ctx.ctx.sen, pmLatest);
   return {
     generatedAt: new Date().toISOString(),
     dates: ctx.dates, pmfxDate: latestDate(fam.pmfx), macro,
@@ -265,6 +319,8 @@ export function run() {
     trackingStats: { clean: stat(byTier('clean')), all: stat(tracking) },
     audit: audit(fam, tracking),
     series: buildSeries(fam),
+    factors, picks,
+    dataAudit: dataAudit(fam),
   };
 }
 
@@ -360,6 +416,10 @@ if (process.argv[1] && process.argv[1].endsWith('engine.mjs')) {
   console.log('ticker      act  net_ev   rr  止損%  共識  tier  score');
   for (const o of show)
     console.log(`${o.ticker.padEnd(11)}${String(o.action).padEnd(5)}${String(o.net_ev).padStart(7)}${String(o.rr).padStart(6)}${String(o.stopPct).padStart(7)}${String(o.cons).padStart(6)}   ${o.tier}   ${o.score}`);
+  console.log('\n=== 因子驗證（t+1 入場、扣成本、頭 20% vs 等權）===');
+  for (const f of res.factors) for (const h of f.byH)
+    console.log(`${(f.marketLabel + ' ' + f.label).padEnd(26)} H=${String(h.H).padEnd(3)} 超額 ${(100 * h.excess).toFixed(2).padStart(6)}%  IS ${(100 * h.isExcess).toFixed(2).padStart(6)}%  OOS ${(100 * h.oosExcess).toFixed(2).padStart(6)}%  t ${String(h.t).padStart(5)}  窗口 ${h.windows}  ${{ pass: '通過', watch: '觀察', fail: '—' }[h.grade]}`);
+  console.log('\n數據核對:'); for (const i of res.dataAudit.issues) console.log(`  [${i.level}] ${i.fam}: ${i.msg}`);
   console.log('\n前向追蹤（乾淨訊號）:', JSON.stringify(res.trackingStats.clean));
   console.log('前向追蹤（全部）  :', JSON.stringify(res.trackingStats.all));
   console.log(`\n已寫 docs/data/dashboard.json (${(fs.statSync(path.join(outDir, 'dashboard.json')).size / 1024).toFixed(0)} KB)`);
