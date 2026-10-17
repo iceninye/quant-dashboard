@@ -22,14 +22,34 @@ from config import (
 warnings.filterwarnings("ignore")
 logger = logging.getLogger("Sentinel.core")
 
+# ─── 網絡重試（P3 修復 2026-10-17）──────────────────────
+from tenacity import retry as _retry, stop_after_attempt, wait_exponential_jitter, before_sleep_log  # noqa: E402
+
+YF_RETRY = dict(
+    reraise=True,
+    stop=stop_after_attempt(3),
+    wait=wait_exponential_jitter(initial=2, max=20),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+)
+
+
 # ──────────────────────────────────────
 # 數據下載
 # ──────────────────────────────────────
 
+@_retry(**YF_RETRY)
+def _bulk_download_retry(period: str) -> pd.DataFrame:
+    """Bulk download；失敗/空結果 → tenacity retry（P3）。"""
+    d = yf.download(ALL_TICKERS, period=period, progress=False, threads=False)
+    if d is None or len(d) == 0:
+        raise ValueError("empty bulk download")
+    return d
+
+
 def download_data(period: str = "1y") -> pd.DataFrame:
     """Bulk download all tickers"""
     logger.info(f"下載 {len(ALL_TICKERS)} 個標的 ({period})...")
-    data = yf.download(ALL_TICKERS, period=period, progress=False)
+    data = _bulk_download_retry(period)
     # Use Adj Close for accuracy with dividend-paying assets
     if "Adj Close" in data.columns.get_level_values(0):
         data = data["Adj Close"]

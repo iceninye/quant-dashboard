@@ -26,6 +26,19 @@ from config import HEADERS, FALLBACK_TICKERS, CFG
 
 logger = logging.getLogger("USQuant")
 
+# ─── 網絡重試（P3 修復 2026-10-17）──────────────────────
+# 原本完全冇 retry：yfinance 429 / 連線閃斷 → 該標的當日直接失敗、靜默缺數。
+# 3 次嘗試、指數退避 + jitter（2s → 20s 上限），最後一次失敗照樣 raise（行為同舊版一致）。
+from tenacity import retry as _retry, stop_after_attempt, wait_exponential_jitter, before_sleep_log  # noqa: E402
+
+YF_RETRY = dict(
+    reraise=True,
+    stop=stop_after_attempt(3),
+    wait=wait_exponential_jitter(initial=2, max=20),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+)
+
+
 # ════════════════════════════════════════
 # 數據源
 # ════════════════════════════════════════
@@ -111,6 +124,16 @@ def get_tickers(no_scrape: bool, fallback: List[str], top_n: int) -> List[str]:
     return valid[:top_n]
 
 
+@_retry(**YF_RETRY)
+def _fetch_history_retry(ticker: str, period: str = "2y") -> "pd.DataFrame":
+    """單一 ticker 歷史價；空結果當失敗 → 觸發 retry（P3）。"""
+    tkr = yf.Ticker(ticker)
+    df = tkr.history(period=period)
+    if df is None or df.empty:
+        raise ValueError(f"empty history: {ticker}")
+    return df
+
+
 def download_price_data(tickers: List[str]) -> Dict[str, pd.DataFrame]:
     import time
     import random
@@ -121,11 +144,7 @@ def download_price_data(tickers: List[str]) -> Dict[str, pd.DataFrame]:
             delay = random.uniform(0.5, 1.5)
             time.sleep(delay)
         try:
-            tkr = yf.Ticker(ticker)
-            df = tkr.history(period="2y")
-            if df.empty:
-                failed.append(ticker)
-                continue
+            df = _fetch_history_retry(ticker, "2y")
             if isinstance(df.columns, pd.MultiIndex):
                 df.columns = [c[0] if isinstance(c, tuple) else c for c in df.columns]
             data[ticker] = df

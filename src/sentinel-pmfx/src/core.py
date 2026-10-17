@@ -40,6 +40,17 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# ─── 網絡重試（P3 修復 2026-10-17）──────────────────────
+from tenacity import retry as _retry, stop_after_attempt, wait_exponential_jitter, before_sleep_log  # noqa: E402
+
+YF_RETRY = dict(
+    reraise=True,
+    stop=stop_after_attempt(3),
+    wait=wait_exponential_jitter(initial=2, max=20),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+)
+
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SECTION 1: CONFIG (原 config.py)
@@ -220,15 +231,22 @@ def _download_twelvedata(ticker: str, period: str, interval: str) -> pd.DataFram
         print(f"  ⚠️ Twelve Data error({ticker}): {e}")
         return pd.DataFrame()
 
+@_retry(**YF_RETRY)
+def _yf_download_retry(ticker: str, period: str, interval: str) -> pd.DataFrame:
+    """yfinance 下載；失敗/空結果 → tenacity retry（P3）。"""
+    d = yf.download(ticker, period=period, interval=interval,
+                    auto_adjust=False, progress=False, threads=False)
+    if d is None or d.empty:
+        raise ValueError(f"empty download: {ticker}")
+    return d
+
+
 def download_history(ticker: str, period: str, interval: str) -> pd.DataFrame:
     """統一入口：XAUUSD=X 走 Twelve Data，其餘走 yfinance"""
     if ticker in TWELVEDATA_TICKERS:
         return _download_twelvedata(ticker, period, interval)
     try:
-        df = yf.download(
-            ticker, period=period, interval=interval,
-            auto_adjust=False, progress=False, threads=False
-        )
+        df = _yf_download_retry(ticker, period, interval)
         if df is None or df.empty:
             return pd.DataFrame()
         if isinstance(df.columns, pd.MultiIndex):
@@ -501,10 +519,14 @@ def cross_asset_summary(prices: pd.DataFrame) -> dict:
             return result
         pivot = prices.pivot_table(index="Date", columns="ticker", values="Close")
         ret = pivot.pct_change().dropna()
-        gold_col = "XAUUSD=X"
+        # Fix 6 (2026-10-17)：XAUUSD=X 已停用（series 空）→ 金銀比變 nan。
+        # 用 GC=F（黃金期貨，同為期貨源，數據新鮮）+ dropna，避免尾部 NaN 污染。
+        gold_col = "GC=F"
         silver_col = "SI=F"
         if gold_col in pivot.columns and silver_col in pivot.columns:
-            gsr = pivot[gold_col] / pivot[silver_col].replace(0, np.nan)
+            gsr = (pivot[gold_col] / pivot[silver_col].replace(0, np.nan)).dropna()
+            if len(gsr) < 20:
+                raise ValueError(f"金銀比樣本不足 ({len(gsr)})")
             result["gold_silver_ratio"] = {
                 "current": float(gsr.iloc[-1]),
                 "avg_1y": float(gsr.mean()),

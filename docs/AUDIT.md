@@ -75,21 +75,73 @@
 
 ## 已確認嘅真問題（按優先級）
 
-| # | 優先 | 問題 | 位置 | 影響 |
+| # | 優先 | 問題 | 位置 | 狀態 |
 |---|---|---|---|---|
-| P1 | 🔴 | `requirements.txt` 與實跑版本脫節 + 4 venv 版本不一致 | `src/*/requirements.txt` | 重建環境會裝到唔同版本 → 結果不可重現 |
-| P2 | 🔴 | 冇 root `requirements.txt` / `.env.example` | repo root | 新人照 README 裝唔起 |
-| P3 | 🔴 | yfinance **冇 retry/backoff** | `quant-hk:226-243`、`quant-us:115-135`、`sentinel-pmfx:1200-1215` | 429/斷線 → 該標的當日直接失敗，靜默缺數 |
+| P1 | 🔴 | `requirements.txt` 與實跑版本脫節 + 4 venv 版本不一致 | `src/*/requirements.txt` | ✅ **已修 2026-10-17** |
+| P2 | 🔴 | 冇 root `requirements.txt` / `.env.example` | repo root | ✅ **已修 2026-10-17** |
+| P3 | 🔴 | yfinance **冇 retry/backoff** | 4 個 `core.py` 全部 fetch 入口 | ✅ **已修 2026-10-17** |
 | P4 | 🟡 | `auto_adjust` 三個 project 三種做法 | 見 §2 | 同一標的不同報告用不同價格口徑，唔可直接比較 |
 | P5 | 🟡 | Sortino 分母非標準 downside deviation | `quant-us:296` | Sortino 數值偏差（非 crash）|
 | P6 | 🟡 | 量化函數冇最小樣本 guard | `calc_sharpe` / `calc_sortino` | 新 call-site 漏 guard 會出無意義數字 |
 | P7 | 🟡 | 跨市場 naive 日期對齊 | `generate_report.py` 各處 | look-ahead 風險（HK vs US 收市時間差 12 小時）|
 
+## 本次已修項目驗證（2026-10-17）
+
+### P1 — 版本 pin 對齊實況
+
+4 個 `requirements.txt` 由 `>=` 無上限（部分甚至完全冇版本）改為 **`>=實測版本, <下個 major`**，並補齊原本漏列嘅依賴（`tenacity`、`openpyxl`、`python-dotenv`）。
+
+**4 個 venv 最終一致性（實測）**：
+
+| Project | pandas | numpy | yfinance | tenacity |
+|---|---|---|---|---|
+| quant-hk | 3.0.5 | 2.4.6 | 1.5.2 | 9.2.1 |
+| quant-us | 3.0.5 | 2.4.6 | 1.5.2 | 9.2.1 |
+| sentinel-pmfx | 3.0.5 | 2.4.6 | 1.5.2 | 9.2.1 |
+| sentinel | 3.0.5 | 2.4.6 | 1.5.2 | 9.2.1 |
+
+（修復前：sentinel = pandas 3.0.3 + yfinance 1.4.1，其餘 1.5.2）
+
+⚠️ 踩過嘅坑：`uv pip install` **冇 `--upgrade` 時只補「唔滿足」嘅版本** → sentinel 嘅 yfinance 1.4.1 唔滿足 `>=1.5`，uv 直接裝 **1.7.0**（比其他 3 個更新，反而更唔一致）。要精確對齊必須寫 `==` 版本號。
+
+### P2 — root 依賴與環境範例
+
+- `requirements.txt`（新增）：全部 4 個 project 嘅依賴總表，附安裝步驟 + 「核心係 Node.js，唔需要 Python」說明
+- `.env.example`（新增）：5 個**全部可選**嘅環境變數，附「缺失時行為」（例：`TWELVEDATA_API_KEY` 缺失 → XAU/USD 印警告後跳過該標的；`TELEGRAM_BOT_TOKEN` 缺失 → Telegram 警報關閉）
+- 冇任何必需 API key（全 yfinance 免費源）
+
+### P3 — tenacity retry
+
+4 個 `core.py` 各加一段 `YF_RETRY` 常數 + 包住 fetch 入口：
+
+| Project | 被 retry 包住嘅入口 | 呼叫方式 |
+|---|---|---|
+| quant-hk | `download_history()`（decorator）| `yf.download` |
+| quant-us | 新增 `_fetch_history_retry()` | `yf.Ticker().history()` |
+| sentinel | 新增 `_bulk_download_retry()` | `yf.download`（bulk 26 tickers）|
+| sentinel-pmfx | 新增 `_yf_download_retry()` | `yf.download` |
+
+參數：`3 次嘗試` / `wait_exponential_jitter(initial=2, max=20)` / `reraise=True`（最後一次失敗照樣 raise，唔改變舊行為）/ 空 result 當失敗以觸發 retry / `before_sleep_log(WARNING)` 記錄每次重試。
+
+**實測（故意令第一次 raise `ConnectionError` 模擬 429）**：
+
+| Project | 結果 |
+|---|---|
+| quant-hk | ✅ `yf.download` 被呼叫 2 次，回傳 5 行 |
+| quant-us | ✅ `Ticker.history` 被呼叫 2 次，回傳 5 行 |
+| sentinel-pmfx | ✅ `yf.download` 被呼叫 2 次，回傳 23 行 |
+| sentinel | ✅ bulk 真實 fetch `(6, 34)`，降版後連續兩次呼叫正常 |
+
+---
+
 ## 建議（未做，等指示）
 
-1. 補 root `requirements.txt`（指向 4 個 project）+ `.env.example`（實際只需 `TZ`）
-2. 加版本上限 pin（`pandas>=3.0,<4`、`yfinance>=1.5,<2`）並統一 4 個 venv
-3. 加 `tenacity` retry decorator（3 次、指數退避）落三個 fetch 函數
-4. 統一 `auto_adjust=True`（除 PMFX 因策略需要未調整價，需明確寫落 config）
-5. Sortino 改標準 downside deviation
-6. 加 `MIN_OBS = 20` guard 落 `calc_sharpe` / `calc_sortino`
+| # | 建議 | 狀態 |
+|---|---|---|
+| 1 | 補 root `requirements.txt` + `.env.example` | ✅ 已做（P2）|
+| 2 | 版本上限 pin + 統一 4 個 venv | ✅ 已做（P1）|
+| 3 | `tenacity` retry 落 4 個 fetch 入口 | ✅ 已做（P3）|
+| 4 | 統一 `auto_adjust`（PMFX 因策略需要未調整價，應寫落 config）| ⏳ 未做（P4）|
+| 5 | Sortino 改標準 downside deviation | ⏳ 未做（P5）|
+| 6 | `MIN_OBS = 20` guard 落 `calc_sharpe` / `calc_sortino` | ⏳ 未做（P6）|
+| 7 | 跨市場 tz-aware 對齊 | ⏳ 未做（P7）|

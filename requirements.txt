@@ -1,0 +1,29 @@
+# quant-dashboard — 全部 4 個量化 project 嘅依賴總表
+# 原則：pin 到「實測運行版本」為下限、下一個 major 為上限（2026-10-17 校正）
+# 逐個 project 專屬依賴見 src/<project>/requirements.txt
+#
+# 安裝：
+#   python -m venv venv && . venv/bin/activate
+#   pip install -r requirements.txt
+#
+# 註：本 repo 核心（docs/ 產生器）係 Node.js，執行 `node scripts/build.mjs`，
+#     唔需要 Python。Python 只用於 src/ 內 4 個分析 project。
+
+# ── 核心 ──
+pandas>=3.0,<4
+numpy>=2.4,<3
+scipy>=1.17,<2
+requests>=2.34,<3
+tenacity>=9.2,<10
+
+# ── 資料源 ──
+yfinance>=1.5,<2
+
+# ── 圖表 / 報表 ──
+plotly>=6.9,<7          # quant-hk / quant-us
+kaleido>=1.3,<2         # plotly 靜態輸出
+matplotlib>=3.11,<4     # sentinel
+openpyxl>=3.1,<4        # Excel 輸出（sentinel / quant-*）
+jinja2>=3.1,<4          # sentinel HTML 模板
+pyyaml>=6.0,<7          # sentinel-pmfx config
+python-dotenv>=1.2,<2   # sentinel-pmfx

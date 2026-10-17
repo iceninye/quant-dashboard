@@ -27,6 +27,19 @@ from config import HEADERS, FALLBACK_TICKERS, BENCHMARK_TICKER, CFG
 
 logger = logging.getLogger("HKQuant")
 
+# ─── 網絡重試（P3 修復 2026-10-17）──────────────────────
+# 原本完全冇 retry：yfinance 429 / 連線閃斷 → 該標的當日直接失敗、靜默缺數。
+# 3 次嘗試、指數退避 + jitter（2s → 20s 上限），最後一次失敗照樣 raise（行為同舊版一致）。
+from tenacity import retry as _retry, stop_after_attempt, wait_exponential_jitter, before_sleep_log  # noqa: E402
+
+YF_RETRY = dict(
+    reraise=True,
+    stop=stop_after_attempt(3),
+    wait=wait_exponential_jitter(initial=2, max=20),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+)
+
+
 # ════════════════════════════════════════
 # 數據源
 # ════════════════════════════════════════
@@ -111,8 +124,11 @@ def normalize_hk_ticker(code: str) -> str:
     return c
 
 
+@_retry(**YF_RETRY)
 def download_history(ticker: str, period: str = '2y', interval: str = '1d') -> pd.DataFrame:
     df = yf.download(ticker, period=period, interval=interval, auto_adjust=True, progress=False, threads=False)
+    if df is None or df.empty:
+        raise ValueError(f"empty history: {ticker}")  # 空結果當失敗 → 觸發 retry
     if df.empty:
         return df
     if isinstance(df.columns, pd.MultiIndex):

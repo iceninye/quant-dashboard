@@ -1,8 +1,10 @@
-yfinance>=0.2.30
-pandas>=2.0.0
-numpy>=1.24.0
-scipy>=1.11.0
-openpyxl>=3.1.0
-matplotlib>=3.7.0
-requests>=2.31.0
-jinja2>=3.1.0
+# Hermes Sentinel v4.0 — 實際運行版本 pin（2026-10-17 校正）
+pandas>=3.0,<4
+numpy>=2.4,<3
+yfinance>=1.5,<2
+scipy>=1.17,<2
+requests>=2.34,<3
+tenacity>=9.2,<10
+openpyxl>=3.1,<4
+matplotlib>=3.11,<4
+jinja2>=3.1,<4
