@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17T06:26:37.893Z",
+ "generatedAt": "2026-10-17T09:36:56.145Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-17",
@@ -33944,7 +33944,10 @@
      "isExcess": 0.0104,
      "oosExcess": 0.0083,
      "t": 1.92,
-     "grade": "watch"
+     "p": 0.0436,
+     "adjP": 0.4799,
+     "grade": "watch",
+     "m": 11
     },
     {
      "H": 20,
@@ -33958,7 +33961,10 @@
      "isExcess": 0.0439,
      "oosExcess": 0.0258,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "watch"
@@ -33981,7 +33987,10 @@
      "isExcess": 0.0051,
      "oosExcess": 0.006,
      "t": 1.38,
-     "grade": "fail"
+     "p": 0.101,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -33995,7 +34004,10 @@
      "isExcess": 0.0462,
      "oosExcess": 0.021,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34018,7 +34030,10 @@
      "isExcess": -0.0072,
      "oosExcess": -0.0074,
      "t": -0.97,
-     "grade": "fail"
+     "p": 0.8207,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34032,7 +34047,10 @@
      "isExcess": 0.0506,
      "oosExcess": 0.004,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34055,7 +34073,10 @@
      "isExcess": -0.0055,
      "oosExcess": -0.002,
      "t": -1.59,
-     "grade": "fail"
+     "p": 0.9269,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34069,7 +34090,10 @@
      "isExcess": 0.0076,
      "oosExcess": 0.0164,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34092,7 +34116,10 @@
      "isExcess": 0.0057,
      "oosExcess": -0.004,
      "t": 0.5,
-     "grade": "fail"
+     "p": 0.3153,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34106,7 +34133,10 @@
      "isExcess": 0.0283,
      "oosExcess": -0.0027,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34129,7 +34159,10 @@
      "isExcess": 0.0066,
      "oosExcess": -0.0047,
      "t": 0.67,
-     "grade": "fail"
+     "p": 0.2604,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34143,7 +34176,10 @@
      "isExcess": 0.0324,
      "oosExcess": -0.0118,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34166,7 +34202,10 @@
      "isExcess": 0.006,
      "oosExcess": -0.0138,
      "t": -0.62,
-     "grade": "fail"
+     "p": 0.7237,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34180,7 +34219,10 @@
      "isExcess": 0.0138,
      "oosExcess": 0.0013,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34203,7 +34245,10 @@
      "isExcess": -0.0045,
      "oosExcess": 0.004,
      "t": 0.18,
-     "grade": "fail"
+     "p": 0.4319,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34217,7 +34262,10 @@
      "isExcess": -0.0056,
      "oosExcess": 0.009,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34240,7 +34288,10 @@
      "isExcess": -0.0032,
      "oosExcess": 0.0016,
      "t": 0.07,
-     "grade": "fail"
+     "p": 0.4714,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34254,7 +34305,10 @@
      "isExcess": -0.0259,
      "oosExcess": -0.0041,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34277,7 +34331,10 @@
      "isExcess": -0.0012,
      "oosExcess": -0.0071,
      "t": -1.14,
-     "grade": "fail"
+     "p": 0.8586,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34291,7 +34348,10 @@
      "isExcess": -0.0171,
      "oosExcess": -0.0276,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34314,7 +34374,10 @@
      "isExcess": -0.0055,
      "oosExcess": -0.0124,
      "t": 0.3,
-     "grade": "fail"
+     "p": 0.3885,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 11
     },
     {
      "H": 20,
@@ -34328,7 +34391,10 @@
      "isExcess": -0.0394,
      "oosExcess": -0.0431,
      "t": null,
-     "grade": "fail"
+     "p": null,
+     "adjP": null,
+     "grade": "fail",
+     "m": 11
     }
    ],
    "grade": "fail"
@@ -34354,7 +34420,10 @@
     "isExcess": 0.0104,
     "oosExcess": 0.0083,
     "t": 1.92,
-    "grade": "watch"
+    "p": 0.0436,
+    "adjP": 0.4799,
+    "grade": "watch",
+    "m": 11
    },
    "names": [
     {
@@ -34588,6 +34657,53 @@
    ]
   }
  ],
+ "forward": {
+  "rule": {
+   "version": "hk-lowmdd-v1",
+   "liveFrom": "2026-10-16",
+   "top": 10,
+   "stepDays": 28,
+   "costBps": 30,
+   "minNames": 30
+  },
+  "settled": 0,
+  "periods": [
+   {
+    "signalDate": "2026-10-16",
+    "entry": null,
+    "exit": null,
+    "tickers": [
+     "0002.HK",
+     "2388.HK",
+     "0941.HK",
+     "1398.HK",
+     "3988.HK",
+     "0939.HK",
+     "0003.HK",
+     "0006.HK",
+     "0270.HK",
+     "0066.HK"
+    ],
+    "late": false,
+    "status": "pending-entry"
+   }
+  ],
+  "meanExcess": null,
+  "sdExcess": null,
+  "t": null,
+  "needed": null,
+  "inconclusive": false,
+  "chainBad": [],
+  "future": [],
+  "mismatches": [],
+  "lateCount": 0
+ },
+ "pmfxNew": {
+  "since": "2026-10-17",
+  "settled": 0,
+  "needed": 20,
+  "avgR5": null
+ },
  "dataAudit": {
   "coverage": [
    {

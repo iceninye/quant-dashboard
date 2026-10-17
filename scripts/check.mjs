@@ -59,12 +59,91 @@ for (const fam of ['hk', 'us', 'sentinel', 'pmfx', 'macro']) {
 }
 ok(total < E.CFG.budgetMB * 1048576, `總體積 ${(total / 1048576).toFixed(2)} MB < 預算 ${E.CFG.budgetMB} MB`);
 
+console.log('Holm / t 分佈');
+const FX = await import('./factors.mjs');
+ok(Math.abs(2 * FX.tPValue(2, 10) - 0.0734) < 0.0005, 't=2,df=10 雙尾 p ≈ 0.0734');
+ok(Math.abs(FX.tPValue(0, 5) - 0.5) < 1e-9, 't=0 單尾 p = 0.5');
+ok(JSON.stringify(FX.holm([0.01, 0.04, 0.03, null])) === JSON.stringify([0.03, 0.06, 0.06, null]), 'Holm step-down 單調 + 跳過 null');
+
+console.log('Forward log');
+const FW = await import('./forward.mjs');
+{
+  // 合成 HK：40 隻，每日 +0.1% 漂移；A00 回撤最淺（mdd 最高）
+  const rule = { ...FW.RULE, liveFrom: '2026-01-05', top: 5, stepDays: 28, costBps: 30, minNames: 30 };
+  const start = Date.parse('2026-01-05'), rows = [];
+  for (let d = 0; d < 80; d++) {
+    const dt = new Date(start + d * 86400000);
+    if ([0, 6].includes(dt.getUTCDay())) continue;
+    const date = dt.toISOString().slice(0, 10);
+    for (let i = 0; i < 40; i++) rows.push({ date, ticker: 'T' + String(i).padStart(2, '0'), close: String(100 * (1 + (i < 5 ? 0.002 : 0.001)) ** d), mdd: String(-0.01 * (i + 1)) });
+  }
+  const a = FW.forwardLog(rows, [], '2026-04-01', rule);
+  ok(a.newRows.length === a.summary.periods.length && a.newRows.length >= 3, `簽名期數 ${a.newRows.length}`);
+  ok(a.newRows[0].tickers === 'T00 T01 T02 T03 T04', '揀 mdd 最高頭 5 隻');
+  const p0 = a.summary.periods[0];
+  ok(p0.entry > p0.signalDate, '入場日喺簽名日之後（t+1）');
+  ok(p0.status === 'settled' && p0.cost === 0.003, '第一期換手 100% → 成本 30 bps');
+  ok(a.summary.periods[1].cost === 0, '組合不變 → 成本 0');
+  ok(p0.excess > 0 && p0.names === 5, '低 MDD 組漂移較高 → 超額為正');
+  ok(a.summary.periods.at(-1).status !== 'settled', '最後一期未結算');
+  const again = FW.forwardLog(rows, a.newRows, '2026-04-01', rule);
+  ok(again.newRows.length === 0 && again.summary.mismatches.length === 0, '重跑冪等，唔重複寫');
+  const tampered = a.newRows.map((r, i) => (i ? r : { ...r, tickers: 'T39 T38 T37 T36 T35' }));
+  const tm = FW.forwardLog(rows, tampered, '2026-04-01', rule).summary;
+  ok(tm.mismatches.length === 1 && tm.mismatches[0].kind === 'log-edited' && tm.chainBad.length >= 1, '改 tickers：紀錄被改 + 斷鏈');
+  ok(FW.verifyChain(a.newRows).length === 0, '鏈完整');
+  ok(FW.verifyChain(a.newRows.map((r, i) => (i === 1 ? { ...r, built_at: '2020-01-01' } : r))).length >= 1, '改 built_at 斷鏈');
+  ok(FW.verifyChain(a.newRows.filter((_, i) => i !== 1)).length >= 1, '刪一行斷鏈');
+  const fut = [...a.newRows, { signal_date: '2030-01-01', rule: rule.version, tickers: 'X', mdd_hash: 'x', built_at: '2026-04-01', late: '0', prev_hash: a.newRows.at(-1).hash, hash: 'bad' }];
+  const fs2 = FW.forwardLog(rows, fut, '2026-04-01', rule).summary;
+  ok(fs2.future.includes('2030-01-01') && fs2.chainBad.includes('2030-01-01'), '未來日期行被偵測');
+  const restated = rows.map((r) => (r.ticker === 'T00' && r.date === a.newRows[0].signal_date ? { ...r, mdd: '-0.5' } : r));
+  const rs = FW.forwardLog(restated, a.newRows, '2026-04-01', rule).summary;
+  ok(rs.mismatches[0]?.kind === 'restated' || rs.mismatches[0]?.kind === 'input-restated', '上游 restate 同篡改分開標示');
+  const v2 = { ...rule, version: 'v2-test' };
+  const both = [...a.newRows];
+  const b2 = FW.forwardLog(rows, both, '2026-04-01', v2);
+  ok(b2.newRows.length === a.newRows.length && b2.summary.mismatches.length === 0, '不同 rule version 同日並存，互不干擾');
+  ok(b2.newRows[0].prev_hash === a.newRows.at(-1).hash, 'v2 接駁喺 v1 鏈尾');
+  { const f = path.join(ROOT, 'scripts', '.tmp-fwd.csv'); fs.writeFileSync(f, FW.LOG_COLS.join(',') + '\n' + 'x,x,x,x,x,x,x,x'); FW.appendLog(f, a.newRows.slice(0, 1)); const L = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean); fs.unlinkSync(f); ok(L.length === 3, 'appendLog 檔尾冇換行唔黏行'); }
+  ok(FW.forwardLog(rows, [], '2026-04-20', rule).newRows[0].late === '1', '遲 build 標 late');
+  const cut = rows.filter((r) => r.date < '2026-01-26' || r.date > '2026-02-13');
+  ok(FW.signalDates([...new Set(cut.map((r) => r.date))].sort(), rule).length < FW.signalDates([...new Set(rows.map((r) => r.date))].sort(), rule).length, '簽名日缺數據 > 4 日 → 跳過');
+}
+console.log('Backfill');
+const BF = await import('./backfill_prices.mjs');
+{
+  const dts = []; for (let i = 0; i < 60; i++) dts.push(new Date(Date.parse('2026-06-01') + i * 86400000).toISOString().slice(0, 10));
+  const px = (i, d) => 100 + i + d * 0.5;
+  const repo = [], wide = [];
+  dts.forEach((d, di) => {
+    const w = { date: d };
+    for (let i = 0; i < 40; i++) { w['T' + i] = String(px(i, di)); if (di < 20 || di > 29) repo.push({ date: d, ticker: 'T' + i, close: String(px(i, di)) }); }
+    wide.push(w);
+  });
+  repo.push({ date: dts[25], ticker: 'T0', close: '' });
+  const plan = BF.planBackfill(wide, repo, []);
+  ok(!plan.rejected && plan.add.length === 40 * 10, `補缺口期 ${plan.add.length} 行（10 日 × 40 隻），repo 已有嘅唔重補`);
+  ok(plan.overlap.max === 0, '重疊日完全一致');
+  ok(plan.add.every((r) => r.date >= dts[20] && r.date <= dts[29]), '只補缺口日');
+  ok(BF.planBackfill(wide, repo, plan.add).add.length === 0, '重跑冪等');
+  const skew = wide.map((w) => ({ ...w, ...Object.fromEntries(Object.keys(w).filter((k) => k !== 'date').map((k) => [k, String(Number(w[k]) * 1.03)])) }));
+  ok(/偏差過大/.test(BF.planBackfill(skew, repo, []).rejected || ''), '復權口徑唔同（+3%）被拒絕');
+  ok(/少於 30/.test(BF.planBackfill(wide, repo.slice(0, 5), []).rejected || ''), '重疊太少無法核對 → 拒絕');
+  // 補完之後，跨缺口持有期可以計
+  const F2 = await import('./factors.mjs');
+  const sNo = F2.priceSeries(repo), sBf = F2.priceSeries([...repo, ...plan.add]);
+  ok(F2.fwdReturn(sNo.get('T1'), dts[18], 5) === null && F2.fwdReturn(sBf.get('T1'), dts[18], 5) !== null, '缺口期補價後，跨缺口窗口由「唔計」變「可計」');
+}
+
 console.log('引擎輸出');
 const res = E.run();
 ok(res.quality.total > 0, `PMFX 標的數 ${res.quality.total}`);
 ok(Array.isArray(res.opportunities) && res.opportunities.length === res.quality.total, 'opportunities 數量一致');
 ok(res.tracking.length > 0, `前向追蹤 ${res.tracking.length} 條`);
 ok(res.series.length > 0, `序列 ${res.series.length} 日`);
+ok(res.forward && res.forward.rule.version && res.pmfxNew.needed === 20, 'forward / pmfxNew 欄位');
+ok(res.factors.flatMap((f) => f.byH).every((h) => h.grade !== 'pass' || h.adjP < 0.05), '通過級一定 Holm 校正後 p < 0.05');
 ok(res.audit.ladder.length >= 5, 'gate 階梯');
 ok(res.quality.clean === 0 || res.opportunities.some((o) => o.tier !== 'EXCLUDED'), '通過 gate 數一致');
 
