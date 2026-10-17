@@ -7,6 +7,13 @@ app:
 market:
   history_period: 2y
   interval: 1d
+  # 【P4 2026-10-17】PMFX 策略用【未調整】原始價（唔要股息/拆股調整），
+  # 同 quant-hk / quant-us / sentinel 嘅 auto_adjust=True 明確區分。
+  auto_adjust: false
+  # 【P7 2026-10-17】跨市場對齊：港股 16:00 HKT 收市，美股/期貨收市喺
+  # 翌日 04:00-05:00 HKT → 非港股標的日期 +1 日，避免 look-ahead。
+  # 設 false 可回退舊嘅「同一個 Date 直接對齊」行為。
+  session_align: true
   min_history: 120
   sim_paths: 2500
   sim_steps: 300

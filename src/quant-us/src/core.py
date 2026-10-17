@@ -298,21 +298,38 @@ def calc_returns(prices: pd.Series) -> pd.Series:
     return prices.pct_change().dropna()
 
 
+MIN_OBS = 20  # 【P6 2026-10-17】少於此觀測數 → 指標無意義，回傳 NaN
+
+
+def _downside_deviation(excess: pd.Series) -> float:
+    """【P5 2026-10-17】標準 downside deviation（Sortino 1994）。
+
+    DD = sqrt( mean( min(r - MAR, 0)^2 ) )，分母用【全部觀測數】。
+    舊寫法 downside.std() 只用下行子集嘅標準差，會系統性低估 DD → Sortino 偏大。
+    """
+    if excess.empty:
+        return 0.0
+    neg = np.minimum(excess.to_numpy(dtype=float), 0.0)
+    return float(np.sqrt(np.mean(neg ** 2)))
+
+
 def calc_sharpe(returns: pd.Series, rf: float) -> float:
-    if returns.empty or returns.std() == 0:
+    r = returns.dropna()
+    if r.size < MIN_OBS or r.std() == 0:
         return np.nan
-    return (returns.mean() * 252 - rf) / (returns.std() * np.sqrt(252))
+    return (r.mean() * 252 - rf) / (r.std() * np.sqrt(252))
 
 
 def calc_sortino(returns: pd.Series, rf: float) -> float:
-    if returns.empty:
+    r = returns.dropna()
+    if r.size < MIN_OBS:
         return np.nan
     daily_rf = rf / 252
-    excess = returns - daily_rf
-    downside = excess[excess < 0]
-    if downside.empty or downside.std() == 0:
+    excess = r - daily_rf
+    dd = _downside_deviation(excess)
+    if dd == 0:
         return np.nan
-    return (excess.mean() * 252) / (downside.std() * np.sqrt(252))
+    return (excess.mean() * 252) / (dd * np.sqrt(252))
 
 
 def calc_max_drawdown(prices: pd.Series) -> float:
@@ -391,8 +408,12 @@ class Backtester:
         df["drawdown"] = df["equity"] / df["equity"].cummax() - 1
         return df
 
-    def metrics(self, equity: pd.Series, rf: float = 0.04, freq: int = 252):
+    def metrics(self, equity: pd.Series, rf: float = 0.026, freq: int = 252):
         ret = equity.pct_change().dropna()
+        if ret.size < MIN_OBS:  # 【P6】樣本不足 → 唔計指標，避免 2 個觀測出 Sharpe
+            nan = float("nan")
+            return {"total_return": nan, "cagr": nan, "volatility": nan, "sharpe": nan,
+                    "sortino": nan, "calmar": nan, "max_drawdown": nan}
         total_return = equity.iloc[-1] / equity.iloc[0] - 1
         if isinstance(equity.index, pd.DatetimeIndex):
             n_days = (equity.index[-1] - equity.index[0]).days
@@ -403,8 +424,9 @@ class Backtester:
         sharpe = (ret.mean() * freq - rf) / (ret.std() * math.sqrt(freq) + 1e-12)
         daily_rf = rf / freq
         excess = ret - daily_rf
-        downside = excess[excess < 0]
-        sortino = (excess.mean() * freq) / (downside.std() * math.sqrt(freq) + 1e-12)
+        # 【P5】標準 downside deviation（分母用全部觀測），唔再係下行子集嘅 std
+        _dd = _downside_deviation(excess)
+        sortino = (excess.mean() * freq) / (_dd * math.sqrt(freq) + 1e-12) if _dd > 0 else float("nan")
         dd = equity / equity.cummax() - 1
         mdd = dd.min()
         calmar = cagr / abs(mdd + 1e-12)

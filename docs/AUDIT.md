@@ -59,6 +59,68 @@
 | 自動化測試 | ✅ `node scripts/check.mjs` = **29 通過 / 0 失敗**（含 gate 數一致、冇外部 CDN、含免責聲明）|
 | Python 語法 | ✅ **20/20** `py_compile` 通過 |
 
+## P4–P7 修復與驗證（2026-10-17）
+
+### P4 — `auto_adjust` 統一
+
+| Project | 修復前 | 修復後 |
+|---|---|---|
+| quant-hk | `auto_adjust=True`（硬編碼）| 不變 |
+| quant-us | 冇設（靠 yfinance 默認，會隨版本漂移）| **明確 `auto_adjust=True`** |
+| sentinel | 冇設 + 靠 `"Adj Close" in columns` 判斷 | **明確 `auto_adjust=True`**，改為一律取 `Close`（auto_adjust 之下 Close 已係調整價、根本冇 Adj Close）|
+| sentinel-pmfx | `auto_adjust=False`（硬編碼）| **`configs/config.yaml` → `market.auto_adjust: false`** + `auto_adjust_flag()` 讀取；`normalize_close` 由「優先 Adj Close」改為**優先 Close**（配合未調整價策略）|
+
+實測：pmfx `auto_adjust_flag() = False` ✅；sentinel 下載 `(367, 34)` 正常 ✅
+
+### P5 — Sortino 標準化
+
+4 個 project 全部改用標準 downside deviation（Sortino 1994）：
+
+```
+DD = sqrt( mean( min(r - MAR, 0)^2 ) )     # 分母用【全部觀測數】
+Sortino = mean(r - MAR) × ann / (DD × sqrt(ann))
+```
+
+舊寫法 `downside.std()` 只用下行子集嘅標準差（以子集均值為中心）→ 系統性偏差。
+
+| 樣本 | 舊寫法 | 新標準 | 變化 |
+|---|---|---|---|
+| AAPL 1y（250 obs）| 1.6775 | **1.8169** | +8.3% |
+| SPY 1y（PMFX 路徑）| 1.2955 | **1.2360** | −4.6% |
+
+### P6 — 最小樣本 guard（`MIN_OBS = 20`）
+
+| 位置 | 行為 |
+|---|---|
+| `quant-hk` / `quant-us` `calc_sharpe` / `calc_sortino` | `dropna().size < 20` → `NaN` |
+| `quant-hk` / `quant-us` `Backtester.metrics` | `ret.size < 20` → 全部指標 `NaN`（唔再出 partial dict）|
+| `sentinel` `calculate_metrics` | `size < MIN_OBS` 或 `vol<=0` → `NaN`（原本出 0）|
+| `sentinel-pmfx` `metrics` | `size < MIN_OBS` → 12 個指標全 `NaN` |
+
+實測：2 個觀測 → `calc_sharpe = NaN`（修復前 = **−3.86**）；19 obs → `NaN`、20 obs → 有值 ✅
+
+### P7 — 跨市場交易時段對齊
+
+**問題**：港股 16:00 HKT 收市；美股/期貨 16:00 ET = **翌日 04:00–05:00 HKT**。用同一個 `Date` 對齊，等於用「HK 收市後約 12 小時才發生」嘅美市收盤價去預測 HK 收市時嘅決策 → look-ahead bias。
+
+**修法**：新增 `session_aligned_pivot()`（`sentinel-pmfx/src/core.py`）
+
+- 非港股標的嘅日期標籤 **+1 日** = 該收盤價實際喺香港時間已知嘅日期
+- `.HK` 後綴與 24/7 市場（`BTC-USD` / `ETH-USD`）不位移
+- `ffill(limit=3)` 補跨市場假期空隙
+- config 可關：`market.session_align: false` 回退舊行為
+
+**替代** `fx_strength_matrix` / `dollar_index_correlation` / `cross_asset_summary` 三個函數嘅 `pivot_table(index="Date")`。
+
+實測（6 標的 1 年：GC=F / SI=F / EURUSD=X / DX-Y.NYB / SPY / 0700.HK）：
+
+| 指標 | 舊（同日 naive）| 新（HK 可知日期）|
+|---|---|---|
+| index 樣本數 | 260 | 312 |
+| 平均相關係數 | 0.0724 | **0.0444** |
+
+**生產流程實跑**（`main.py` 完整跑一次）：分析 36 標的、失敗 0、買 2 / 沽 19 / 觀望 15 — **訊號與修復前一致**（Sortino 與對齊方式改變未翻轉任何訊號），HTML + Obsidian 寫入正常 ✅
+
 ---
 
 ## 你提供嘅除錯指令：實測結果
@@ -80,10 +142,10 @@
 | P1 | 🔴 | `requirements.txt` 與實跑版本脫節 + 4 venv 版本不一致 | `src/*/requirements.txt` | ✅ **已修 2026-10-17** |
 | P2 | 🔴 | 冇 root `requirements.txt` / `.env.example` | repo root | ✅ **已修 2026-10-17** |
 | P3 | 🔴 | yfinance **冇 retry/backoff** | 4 個 `core.py` 全部 fetch 入口 | ✅ **已修 2026-10-17** |
-| P4 | 🟡 | `auto_adjust` 三個 project 三種做法 | 見 §2 | 同一標的不同報告用不同價格口徑，唔可直接比較 |
-| P5 | 🟡 | Sortino 分母非標準 downside deviation | `quant-us:296` | Sortino 數值偏差（非 crash）|
-| P6 | 🟡 | 量化函數冇最小樣本 guard | `calc_sharpe` / `calc_sortino` | 新 call-site 漏 guard 會出無意義數字 |
-| P7 | 🟡 | 跨市場 naive 日期對齊 | `generate_report.py` 各處 | look-ahead 風險（HK vs US 收市時間差 12 小時）|
+| P4 | 🟡 | `auto_adjust` 三個 project 三種做法 | 4 個 `core.py` | ✅ **已修 2026-10-17** |
+| P5 | 🟡 | Sortino 分母非標準 downside deviation | 4 個 metrics 函數 | ✅ **已修 2026-10-17** |
+| P6 | 🟡 | 量化函數冇最小樣本 guard | 4 個 project | ✅ **已修 2026-10-17** |
+| P7 | 🟡 | 跨市場 naive 日期對齊 | `sentinel-pmfx/src/core.py` | ✅ **已修 2026-10-17** |
 
 ## 本次已修項目驗證（2026-10-17）
 
@@ -141,7 +203,9 @@
 | 1 | 補 root `requirements.txt` + `.env.example` | ✅ 已做（P2）|
 | 2 | 版本上限 pin + 統一 4 個 venv | ✅ 已做（P1）|
 | 3 | `tenacity` retry 落 4 個 fetch 入口 | ✅ 已做（P3）|
-| 4 | 統一 `auto_adjust`（PMFX 因策略需要未調整價，應寫落 config）| ⏳ 未做（P4）|
-| 5 | Sortino 改標準 downside deviation | ⏳ 未做（P5）|
-| 6 | `MIN_OBS = 20` guard 落 `calc_sharpe` / `calc_sortino` | ⏳ 未做（P6）|
-| 7 | 跨市場 tz-aware 對齊 | ⏳ 未做（P7）|
+| 4 | 統一 `auto_adjust`（PMFX 寫落 config）| ✅ 已做（P4）|
+| 5 | Sortino 改標準 downside deviation | ✅ 已做（P5）|
+| 6 | `MIN_OBS = 20` guard | ✅ 已做（P6）|
+| 7 | 跨市場 tz-aware 對齊 | ✅ 已做（P7）|
+
+**P1–P7 全部完成，冇已知未修項。**

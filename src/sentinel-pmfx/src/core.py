@@ -76,6 +76,8 @@ class MarketConfig:
     atr_window: int = 14
     support_window: int = 20
     corr_window: int = 90
+    auto_adjust: bool = False   # 【P4】PMFX 用未調整原始價
+    session_align: bool = True  # 【P7】跨市場按香港時間可知日期對齊
 
 @dataclass
 class AlertConfig:
@@ -195,6 +197,26 @@ def _fetch_goldapi_spot(symbol: str) -> float | None:
 
 TWELVEDATA_TICKERS = {"XAUUSD=X": "XAU/USD"}
 
+_AUTO_ADJUST: bool | None = None
+
+
+def auto_adjust_flag() -> bool:
+    """【P4 2026-10-17】讀 configs/config.yaml 嘅 market.auto_adjust（預設 False）。
+
+    PMFX 策略刻意用未調整價；其他 3 個 project 用 True。寫落 config 而唔係
+    hardcode，係為咗日後改策略時一個地方改得完、報告講得清口徑。
+    """
+    global _AUTO_ADJUST
+    if _AUTO_ADJUST is None:
+        try:
+            with open("configs/config.yaml", "r", encoding="utf-8") as _f:
+                _cfg = yaml.safe_load(_f) or {}
+            _AUTO_ADJUST = bool(_cfg.get("market", {}).get("auto_adjust", False))
+        except Exception:
+            _AUTO_ADJUST = False
+    return _AUTO_ADJUST
+
+
 def _get_twelvedata_key() -> str | None:
     return os.getenv("TWELVEDATA_API_KEY")
 
@@ -235,7 +257,7 @@ def _download_twelvedata(ticker: str, period: str, interval: str) -> pd.DataFram
 def _yf_download_retry(ticker: str, period: str, interval: str) -> pd.DataFrame:
     """yfinance 下載；失敗/空結果 → tenacity retry（P3）。"""
     d = yf.download(ticker, period=period, interval=interval,
-                    auto_adjust=False, progress=False, threads=False)
+                    auto_adjust=auto_adjust_flag(), progress=False, threads=False)
     if d is None or d.empty:
         raise ValueError(f"empty download: {ticker}")
     return d
@@ -267,7 +289,11 @@ def download_history(ticker: str, period: str, interval: str) -> pd.DataFrame:
 def normalize_close(df: pd.DataFrame) -> pd.Series | None:
     if df.empty:
         return None
-    col = next((c for c in ["Adj Close", "Close"] if c in df.columns), None)
+    # 【P4 2026-10-17】一律優先 Close：
+    # auto_adjust=True → Close 已係調整後價、冇 Adj Close；
+    # auto_adjust=False（PMFX 默認）→ df 同時有 Adj Close，但策略要原始價 → Close 優先。
+    # 舊版無條件優先 Adj Close，同 auto_adjust=False 嘅意圖矛盾。
+    col = next((c for c in ["Close", "Adj Close"] if c in df.columns), None)
     if col is None:
         return None
     s = df[col].astype(float).dropna()
@@ -432,6 +458,13 @@ def metrics(close: pd.Series, benchmark: pd.Series | None = None,
             n_days = max(int(round((len(close) - 1) * 365.0 / 252.0)), 1)
         total_ret = float(close.iloc[-1] / close.iloc[0] - 1)
         ann_ret = float((1 + total_ret) ** (365.0 / n_days) - 1) if n_days > 0 else 0.0
+        # 【P6 2026-10-17】觀測數不足 → 所有指標回 NaN，避免 2 個樣本出 Sharpe
+        if ret.dropna().size < MIN_OBS:
+            _nan = float("nan")
+            return {"total_return": _nan, "cagr": _nan, "ann_return": _nan,
+                    "ann_vol": _nan, "sharpe": _nan, "sortino": _nan,
+                    "calmar": _nan, "max_drawdown": _nan, "beta": _nan, "alpha": _nan,
+                    "var_95": _nan, "cvar_95": _nan}
         ann_vol = float(ret.std() * np.sqrt(ann))
         sharpe = (ann_ret - risk_free_rate) / ann_vol if ann_vol > 0 else 0.0
         cummax = close.cummax()
@@ -440,8 +473,8 @@ def metrics(close: pd.Series, benchmark: pd.Series | None = None,
         calmar = ann_ret / abs(max_dd) if max_dd != 0 else 0.0
         daily_rf = risk_free_rate / ann
         excess = ret - daily_rf
-        downside = excess[excess < 0]
-        down_vol = float(downside.std() * np.sqrt(ann)) if len(downside) > 0 else 1e-12
+        # 【P5 2026-10-17】標準 downside deviation（分母用全部觀測）
+        down_vol = float(_downside_deviation(excess) * np.sqrt(ann))
         sortino = (excess.mean() * ann) / down_vol if down_vol > 0 else 0.0
         beta = alpha = np.nan
         if benchmark is not None and len(benchmark) > 30:
@@ -484,6 +517,55 @@ def risk_parity_weights(returns_df: pd.DataFrame) -> pd.Series:
 
 # ─── 跨資產分析 ───
 
+# ─── 交易時段對齊（P7 2026-10-17）─────────────────────────
+# 問題：HK 收市 16:00 HKT；美股/期貨收市 16:00 ET = 翌日 04:00-05:00 HKT。
+# 若用同一個 Date 對齊 → 會將「HK 收市後 ~12 小時才發生」嘅美市收盤價，
+# 當成同一時點已知嘅資訊 → look-ahead bias。
+# 對策：非港股標的嘅日期標籤 +1 日 = 該收盤價實際喺香港時間已知嘅日期。
+NO_SHIFT_SUFFIXES = (".HK",)
+NO_SHIFT_TICKERS = {"BTC-USD", "ETH-USD"}  # 24/7 市場，收市時間無意義
+
+MIN_OBS = 20  # 【P6 2026-10-17】少於此觀測數 → 指標無意義
+
+
+def _downside_deviation(excess: pd.Series) -> float:
+    """【P5 2026-10-17】標準 downside deviation（Sortino 1994）。
+
+    DD = sqrt( mean( min(r - MAR, 0)^2 ) )——分母用【全部觀測數】。
+    舊寫法 downside.std() 只用下行子集，會系統性低估 DD → Sortino 偏大。
+    """
+    if excess.empty:
+        return 0.0
+    neg = np.minimum(excess.to_numpy(dtype=float), 0.0)
+    return float(np.sqrt(np.mean(neg ** 2)))
+
+
+def _needs_session_shift(ticker: str) -> bool:
+    t = str(ticker).upper()
+    return not (t.endswith(NO_SHIFT_SUFFIXES) or t in NO_SHIFT_TICKERS)
+
+
+def session_aligned_pivot(prices: pd.DataFrame, max_ffill: int = 3) -> pd.DataFrame:
+    """收盤價寬表，index = 該價格喺【香港時間】已知嘅日期。
+
+    config `market.session_align: false` 可關閉（回退舊嘅同日 naive 對齊）。
+    """
+    if prices is None or prices.empty or "ticker" not in prices.columns:
+        return pd.DataFrame()
+    df = prices.copy()
+    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+    df = df.dropna(subset=["Date"])
+    try:
+        align = bool(load_settings().market.session_align)
+    except Exception:
+        align = True
+    if not align:
+        return df.pivot_table(index="Date", columns="ticker", values="Close").sort_index()
+    shift = df["ticker"].map(_needs_session_shift).astype(int)
+    df["SessionDate"] = df["Date"] + pd.to_timedelta(shift, unit="D")
+    pivot = df.pivot_table(index="SessionDate", columns="ticker", values="Close").sort_index()
+    return pivot.ffill(limit=max_ffill)
+
 def gold_silver_ratio(gold: pd.Series, silver: pd.Series) -> pd.DataFrame:
     """Gold/Silver ratio time series"""
     common = gold.index.intersection(silver.index)
@@ -493,7 +575,10 @@ def gold_silver_ratio(gold: pd.Series, silver: pd.Series) -> pd.DataFrame:
 def fx_strength_matrix(prices: pd.DataFrame) -> pd.DataFrame:
     """Simple FX correlation matrix from price data"""
     try:
-        pivot = prices.pivot_table(index="Date", columns="ticker", values="Close")
+        # 【P7】按香港時間可知日期對齊（唔再同日 naive 對齊）
+        pivot = session_aligned_pivot(prices)
+        if pivot.empty:
+            return pd.DataFrame()
         ret = pivot.pct_change().dropna()
         return ret.corr()
     except Exception:
@@ -502,7 +587,10 @@ def fx_strength_matrix(prices: pd.DataFrame) -> pd.DataFrame:
 def dollar_index_correlation(prices: pd.DataFrame, dxy: pd.Series) -> pd.DataFrame:
     """Correlation of each ticker with DXY"""
     try:
-        pivot = prices.pivot_table(index="Date", columns="ticker", values="Close")
+        # 【P7】按香港時間可知日期對齊（唔再同日 naive 對齊）
+        pivot = session_aligned_pivot(prices)
+        if pivot.empty:
+            return pd.DataFrame()
         ret = pivot.pct_change().dropna()
         dxy_ret = dxy.pct_change().dropna()
         common = ret.index.intersection(dxy_ret.index)
@@ -517,7 +605,10 @@ def cross_asset_summary(prices: pd.DataFrame) -> dict:
     try:
         if prices.empty:
             return result
-        pivot = prices.pivot_table(index="Date", columns="ticker", values="Close")
+        # 【P7】按香港時間可知日期對齊（唔再同日 naive 對齊）
+        pivot = session_aligned_pivot(prices)
+        if pivot.empty:
+            return result
         ret = pivot.pct_change().dropna()
         # Fix 6 (2026-10-17)：XAUUSD=X 已停用（series 空）→ 金銀比變 nan。
         # 用 GC=F（黃金期貨，同為期貨源，數據新鮮）+ dropna，避免尾部 NaN 污染。

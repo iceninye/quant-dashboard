@@ -40,7 +40,10 @@ YF_RETRY = dict(
 @_retry(**YF_RETRY)
 def _bulk_download_retry(period: str) -> pd.DataFrame:
     """Bulk download；失敗/空結果 → tenacity retry（P3）。"""
-    d = yf.download(ALL_TICKERS, period=period, progress=False, threads=False)
+    # 【P4 2026-10-17】明確 auto_adjust=True：yfinance >=0.2.51 默認已調整，
+    # 但默認值會隨版本漂移（舊版默認 False），寫死避免靜默改變價格口徑。
+    d = yf.download(ALL_TICKERS, period=period, progress=False, threads=False,
+                    auto_adjust=True)
     if d is None or len(d) == 0:
         raise ValueError("empty bulk download")
     return d
@@ -50,11 +53,13 @@ def download_data(period: str = "1y") -> pd.DataFrame:
     """Bulk download all tickers"""
     logger.info(f"下載 {len(ALL_TICKERS)} 個標的 ({period})...")
     data = _bulk_download_retry(period)
-    # Use Adj Close for accuracy with dividend-paying assets
-    if "Adj Close" in data.columns.get_level_values(0):
-        data = data["Adj Close"]
-    else:
+    # 【P4 2026-10-17】auto_adjust=True 之下 Close 已經係「股息/拆股調整後」價，
+    # 而且冇 "Adj Close" 欄（舊版 yfinance 才有）。所以一律取 Close，
+    # 唔再用「Adj Close 存在性」判斷（會隨版本靜默改變口徑）。
+    if isinstance(data.columns, pd.MultiIndex):
         data = data["Close"]
+    else:
+        data = data[["Close"]] if "Close" in data.columns else data
     data = data.ffill().dropna(how="all")
     logger.info(f"✅ 數據下載完成：{data.shape[0]} 天 × {data.shape[1]} 標的")
     return data
@@ -129,6 +134,21 @@ def fetch_macro(data: pd.DataFrame) -> dict:
 # 資產指標計算（統一公式）
 # ──────────────────────────────────────
 
+MIN_OBS = 20  # 【P6 2026-10-17】少於此觀測數 → 指標無意義
+
+
+def _downside_deviation(excess: pd.Series) -> float:
+    """【P5 2026-10-17】標準 downside deviation（Sortino 1994）。
+
+    DD = sqrt( mean( min(r - MAR, 0)^2 ) )——分母用【全部觀測數】。
+    舊寫法 downside.std() 只用下行子集，會系統性低估 DD → Sortino 偏大。
+    """
+    if excess.empty:
+        return 0.0
+    neg = np.minimum(excess.to_numpy(dtype=float), 0.0)
+    return float(np.sqrt(np.mean(neg ** 2)))
+
+
 def calculate_mdd(prices: pd.Series) -> float:
     """Peak-to-trough max drawdown on price/equity series"""
     rolling_max = prices.cummax()
@@ -165,7 +185,11 @@ def calculate_metrics(data: pd.DataFrame, rf_rate: float) -> pd.DataFrame:
         volatility = float(ret.std() * np.sqrt(252))
 
         # Sharpe: (mean_daily × 252 - rf) / (std_daily × √252)
-        sharpe = float((ret.mean() * 252 - rf_rate) / volatility) if volatility > 0 else 0
+        # 【P6 2026-10-17】觀測數少於 MIN_OBS → 指標無意義，回 NaN（原本會照計）
+        if ret.dropna().size < MIN_OBS or volatility <= 0:
+            sharpe = float("nan")
+        else:
+            sharpe = float((ret.mean() * 252 - rf_rate) / volatility)
 
         # MDD: peak-to-trough on price series
         mdd = calculate_mdd(prices)
@@ -173,11 +197,10 @@ def calculate_metrics(data: pd.DataFrame, rf_rate: float) -> pd.DataFrame:
         # Sortino: 年化超額報酬 / 下行波動
         daily_rf = rf_rate / 252
         excess = ret - daily_rf
-        downside = excess[excess < 0]
-        if len(downside) > 0 and downside.std() > 0:
-            sortino = float((excess.mean() * 252) / (downside.std() * np.sqrt(252)))
-        else:
-            sortino = 0.0
+        # 【P5 2026-10-17】標準 downside deviation（Sortino 1994）：
+        # DD = sqrt(mean(min(r-MAR,0)^2))，分母用全部觀測；舊版用下行子集 std 會低估 DD。
+        _dd = _downside_deviation(excess)
+        sortino = float((excess.mean() * 252) / (_dd * np.sqrt(252))) if _dd > 0 else 0.0
 
         # Calmar: 年化報酬 / 最大回撤
         calmar = float(cagr / abs(mdd)) if mdd != 0 else 0.0
