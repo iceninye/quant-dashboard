@@ -11,7 +11,7 @@
 | `quant-hk` | `~/hermes-projects/quant-hk/` | `src/*.py` × 4 + `requirements.txt` + `README.md` | 1,255 | `src/main.py` |
 | `quant-us` | `~/hermes-projects/quant-us/` | `src/*.py` × 4 + `requirements.txt` + `README.md` | 1,171 | `src/main.py` |
 | `sentinel` | `~/hermes-projects/sentinel/` | `src/*.py` × 4 + `templates/` + `requirements.txt` | 1,088 | `src/main.py` |
-| `sentinel-pmfx` | `~/hermes-projects/sentinel-pmfx/` | `main.py` + `src/*.py` + `configs/config.yaml` + `verify_fix.py`（回歸測試）+ `verify_fix3.py`（止損距離）+ `retry_obsidian.py`（補寫 Vault）| 1,588 | `main.py` |
+| `sentinel-pmfx` | `~/hermes-projects/sentinel-pmfx/` | `main.py` + `src/*.py` + `configs/config.yaml` + `verify_fix.py`（回歸測試）+ `verify_fix6.py`（金銀比）+ `retry_obsidian.py`（補寫 Vault）| 1,588 | `main.py` |
 
 ## 刻意唔收錄
 
