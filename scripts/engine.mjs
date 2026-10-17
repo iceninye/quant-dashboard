@@ -243,7 +243,7 @@ export function dataAudit(fam) {
   });
   for (const c of cov) {
     for (const g of c.gaps) {
-      const bf = new Set((fam.backfill || []).filter((r) => r.date > g.from && r.date < g.to).map((r) => r.date)).size;
+      const bf = !['hk', 'us'].includes(c.fam) ? 0 : new Set((fam.backfill || []).filter((r) => r.date > g.from && r.date < g.to).map((r) => r.date)).size;
       issues.push({ level: 'warn', fam: c.fam, msg: bf >= 3
         ? `${g.from} → ${g.to} 缺 ${g.days} 日訊號數據；收市價已由 backfill 補 ${bf} 日（持有期可計，但呢段冇訊號，亦冇 mdd 等欄）`
         : `${g.from} → ${g.to} 缺 ${g.days} 日數據；跨越呢段嘅持有期唔計` });

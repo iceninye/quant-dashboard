@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17T12:04:42.063Z",
+ "generatedAt": "2026-10-17T12:08:07.343Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-17",
@@ -33945,9 +33945,9 @@
      "oosExcess": 0.0082,
      "t": 1.56,
      "p": 0.0739,
-     "adjP": 1,
+     "adjP": 0.739,
      "grade": "watch",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -33962,52 +33962,9 @@
      "oosExcess": 0.0267,
      "t": 2.78,
      "p": 0.0544,
-     "adjP": 0.8704,
-     "grade": "watch",
-     "m": 16
-    }
-   ],
-   "grade": "watch"
-  },
-  {
-   "key": "lowvol",
-   "label": "低波動",
-   "market": "hk",
-   "marketLabel": "港股",
-   "byH": [
-    {
-     "H": 5,
-     "days": 57,
-     "windows": 12,
-     "top": 0.0005,
-     "ew": -0.0035,
-     "excess": 0.004,
-     "spread": 0.0163,
-     "beatRate": 65,
-     "isExcess": 0.0024,
-     "oosExcess": 0.0059,
-     "t": 0.73,
-     "p": 0.2405,
-     "adjP": 1,
+     "adjP": null,
      "grade": "fail",
-     "m": 16
-    },
-    {
-     "H": 20,
-     "days": 42,
-     "windows": 3,
-     "top": 0.0189,
-     "ew": -0.0061,
-     "excess": 0.025,
-     "spread": 0.0721,
-     "beatRate": 86,
-     "isExcess": 0.0262,
-     "oosExcess": 0.0217,
-     "t": 1.92,
-     "p": 0.0978,
-     "adjP": 1,
-     "grade": "watch",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "watch"
@@ -34033,7 +33990,7 @@
      "p": 0.7058,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34050,7 +34007,50 @@
      "p": null,
      "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
+    }
+   ],
+   "grade": "fail"
+  },
+  {
+   "key": "lowvol",
+   "label": "低波動",
+   "market": "hk",
+   "marketLabel": "港股",
+   "byH": [
+    {
+     "H": 5,
+     "days": 57,
+     "windows": 12,
+     "top": 0.0005,
+     "ew": -0.0035,
+     "excess": 0.004,
+     "spread": 0.0163,
+     "beatRate": 65,
+     "isExcess": 0.0024,
+     "oosExcess": 0.0059,
+     "t": 0.73,
+     "p": 0.2405,
+     "adjP": 1,
+     "grade": "fail",
+     "m": 10
+    },
+    {
+     "H": 20,
+     "days": 42,
+     "windows": 3,
+     "top": 0.0189,
+     "ew": -0.0061,
+     "excess": 0.025,
+     "spread": 0.0721,
+     "beatRate": 86,
+     "isExcess": 0.0262,
+     "oosExcess": 0.0217,
+     "t": 1.92,
+     "p": 0.0978,
+     "adjP": null,
+     "grade": "fail",
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34076,7 +34076,7 @@
      "p": 0.8091,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34091,9 +34091,9 @@
      "oosExcess": -0.0029,
      "t": 0.08,
      "p": 0.4706,
-     "adjP": 1,
+     "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34119,7 +34119,7 @@
      "p": 0.3321,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34136,7 +34136,7 @@
      "p": null,
      "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34162,7 +34162,7 @@
      "p": 0.7266,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34179,7 +34179,7 @@
      "p": null,
      "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34205,7 +34205,7 @@
      "p": 0.4664,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34222,7 +34222,7 @@
      "p": null,
      "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34248,7 +34248,7 @@
      "p": 0.4891,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34265,7 +34265,7 @@
      "p": null,
      "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34291,7 +34291,7 @@
      "p": 0.9042,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34306,9 +34306,9 @@
      "oosExcess": 0.0148,
      "t": -0.53,
      "p": 0.6761,
-     "adjP": 1,
+     "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34334,7 +34334,7 @@
      "p": 0.7683,
      "adjP": 1,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34349,9 +34349,9 @@
      "oosExcess": -0.0263,
      "t": -4.02,
      "p": 0.9716,
-     "adjP": 1,
+     "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34375,9 +34375,9 @@
      "oosExcess": -0.0112,
      "t": -2.08,
      "p": 0.9468,
-     "adjP": 1,
+     "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     },
     {
      "H": 20,
@@ -34394,7 +34394,7 @@
      "p": null,
      "adjP": null,
      "grade": "fail",
-     "m": 16
+     "m": 10
     }
    ],
    "grade": "fail"
@@ -34409,21 +34409,21 @@
    "date": "2026-10-16",
    "grade": "watch",
    "best": {
-    "H": 20,
-    "days": 42,
-    "windows": 3,
-    "top": 0.023,
-    "ew": -0.0061,
-    "excess": 0.0291,
-    "spread": 0.0664,
-    "beatRate": 86,
-    "isExcess": 0.0299,
-    "oosExcess": 0.0267,
-    "t": 2.78,
-    "p": 0.0544,
-    "adjP": 0.8704,
+    "H": 5,
+    "days": 57,
+    "windows": 12,
+    "top": 0.004,
+    "ew": -0.0035,
+    "excess": 0.0075,
+    "spread": 0.0205,
+    "beatRate": 70,
+    "isExcess": 0.007,
+    "oosExcess": 0.0082,
+    "t": 1.56,
+    "p": 0.0739,
+    "adjP": 0.739,
     "grade": "watch",
-    "m": 16
+    "m": 10
    },
    "names": [
     {
@@ -34655,261 +34655,6 @@
      "pmfx": null
     }
    ]
-  },
-  {
-   "key": "lowvol",
-   "label": "低波動",
-   "market": "hk",
-   "marketLabel": "港股",
-   "date": "2026-10-16",
-   "grade": "watch",
-   "best": {
-    "H": 20,
-    "days": 42,
-    "windows": 3,
-    "top": 0.0189,
-    "ew": -0.0061,
-    "excess": 0.025,
-    "spread": 0.0721,
-    "beatRate": 86,
-    "isExcess": 0.0262,
-    "oosExcess": 0.0217,
-    "t": 1.92,
-    "p": 0.0978,
-    "adjP": 1,
-    "grade": "watch",
-    "m": 16
-   },
-   "names": [
-    {
-     "ticker": "0002.HK",
-     "name": "",
-     "close": 77.15,
-     "value": -0.11454,
-     "sharpe": 0.7063,
-     "vol": 0.11454,
-     "mdd": -0.058953,
-     "month": 0.003904,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0941.HK",
-     "name": "",
-     "close": 80.95,
-     "value": -0.126167,
-     "sharpe": 0.5613,
-     "vol": 0.126167,
-     "mdd": -0.127743,
-     "month": 0.024035,
-     "sentinel": "觀望",
-     "pmfx": null
-    },
-    {
-     "ticker": "0003.HK",
-     "name": "",
-     "close": 7.215,
-     "value": -0.155906,
-     "sharpe": 0.6237,
-     "vol": 0.155906,
-     "mdd": -0.142826,
-     "month": 0.016913,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0006.HK",
-     "name": "",
-     "close": 60.55,
-     "value": -0.166485,
-     "sharpe": 0.6411,
-     "vol": 0.166485,
-     "mdd": -0.149034,
-     "month": 0.01594,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0066.HK",
-     "name": "",
-     "close": 32.38,
-     "value": -0.185773,
-     "sharpe": 0.3671,
-     "vol": 0.185773,
-     "mdd": -0.175559,
-     "month": -0.004305,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "1038.HK",
-     "name": "",
-     "close": 67.95,
-     "value": -0.195956,
-     "sharpe": 0.6534,
-     "vol": 0.195956,
-     "mdd": -0.197403,
-     "month": 0.055944,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0823.HK",
-     "name": "",
-     "close": 38.2,
-     "value": -0.201698,
-     "sharpe": 0.2216,
-     "vol": 0.201698,
-     "mdd": -0.206015,
-     "month": 0.038044,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "3988.HK",
-     "name": "",
-     "close": 6.14,
-     "value": -0.206421,
-     "sharpe": 1.3322,
-     "vol": 0.206421,
-     "mdd": -0.132353,
-     "month": 0.031066,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0083.HK",
-     "name": "",
-     "close": 10.5,
-     "value": -0.207465,
-     "sharpe": 0.6759,
-     "vol": 0.207465,
-     "mdd": -0.2519,
-     "month": 0.066531,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "1398.HK",
-     "name": "",
-     "close": 7.59,
-     "value": -0.210139,
-     "sharpe": 1.3162,
-     "vol": 0.210139,
-     "mdd": -0.12892,
-     "month": 0.034004,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "1044.HK",
-     "name": "",
-     "close": 19.8,
-     "value": -0.210149,
-     "sharpe": -0.2454,
-     "vol": 0.210149,
-     "mdd": -0.303016,
-     "month": -0.010989,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "1658.HK",
-     "name": "",
-     "close": 5.515,
-     "value": -0.213495,
-     "sharpe": 0.4751,
-     "vol": 0.213495,
-     "mdd": -0.201095,
-     "month": 0.034709,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "1113.HK",
-     "name": "",
-     "close": 44.5,
-     "value": -0.219217,
-     "sharpe": 0.7603,
-     "vol": 0.219217,
-     "mdd": -0.193324,
-     "month": -0.040948,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0939.HK",
-     "name": "",
-     "close": 9.865,
-     "value": -0.219837,
-     "sharpe": 1.2918,
-     "vol": 0.219837,
-     "mdd": -0.141509,
-     "month": 0.026535,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0386.HK",
-     "name": "",
-     "close": 4.5,
-     "value": -0.221023,
-     "sharpe": 0.0421,
-     "vol": 0.221023,
-     "mdd": -0.271394,
-     "month": -0.000987,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "0836.HK",
-     "name": "",
-     "close": 19.83,
-     "value": -0.232528,
-     "sharpe": 0.0536,
-     "vol": 0.232528,
-     "mdd": -0.203169,
-     "month": 0.057036,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "2388.HK",
-     "name": "",
-     "close": 50.15,
-     "value": -0.235197,
-     "sharpe": 1.6293,
-     "vol": 0.235197,
-     "mdd": -0.111193,
-     "month": -0.020508,
-     "sentinel": null,
-     "pmfx": "觀望"
-    },
-    {
-     "ticker": "0384.HK",
-     "name": "",
-     "close": 5.125,
-     "value": -0.241909,
-     "sharpe": -0.4122,
-     "vol": 0.241909,
-     "mdd": -0.395656,
-     "month": -0.061355,
-     "sentinel": null,
-     "pmfx": null
-    },
-    {
-     "ticker": "3968.HK",
-     "name": "",
-     "close": 53.25,
-     "value": -0.247787,
-     "sharpe": 0.6949,
-     "vol": 0.247787,
-     "mdd": -0.203759,
-     "month": 0.040039,
-     "sentinel": null,
-     "pmfx": null
-    }
-   ]
   }
  ],
  "forward": {
@@ -35080,7 +34825,7 @@
    {
     "level": "warn",
     "fam": "sentinel",
-    "msg": "2026-07-10 → 2026-07-31 缺 21 日訊號數據；收市價已由 backfill 補 13 日（持有期可計，但呢段冇訊號，亦冇 mdd 等欄）"
+    "msg": "2026-07-10 → 2026-07-31 缺 21 日數據；跨越呢段嘅持有期唔計"
    },
    {
     "level": "warn",
@@ -35095,12 +34840,12 @@
    {
     "level": "warn",
     "fam": "pmfx",
-    "msg": "2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 10 日（持有期可計，但呢段冇訊號，亦冇 mdd 等欄）"
+    "msg": "2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計"
    },
    {
     "level": "warn",
     "fam": "macro",
-    "msg": "2026-07-10 → 2026-07-31 缺 21 日訊號數據；收市價已由 backfill 補 13 日（持有期可計，但呢段冇訊號，亦冇 mdd 等欄）"
+    "msg": "2026-07-10 → 2026-07-31 缺 21 日數據；跨越呢段嘅持有期唔計"
    },
    {
     "level": "warn",

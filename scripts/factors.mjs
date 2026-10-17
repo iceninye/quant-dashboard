@@ -11,7 +11,7 @@
 import { num } from './lib/csv.mjs';
 import { CFG, sentiOf } from './engine.mjs';
 
-export const FCFG = { horizons: [5, 20], topFrac: 0.2, minNames: 30, minNamesSentinel: 10, tPass: 2, tWatch: 1.5, alpha: 0.05 };
+export const FCFG = { horizons: [5, 20], topFrac: 0.2, minNames: 30, minNamesSentinel: 10, tPass: 2, tWatch: 1.5, alpha: 0.05, minWindows: 8 };
 
 const n = (v) => num(v);
 const DAY = 86400000;
@@ -156,7 +156,8 @@ function testFactor(rows, series, valueOf, H, minNames, discrete) {
     beatRate: Math.round(100 * daily.filter((x) => x.excess > 0).length / daily.length),
     isExcess: r4(isEx), oosExcess: r4(oosEx), t: r2(t),
     p: t === null ? null : tPValue(t, nonOverlap.length - 1), adjP: null,
-    grade: isEx > 0 && oosEx > 0 && t !== null && t >= FCFG.tPass ? 'pass'   // 未做 Holm；validateFactors 再降級
+    grade: nonOverlap.length < FCFG.minWindows ? 'fail'
+      : isEx > 0 && oosEx > 0 && t !== null && t >= FCFG.tPass ? 'pass'   // 未做 Holm；validateFactors 再降級
       : isEx > 0 && oosEx > 0 && t !== null && t >= FCFG.tWatch ? 'watch' : 'fail',
   };
 }
@@ -185,7 +186,7 @@ export function validateFactors(fam, prices) {
   }
   // 多重比較：所有有 t 值嘅檢定一齊做 Holm
   const all = out.flatMap((f) => f.byH);
-  const adj = holm(all.map((h) => h.p));
+  const adj = holm(all.map((h) => (h.windows >= FCFG.minWindows ? h.p : null)));   // 窗口太少嘅唔算可測檢定
   const mTests = adj.filter((x) => x !== null).length;
   all.forEach((h, i) => {
     h.adjP = adj[i] === null ? null : r4(adj[i]); h.p = h.p === null ? null : r4(h.p); h.m = mTests;
