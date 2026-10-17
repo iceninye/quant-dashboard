@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel 市場監控報告 — {{ report_date }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, 'Segoe UI', 'PingFang HK', 'Microsoft JhengHei', sans-serif; background: #f0f2f5; color: #1e293b; line-height: 1.6; padding: 16px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        h1 { font-size: 1.5em; color: #0f172a; margin-bottom: 4px; }
+        h2 { font-size: 1.15em; color: #0f172a; margin: 24px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; }
+        .header-date { color: #64748b; font-size: 0.85em; margin-bottom: 20px; }
+
+        /* KPI Cards */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .kpi-card { background: white; padding: 16px; border-radius: 10px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .kpi-value { font-size: 1.8em; font-weight: 700; }
+        .kpi-label { font-size: 0.8em; color: #64748b; margin-top: 2px; }
+        .kpi-green { color: #16a34a; }
+        .kpi-red { color: #dc2626; }
+        .kpi-orange { color: #f59e0b; }
+        .kpi-blue { color: #3b82f6; }
+
+        /* Macro Cards */
+        .macro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .macro-card { background: white; padding: 16px; border-radius: 10px; border-left: 4px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .macro-card.warning { border-left-color: #ef4444; }
+        .macro-card.good { border-left-color: #16a34a; }
+        .macro-title { font-weight: 600; font-size: 0.9em; color: #475569; }
+        .macro-value { font-size: 1.6em; font-weight: 700; color: #0f172a; }
+        .macro-change { font-size: 0.8em; margin-top: 2px; }
+        .macro-explain { font-size: 0.8em; color: #64748b; margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 8px; }
+
+        /* Alert Box */
+        .alert-box { background: #fffbeb; border: 1px solid #fde68a; padding: 14px; border-radius: 8px; margin-bottom: 16px; }
+        .alert-box ul { margin: 6px 0 0 18px; color: #92400e; }
+        .alert-ok { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+
+        /* Focus Cards */
+        .focus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
+        .focus-card { background: white; padding: 12px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .focus-name { font-weight: 600; }
+        .focus-reason { font-size: 0.85em; color: #475569; }
+
+        /* Tables */
+        .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88em; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        th { background: #f8fafc; padding: 10px 12px; text-align: left; font-weight: 600; color: #475569; font-size: 0.85em; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
+        td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; }
+        tr:hover { background: #f8fafc; }
+
+        /* Risk badges */
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.78em; font-weight: 600; }
+        .badge-red { background: #fef2f2; color: #dc2626; }
+        .badge-orange { background: #fffbeb; color: #d97706; }
+        .badge-green { background: #f0fdf4; color: #16a34a; }
+
+        /* Action badges */
+        .action-strong-sell { color: #dc2626; font-weight: 700; }
+        .action-sell { color: #d97706; font-weight: 600; }
+        .action-watch { color: #6b7280; }
+        .action-buy { color: #16a34a; font-weight: 700; }
+
+        /* Progress bars */
+        .bar-bg { background: #e2e8f0; border-radius: 4px; height: 6px; width: 100%; overflow: hidden; margin-top: 4px; }
+        .bar-fill { height: 100%; border-radius: 4px; }
+        .bar-normal { background: #3b82f6; }
+        .bar-medium { background: #f59e0b; }
+        .bar-high { background: #ef4444; }
+
+        /* Color helpers */
+        .text-green { color: #16a34a; font-weight: 600; }
+        .text-red { color: #dc2626; font-weight: 600; }
+        .text-muted { color: #94a3b8; font-size: 0.8em; }
+
+        /* Footer */
+        .footer { text-align: center; color: #94a3b8; font-size: 0.75em; margin-top: 30px; padding-top: 16px; border-top: 1px solid #e2e8f0; }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            body { padding: 8px; }
+            h1 { font-size: 1.2em; }
+            .kpi-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .macro-grid { grid-template-columns: 1fr; }
+            table { font-size: 0.78em; }
+            th, td { padding: 6px 8px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>🛡️ Sentinel 市場監控報告</h1>
+    <div class="header-date">📅 {{ report_date }} {{ report_time }} | 標的: {{ kpi.total }} 隻</div>
+
+    <!-- KPI -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-value kpi-green">{{ kpi.buy }}</div>
+            <div class="kpi-label">✅ 可加倉</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-red">{{ kpi.sell }}</div>
+            <div class="kpi-label">⚠️ 建議減持</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-orange">{{ kpi.watch }}</div>
+            <div class="kpi-label">⏸️ 觀望</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-blue">{{ kpi.avg_sharpe }}</div>
+            <div class="kpi-label">📊 平均 Sharpe</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-value kpi-green">{{ kpi.win_rate }}%</div>
+            <div class="kpi-label">🎯 正 Sharpe 率</div>
+        </div>
+    </div>
+
+    <!-- 宏觀指標 -->
+    <h2>📊 宏觀政經與情緒指標</h2>
+    <div class="macro-grid">
+        {% if macro.vix is not none %}
+        <div class="macro-card {% if macro.vix >= 30 %}warning{% elif macro.vix < 20 %}good{% endif %}">
+            <div class="macro-title">VIX 恐慌指數</div>
+            <div class="macro-value" style="color: {{ macro.get('vix_color', '#0f172a') }}">{{ macro.vix }}</div>
+            {% if macro.vix_change is not none %}
+            <div class="macro-change" style="color: {{ '#dc2626' if macro.vix_change > 0 else '#16a34a' }}">
+                {{ '+' if macro.vix_change > 0 else '' }}{{ macro.vix_change }}%
+            </div>
+            {% endif %}
+            <div class="macro-explain">💡 反映期權市場隱含波動率。&lt;20 穩定，&gt;30 恐慌。</div>
+        </div>
+        {% endif %}
+
+        {% if macro.dxy is not none %}
+        <div class="macro-card">
+            <div class="macro-title">美元指數 (DXY)</div>
+            <div class="macro-value">{{ macro.dxy }}</div>
+            {% if macro.dxy_change is not none %}
+            <div class="macro-change" style="color: {{ '#16a34a' if macro.dxy_change >= 0 else '#dc2626' }}">
+                {{ '+' if macro.dxy_change >= 0 else '' }}{{ macro.dxy_change }}%
+            </div>
+            {% endif %}
+            <div class="macro-explain">💡 強美元壓新興市場及黃金；弱美元利資產價格。</div>
+        </div>
+        {% endif %}
+
+        {% if macro.tnx is not none %}
+        <div class="macro-card">
+            <div class="macro-title">美國10年期債息</div>
+            <div class="macro-value">{{ macro.tnx }}%</div>
+            <div class="macro-explain">💡 無風險利率基準。升則壓估值，跌則利成長股。</div>
+        </div>
+        {% endif %}
+
+        {% if macro.cg_ratio is not none %}
+        <div class="macro-card {% if macro.get('cg_label') == '避險升溫' %}warning{% elif macro.get('cg_label') == '經濟擴張' %}good{% endif %}">
+            <div class="macro-title">銅金比例 (Copper / 2840.HK)</div>
+            <div class="macro-value" style="color: {{ macro.get('cg_color', '#0f172a') }}">{{ macro.cg_ratio }}</div>
+            {% if macro.get('cg_label') %}
+            <div class="macro-change" style="color: {{ macro.get('cg_color', '#64748b') }}">{{ macro.cg_label }}</div>
+            {% endif %}
+            <div class="macro-explain">💡 銅=工業需求，金=避險。比例升=經濟好，跌=衰退/避險。</div>
+        </div>
+        {% endif %}
+
+        {% if macro.fear_greed is not none %}
+        <div class="macro-card">
+            <div class="macro-title">CNN Fear & Greed</div>
+            <div class="macro-value">{{ macro.fear_greed | int }}</div>
+            {% if macro.get('fear_greed_label') %}
+            <div class="macro-change">{{ macro.fear_greed_label }}</div>
+            {% endif %}
+            <div class="macro-explain">💡 0=極度恐懼，100=極度貪婪。逆向指標參考。</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 高相關性警告 -->
+    <h2>⚠️ 資產重疊風險警告</h2>
+    {% if warnings %}
+    <div class="alert-box">
+        <strong>偵測到高度相關資產 (相關係數 ≥ 0.8)：</strong>
+        <div class="macro-explain" style="border-top:none;margin-top:4px;padding-top:0;color:#b45309;">
+            當兩隻資產走勢極度相似，同時持有無法有效分散風險。市況逆轉時大機會一齊跌。
+        </div>
+        <ul>
+            {% for w in warnings %}
+            <li>{{ w.pair }} ({{ w.corr }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <div class="alert-box alert-ok">✅ 暫未發現高度重疊嘅風險資產，組合分散度良好。</div>
+    {% endif %}
+
+    <!-- 本週重點關注 -->
+    {% if focus %}
+    <h2>🔍 本週重點關注</h2>
+    <div class="focus-grid">
+        {% for f in focus %}
+        <div class="focus-card">
+            <div class="focus-name">{{ f.emoji }} {{ f.name }} <span class="text-muted">{{ f.ticker }}</span></div>
+            <div class="focus-reason">{{ f.reason }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- 完整信號表 -->
+    <h2>📈 完整信號一覽 (按波動率排序)</h2>
+    <div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>標的</th>
+                <th>板塊</th>
+                <th>風險</th>
+                <th>行動</th>
+                <th>CAGR</th>
+                <th>波動率</th>
+                <th>Sharpe</th>
+                <th>最大回撤</th>
+                <th>日回報</th>
+                <th>Beta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in metrics %}
+            <tr>
+                <td>
+                    <strong>{{ m.name }}</strong><br>
+                    <span class="text-muted">{{ m.ticker }}</span>
+                </td>
+                <td><span class="text-muted">{{ m.sector }}</span></td>
+                <td>
+                    <span class="badge badge-{{ m.risk_level }}">{{ m.risk_emoji }} {{ m.risk_label }}</span>
+                </td>
+                <td>
+                    <span class="action-{{ 'strong-sell' if m.action == '強烈減持' else 'sell' if m.action == '建議減持' else 'watch' if m.action == '觀望' else 'buy' }}">
+                        {{ m.action_emoji }} {{ m.action }}
+                    </span>
+                </td>
+                <td class="{{ 'text-green' if m.cagr > 0 else 'text-red' }}">{{ m.cagr }}%</td>
+                <td>
+                    {{ m.volatility }}%
+                    {% set vol_pct = [m.volatility * 2, 100] | min | int %}
+                    {% set vol_class = 'bar-high' if m.volatility > 40 else ('bar-medium' if m.volatility > 25 else 'bar-normal') %}
+                    <div class="bar-bg"><div class="bar-fill {{ vol_class }}" style="width:{{ vol_pct }}%"></div></div>
+                </td>
+                <td class="{{ 'text-green' if m.sharpe > 0 else 'text-red' }}">{{ m.sharpe }}</td>
+                <td>
+                    <span class="text-red">{{ m.mdd }}%</span>
+                    {% set mdd_pct = [m.mdd | abs * 2, 100] | min | int %}
+                    {% set mdd_class = 'bar-high' if m.mdd | abs > 30 else ('bar-medium' if m.mdd | abs > 15 else 'bar-normal') %}
+                    <div class="bar-bg"><div class="bar-fill {{ mdd_class }}" style="width:{{ mdd_pct }}%"></div></div>
+                </td>
+                <td class="{{ 'text-green' if m.daily_return > 0 else 'text-red' }}">
+                    {{ '+' if m.daily_return > 0 else '' }}{{ m.daily_return }}%
+                </td>
+                <td>{{ m.beta }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <div class="footer">
+        Sentinel Unified v4.0 — Hermes Agent 自動生成 | {{ report_date }} {{ report_time }}
+    </div>
+
+</div>
+</body>
+</html>

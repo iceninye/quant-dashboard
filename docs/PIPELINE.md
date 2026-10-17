@@ -1,5 +1,7 @@
 # 系統全景（產生層 + 分析層）
 
+> 📁 **原始碼已收錄**：本 repo `src/<project>/` 有四個 project 嘅完整 Python 快照（2026-10-17，共 24 檔）。見 [src/README.md](../src/README.md)。
+
 ## 兩層架構
 
 ```

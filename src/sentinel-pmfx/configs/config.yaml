@@ -1,0 +1,87 @@
+app:
+  name: hermes_sentinel_pmfx
+  timezone: Asia/Hong_Kong
+  output_dir: reports
+  seed: 42
+
+market:
+  history_period: 2y
+  interval: 1d
+  min_history: 120
+  sim_paths: 2500
+  sim_steps: 300
+  atr_window: 14
+  support_window: 20
+  corr_window: 90
+
+universe:
+  gold_silver:
+    - XAUUSD=X
+    - SLV
+    - GC=F
+    - SI=F
+    - 2840.HK
+  fx_major:
+    - EURUSD=X
+    - GBPUSD=X
+    - USDJPY=X
+    - USDCHF=X
+    - AUDUSD=X
+    - NZDUSD=X
+    - USDCAD=X
+    - DX-Y.NYB
+  fx_cross:
+    - EURJPY=X
+    - GBPJPY=X
+    - EURGBP=X
+    - AUDJPY=X
+    - CADJPY=X
+  fx_other:
+    - BTC-USD
+    - CL=F
+    - HG=F
+    - PL=F
+    - PA=F
+    - NG=F
+    - ZC=F
+    - ZW=F
+
+alerts:
+  telegram_enabled: false
+  email_enabled: false
+  trade_enabled: false
+  min_opportunity_score: 3.0
+
+broker:
+  provider: mock
+  account_id: ""
+  endpoint: ""
+
+display_names:
+  "XAUUSD=X": "黃金現貨 (Gold)"
+  "XAGUSD=X": "白銀現貨 (Silver)"
+  "SLV":      "白銀ETF (SLV)"
+  "GC=F":     "黃金期貨 (GC)"
+  "SI=F":     "白銀期貨 (SI)"
+  "HG=F":     "銅期貨 (HG)"
+  "PL=F":     "鉑金期貨 (PL)"
+  "PA=F":     "鈀金期貨 (PA)"
+  "CL=F":     "原油期貨 (WTI)"
+  "NG=F":     "天然氣期貨 (NG)"
+  "ZC=F":     "玉米期貨 (Corn)"
+  "ZW=F":     "小麥期貨 (Wheat)"
+  "BTC-USD":  "比特幣 (BTC)"
+  "DX-Y.NYB": "美元指數 (DXY)"
+  "2840.HK":  "SPDR金ETF (2840)"
+  "EURUSD=X": "歐元/美元 (EUR/USD)"
+  "GBPUSD=X": "英鎊/美元 (GBP/USD)"
+  "USDJPY=X": "美元/日圓 (USD/JPY)"
+  "USDCHF=X": "美元/瑞郎 (USD/CHF)"
+  "AUDUSD=X": "澳元/美元 (AUD/USD)"
+  "NZDUSD=X": "紐元/美元 (NZD/USD)"
+  "USDCAD=X": "美元/加元 (USD/CAD)"
+  "EURJPY=X": "歐元/日圓 (EUR/JPY)"
+  "GBPJPY=X": "英鎊/日圓 (GBP/JPY)"
+  "EURGBP=X": "歐元/英鎊 (EUR/GBP)"
+  "AUDJPY=X": "澳元/日圓 (AUD/JPY)"
+  "CADJPY=X": "加元/日圓 (CAD/JPY)"

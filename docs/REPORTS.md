@@ -5,6 +5,8 @@
 
 ## 總覽
 
+> 📁 四個 project 嘅 Python 原始碼快照：`src/<project>/`（2026-10-17）。
+
 | # | 報告 | Cron（HKT） | 入口 | 計算耗時 | 發送 |
 |---|---|---|---|---|---|
 | 1 | **HK Quant** | `0 18 * * 1-5`（Mon-Fri 18:00）| `hk_quant_compute.sh` | 長（20 分鐘＋）| WhatsApp 18:20（`hk_quant_notify.sh`）|
