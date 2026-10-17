@@ -110,6 +110,32 @@ const FW = await import('./forward.mjs');
   const cut = rows.filter((r) => r.date < '2026-01-26' || r.date > '2026-02-13');
   ok(FW.signalDates([...new Set(cut.map((r) => r.date))].sort(), rule).length < FW.signalDates([...new Set(rows.map((r) => r.date))].sort(), rule).length, '簽名日缺數據 > 4 日 → 跳過');
 }
+console.log('Backfill');
+const BF = await import('./backfill_prices.mjs');
+{
+  const dts = []; for (let i = 0; i < 60; i++) dts.push(new Date(Date.parse('2026-06-01') + i * 86400000).toISOString().slice(0, 10));
+  const px = (i, d) => 100 + i + d * 0.5;
+  const repo = [], wide = [];
+  dts.forEach((d, di) => {
+    const w = { date: d };
+    for (let i = 0; i < 40; i++) { w['T' + i] = String(px(i, di)); if (di < 20 || di > 29) repo.push({ date: d, ticker: 'T' + i, close: String(px(i, di)) }); }
+    wide.push(w);
+  });
+  repo.push({ date: dts[25], ticker: 'T0', close: '' });
+  const plan = BF.planBackfill(wide, repo, []);
+  ok(!plan.rejected && plan.add.length === 40 * 10, `補缺口期 ${plan.add.length} 行（10 日 × 40 隻），repo 已有嘅唔重補`);
+  ok(plan.overlap.max === 0, '重疊日完全一致');
+  ok(plan.add.every((r) => r.date >= dts[20] && r.date <= dts[29]), '只補缺口日');
+  ok(BF.planBackfill(wide, repo, plan.add).add.length === 0, '重跑冪等');
+  const skew = wide.map((w) => ({ ...w, ...Object.fromEntries(Object.keys(w).filter((k) => k !== 'date').map((k) => [k, String(Number(w[k]) * 1.03)])) }));
+  ok(/偏差過大/.test(BF.planBackfill(skew, repo, []).rejected || ''), '復權口徑唔同（+3%）被拒絕');
+  ok(/少於 30/.test(BF.planBackfill(wide, repo.slice(0, 5), []).rejected || ''), '重疊太少無法核對 → 拒絕');
+  // 補完之後，跨缺口持有期可以計
+  const F2 = await import('./factors.mjs');
+  const sNo = F2.priceSeries(repo), sBf = F2.priceSeries([...repo, ...plan.add]);
+  ok(F2.fwdReturn(sNo.get('T1'), dts[18], 5) === null && F2.fwdReturn(sBf.get('T1'), dts[18], 5) !== null, '缺口期補價後，跨缺口窗口由「唔計」變「可計」');
+}
+
 console.log('引擎輸出');
 const res = E.run();
 ok(res.quality.total > 0, `PMFX 標的數 ${res.quality.total}`);

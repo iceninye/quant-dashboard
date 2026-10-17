@@ -35,9 +35,14 @@ function loadFamily(fam) {
     rows.push(...parseCsv(fs.readFileSync(path.join(dir, f), 'utf8')));
   return rows;
 }
+function loadBackfill() {
+  const f = path.join(ROOT, 'data', 'backfill', 'closes.csv');
+  return fs.existsSync(f) ? parseCsv(fs.readFileSync(f, 'utf8')) : [];
+}
 export function loadAll() {
   const fam = {};
   for (const f of ['hk', 'us', 'sentinel', 'pmfx', 'macro']) fam[f] = loadFamily(f);
+  fam.backfill = loadBackfill();   // 只有 date/ticker/close，唔畀訊號用
   return fam;
 }
 export const latestDate = (rows) => rows.reduce((m, r) => (r.date > m ? r.date : m), '');
@@ -213,7 +218,7 @@ export function forwardTrack(fam) {
 // 用佢做前向追蹤會造出一日假波動。PMFX 只補 quant 冇嘅標的（FX、期貨、加密）。
 export function priceMap(fam) {
   const m = priceSeries(fam.pmfx || []);
-  for (const [t, s] of priceSeries([...(fam.hk || []), ...(fam.us || [])])) m.set(t, s);
+  for (const [t, s] of priceSeries([...(fam.hk || []), ...(fam.us || []), ...(fam.backfill || [])])) m.set(t, s);
   return m;
 }
 
@@ -234,7 +239,12 @@ export function dataAudit(fam) {
     return { fam: f, rows: fam[f].length, days: ds.length, first: ds[0] || null, last: ds.at(-1) || null, gaps, dup, empty };
   });
   for (const c of cov) {
-    for (const g of c.gaps) issues.push({ level: 'warn', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日數據；跨越呢段嘅持有期唔計` });
+    for (const g of c.gaps) {
+      const bf = new Set((fam.backfill || []).filter((r) => r.date > g.from && r.date < g.to).map((r) => r.date)).size;
+      issues.push({ level: 'warn', fam: c.fam, msg: bf >= 3
+        ? `${g.from} → ${g.to} 缺 ${g.days} 日訊號數據；收市價已由 backfill 補 ${bf} 日（持有期可計，但呢段冇訊號，亦冇 mdd 等欄）`
+        : `${g.from} → ${g.to} 缺 ${g.days} 日數據；跨越呢段嘅持有期唔計` });
+    }
     if (c.dup) issues.push({ level: 'bad', fam: c.fam, msg: `${c.dup} 行重複 (date, ticker)` });
     if (c.empty.length) issues.push({ level: 'warn', fam: c.fam, msg: `欄位全空：${c.empty.join(', ')}` });
   }

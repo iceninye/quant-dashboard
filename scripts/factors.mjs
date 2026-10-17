@@ -162,7 +162,7 @@ export function validateFactors(fam, prices) {
   for (const f of FACTORS) for (const m of f.fam) {
     const rows = fam[m] || [];
     const minNames = m === 'sentinel' ? FCFG.minNamesSentinel : FCFG.minNames;
-    const series = m === 'sentinel' ? prices : priceSeries(rows);
+    const series = m === 'sentinel' ? prices : priceSeries([...rows, ...(fam.backfill || [])]);   // backfill 只有收市價，補缺口期嘅持有期回報
     const res = FCFG.horizons.map((H) => testFactor(rows, series, f.valueOf, H, minNames, f.discrete)).filter(Boolean);
     if (!res.length) continue;
     out.push({ key: f.key, label: f.label, market: m, marketLabel: MARKET[m], byH: res });
