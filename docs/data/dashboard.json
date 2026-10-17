@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17T12:15:02.856Z",
+ "generatedAt": "2026-10-17T12:18:02.952Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-17",
@@ -34698,7 +34698,49 @@
   "mismatches": [],
   "lateCount": 0
  },
- "forwardV2": null,
+ "forwardV2": {
+  "rule": {
+   "version": "hk-lowmdd-252-v1",
+   "liveFrom": "2026-10-16",
+   "top": 10,
+   "stepDays": 28,
+   "costBps": 30,
+   "minNames": 30,
+   "window": 252
+  },
+  "settled": 0,
+  "periods": [
+   {
+    "signalDate": "2026-10-16",
+    "entry": null,
+    "exit": null,
+    "tickers": [
+     "0002.HK",
+     "3988.HK",
+     "0939.HK",
+     "1398.HK",
+     "2388.HK",
+     "0001.HK",
+     "0941.HK",
+     "0006.HK",
+     "0270.HK",
+     "1038.HK"
+    ],
+    "late": false,
+    "status": "pending-entry"
+   }
+  ],
+  "meanExcess": null,
+  "sdExcess": null,
+  "t": null,
+  "needed": null,
+  "inconclusive": false,
+  "chainBad": [],
+  "future": [],
+  "mismatches": [],
+  "unverifiable": true,
+  "lateCount": 0
+ },
  "pmfxNew": {
   "since": "2026-10-17",
   "settled": 0,
