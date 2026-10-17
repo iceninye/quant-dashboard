@@ -151,6 +151,7 @@ ok(Array.isArray(res.opportunities) && res.opportunities.length === res.quality.
 ok(res.tracking.length > 0, `前向追蹤 ${res.tracking.length} 條`);
 ok(res.series.length > 0, `序列 ${res.series.length} 日`);
 ok(res.forward && res.forward.rule.version && res.pmfxNew.needed === 20, 'forward / pmfxNew 欄位');
+ok(res.factors.flatMap((f) => f.byH).every((h) => h.windows >= 8 || h.grade === 'fail'), '窗口少於 8 個一律唔評級');
 ok(res.factors.flatMap((f) => f.byH).every((h) => h.grade !== 'pass' || h.adjP < 0.05), '通過級一定 Holm 校正後 p < 0.05');
 ok(res.audit.ladder.length >= 5, 'gate 階梯');
 ok(res.quality.clean === 0 || res.opportunities.some((o) => o.tier !== 'EXCLUDED'), '通過 gate 數一致');
