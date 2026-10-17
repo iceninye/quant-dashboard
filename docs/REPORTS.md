@@ -32,9 +32,8 @@ output/
 ├── data/
 │   ├── metrics_<dd-mm-YYYY>.csv       # 每股票風險指標（98-100 行）
 │   ├── prices_<dd-mm-YYYY>.csv        # 歷史價
-│   ├── returns_<dd-mm-YYYY>.csv       # 日回報
-│   ├── correlation_<dd-mm-YYYY>.csv   # 相關矩陣
-│   └── rolling_corr_<dd-mm-YYYY>.csv  # 滾動相關（48,000+ 行，最大檔）
+│   ├── correlation_<dd-mm-YYYY>.csv   # 相關矩陣（由 prices 重算）
+│   └── （returns_* / rolling_corr_* 自 2026-10-17 起停寫，可由 prices 重算）
 ├── charts/                            # fan_<ticker>.png、vol_surface 等（44 個）
 └── reports/                           # summary_<date>.md（84 個）
 ```
@@ -46,7 +45,8 @@ output/
 
 **注意**：
 - ⚠️ `beta` 有部分行係空（`parametric_var_95` 之後有 `,,`）—— 港股 benchmark 對唔上時會 nan。
-- ⚠️ `rolling_corr_*.csv` 每個 ~5.9 MB，80 個 = 475 MB。**無自動 prune**（冰 2026-10-17 明示暫時唔加 cron），係本機最大單一數據源。
+- ✅ **2026-10-17 停寫 `returns_*` 同 `rolling_corr_*`**（冰 mandate）：`rolling_corr_*.csv` 實測每個 **82.95 MB**（唔係舊文件寫嘅 5.9 MB），80 個 = **6.3 GB**，而全機零 consumer（`quant-dashboard/scripts` + 4 個 project 都冇讀）。需要時可由 `prices_*.csv → calc_returns → returns.rolling(60).corr()` 即時重算。`all_data_*.xlsx` 亦已去掉 `Returns` sheet（保留 Metrics / Prices / Correlation）。
+- 📌 `prices_<dd-mm-YYYY>.csv` **係 walk-forward 驗證嘅原料**（每次 run 都含 ~100 隻股 × 2 年日收市價），所以**永遠保留**：每日一份 + 每月底一份。
 - ⚠️ 檔名日期係 `dd-mm-YYYY` 字串 → **唔可以用字串排序攞最新**（`31-08` 會排喺 `16-10` 之後）。
 
 ---

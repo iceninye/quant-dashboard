@@ -26,7 +26,10 @@ def save_data_files(today: str, metrics_df: pd.DataFrame,
     returns_df = pd.DataFrame({t: calc_returns(d["Close"]) for t, d in price_data.items()})
     if hasattr(returns_df.index, 'tz') and returns_df.index.tz:
         returns_df.index = returns_df.index.tz_localize(None)
-    returns_df.to_csv(os.path.join(DATA_DIR, f"returns_{today}.csv"))
+    # 【2026-10-17 冰 mandate】唔再落盤 returns_{today}.csv：
+    # 唯一用途係計 correlation，已經喺記憶體算完；落盤等於每日 ~1MB × 80 日冗餘，
+    # 而且完全可以由 prices_{today}.csv 重算（第 24 行 calc_returns）。
+
 
     prices_df = pd.DataFrame({t: d["Close"] for t, d in price_data.items()})
     if hasattr(prices_df.index, 'tz') and prices_df.index.tz:
@@ -34,10 +37,9 @@ def save_data_files(today: str, metrics_df: pd.DataFrame,
     prices_df.to_csv(os.path.join(DATA_DIR, f"prices_{today}.csv"))
 
     # Rolling correlation
-    if len(returns_df) > 60:
-        rolling_corr = returns_df.rolling(60).corr()
-        rolling_corr.to_csv(os.path.join(DATA_DIR, f"rolling_corr_{today}.csv"))
-
+    # 【2026-10-17 冰 mandate】停寫 rolling_corr_{today}.csv：
+    # 80 檔 × 83MB = 6.3GB，全機零 consumer（grep quant-dashboard scripts + 4 個 project）。
+    # 需要時可由 prices_*.csv → calc_returns → rolling(60).corr() 即時重算。
     # Static correlation
     corr = returns_df.corr()
     corr.to_csv(os.path.join(DATA_DIR, f"correlation_{today}.csv"))
@@ -46,7 +48,7 @@ def save_data_files(today: str, metrics_df: pd.DataFrame,
     xlsx_path = os.path.join(OUTPUT_DIR, f"all_data_{today}.xlsx")
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as writer:
         metrics_df.to_excel(writer, sheet_name="Metrics", index=False)
-        returns_df.to_excel(writer, sheet_name="Returns")
+        # 【2026-10-17 冰 mandate】唔再寫 Returns sheet（可由 Prices 重算）
         prices_df.to_excel(writer, sheet_name="Prices")
         corr.to_excel(writer, sheet_name="Correlation")
 
