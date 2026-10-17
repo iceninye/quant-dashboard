@@ -17,6 +17,8 @@ export const CFG = {
   maxStopPct: 12,      // 止損 > 12% 唔算「短線機會」
   minRR: 1.0,
   minNetEv: 0,
+  costPct: 0.2,        // 來回交易成本（%），前向回報一律扣除
+  fillDays: 20,        // 限價 entry 要喺幾多個交易日內被收市價觸及先算成交
   budgetMB: 20,
 };
 
@@ -86,7 +88,7 @@ export function sideOf(action) {          // +1 做多, -1 做空, 0 無方向
 // ---------- Quality gate ----------
 export function quality(row) {
   const fails = [];
-  const rr = n(row.rr), ev = n(row.net_ev), sp = n(row.stop_pct);
+  const rr = n(row.rr), ev = n(row.net_ev), sp = n(row.stop_pct) === null ? null : Math.abs(n(row.stop_pct));  // 舊數據做空 stop_pct 係負數
   // Pending Data 佔位行（動態觀察名單數據不足）：全 0 值 + rr_valid 被錯誤設成 true
   if (/^Pending$/i.test((row.action || '').trim())) fails.push('Pending Data（動態觀察名單數據不足）');
   else if (n(row.close) === 0 || n(row.entry) === 0) fails.push('價格為 0（無有效報價）');
@@ -147,7 +149,9 @@ export function tierOf(row, sc) {
 }
 
 // ---------- 前向追蹤（唯一可以證明「機會」真定假）----------
-// 用 PMFX 之後幾日嘅 last_price 計實際回報；同時睇有冇觸及 target / stop。
+// PMFX 嘅 entry 係限價（做空平均高過收市 ~7.6%、做多低過 ~4.4%），唔係市價。
+// 所以：之後收市價觸及 entry 先算成交（fillDays 內），回報由成交日起計、扣 costPct；
+// 未成交 = 'unfilled'，唔計回報。entry == close 嘅訊號即係市價，t+1 收市成交。
 export function forwardTrack(fam) {
   const pm = byDate(fam.pmfx);
   const dates = Object.keys(pm).sort();
@@ -158,6 +162,7 @@ export function forwardTrack(fam) {
     if (!px.has(r.ticker)) px.set(r.ticker, []);
     px.get(r.ticker).push([d, c]);
   }
+  const cost = CFG.costPct / 100;
   const out = [];
   for (let i = 0; i < dates.length; i++) {
     const d = dates[i];
@@ -171,24 +176,31 @@ export function forwardTrack(fam) {
       const entry = n(r.entry) || n(r.close);
       const tgt = n(r.target), stp = n(r.stop);
       const series = (px.get(r.ticker) || []).filter(([dd]) => dd > d);
+      // 成交：收市價觸及限價 entry（做多 ≤ entry、做空 ≥ entry）
+      let fill = -1;
+      for (let k = 0; k < Math.min(series.length, CFG.fillDays); k++)
+        if (side === 1 ? series[k][1] <= entry : series[k][1] >= entry) { fill = k; break; }
+      const after = fill < 0 ? [] : series.slice(fill + 1);
       const ret = (k) => {
-        if (series.length < k) return null;
-        const c = series[k - 1][1];
-        return entry ? side * (c - entry) / entry : null;
+        if (fill < 0 || after.length < k) return null;
+        return side * (after[k - 1][1] - entry) / entry - cost;
       };
       let outcome = 'pending', hitDay = null;
-      for (let k = 0; k < Math.min(series.length, 20); k++) {
-        const [, c] = series[k];
-        const hitT = tgt !== null && (side === 1 ? c >= tgt : c <= tgt);
-        const hitS = stp !== null && (side === 1 ? c <= stp : c >= stp);
-        if (hitT) { outcome = 'target'; hitDay = k + 1; break; }
-        if (hitS) { outcome = 'stop'; hitDay = k + 1; break; }
+      if (fill < 0) outcome = series.length >= CFG.fillDays ? 'unfilled' : 'pending';
+      else {
+        for (let k = 0; k < Math.min(after.length, 20); k++) {
+          const [, c] = after[k];
+          const hitT = tgt !== null && (side === 1 ? c >= tgt : c <= tgt);
+          const hitS = stp !== null && (side === 1 ? c <= stp : c >= stp);
+          if (hitT) { outcome = 'target'; hitDay = fill + k + 2; break; }
+          if (hitS) { outcome = 'stop'; hitDay = fill + k + 2; break; }
+        }
+        if (outcome === 'pending' && after.length >= 20) outcome = 'timeout';
       }
-      if (outcome === 'pending' && series.length >= 20) outcome = 'timeout';
       out.push({
         date: d, ticker: r.ticker, name: r.name, side, action: r.action,
         entry, rr: n(r.rr), net_ev: ev, stopPct: n(r.stop_pct),
-        clean: q.ok, outcome, hitDay,
+        clean: q.ok, filled: fill >= 0, fillDay: fill < 0 ? null : fill + 1, outcome, hitDay,
         r1: ret(1), r5: ret(5), r10: ret(10), r20: ret(20),
         daysObserved: series.length,
       });
@@ -289,9 +301,9 @@ export function audit(fam, track = forwardTrack(fam)) {
     ['全部有 EV 訊號', () => true],
     ['net_ev > 0', (r) => (n(r.net_ev) || -1e9) > 0],
     ['+ rr_valid', (r) => r.rrv === '1'],
-    ['+ 止損 ≥ 0.3%', (r) => (n(r.stop_pct) ?? -1) >= CFG.minStopPct],
+    ['+ 止損 ≥ 0.3%', (r) => Math.abs(n(r.stop_pct) ?? 0) >= CFG.minStopPct],
     ['+ 引擎無 error', (r) => r.err !== '1'],
-    ['+ 止損 ≤ 5%', (r) => (n(r.stop_pct) ?? 1e9) <= 5],
+    ['+ 止損 ≤ 5%', (r) => Math.abs(n(r.stop_pct) ?? 1e9) <= 5],
   ];
   const statOf = (arr) => {
     const done = arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop');

@@ -35,7 +35,7 @@ footer{margin-top:26px;color:var(--dim);font-size:12.5px;border-top:1px solid va
 code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4px;font-size:12.5px}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉分析</span></h1>
-<div class="sub">PMFX 訊號日 <b>2026-10-17</b> · 生成 17/10/2026 上午10:19:23 HKT ·
+<div class="sub">PMFX 訊號日 <b>2026-10-17</b> · 生成 17/10/2026 上午11:19:00 HKT ·
 HK 2026-10-16 · US 2026-10-17 · Sentinel 2026-10-16</div>
 
 
@@ -413,15 +413,15 @@ notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 
 
 <h2><span class="n">2</span>Gate 階梯 — 過濾器真係有效嗎？</h2>
 <div class="card"><table><thead><tr><th>累加 gate</th><th>訊號數</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
-<tr><td>全部有 EV 訊號</td><td>1516</td><td>623</td>
-<td class="good">53%</td>
-<td>4.98%</td><td>3.16%</td></tr><tr><td>net_ev &gt; 0</td><td>1516</td><td>623</td>
-<td class="good">53%</td>
-<td>4.98%</td><td>3.16%</td></tr><tr><td>+ rr_valid</td><td>1316</td><td>508</td>
-<td class="bad">49%</td>
-<td>4.04%</td><td>2.28%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td>789</td><td>293</td>
-<td class="bad">41%</td>
-<td>3.91%</td><td>2.77%</td></tr><tr><td>+ 引擎無 error</td><td>17</td><td>0</td>
+<tr><td>全部有 EV 訊號</td><td>1516</td><td>378</td>
+<td class="bad">1.9%</td>
+<td>-2.33%</td><td>-4.52%</td></tr><tr><td>net_ev &gt; 0</td><td>1516</td><td>378</td>
+<td class="bad">1.9%</td>
+<td>-2.33%</td><td>-4.52%</td></tr><tr><td>+ rr_valid</td><td>1316</td><td>342</td>
+<td class="bad">1.2%</td>
+<td>-2.38%</td><td>-4.32%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td>1316</td><td>342</td>
+<td class="bad">1.2%</td>
+<td>-2.38%</td><td>-4.32%</td></tr><tr><td>+ 引擎無 error</td><td>17</td><td>0</td>
 <td class="bad">—</td>
 <td>—</td><td>—</td></tr><tr><td>+ 止損 ≤ 5%</td><td>11</td><td>0</td>
 <td class="bad">—</td>
@@ -433,25 +433,25 @@ notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 
 <h2><span class="n">3</span>排名有冇 edge？（net_ev 排名 vs 實際結果）</h2>
 <div class="card"><table><thead><tr><th>組別</th><th>訊號</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
 <tr><td>每日 net_ev 頭 1 名</td>
-<td>65</td><td>35</td><td class="bad">48.6%</td>
-<td>5.17%</td><td>2.50%</td></tr><tr><td>每日 net_ev 尾 1 名</td>
-<td>65</td><td>20</td><td class="bad">35%</td>
-<td>1.27%</td><td>0.31%</td></tr><tr><td>全部做多</td>
-<td>776</td><td>293</td><td class="bad">41%</td>
-<td>3.92%</td><td>2.77%</td></tr><tr><td>全部做空</td>
-<td>740</td><td>330</td><td class="good">63.6%</td>
-<td>6.19%</td><td>3.71%</td></tr>
+<td>65</td><td>18</td><td class="bad">5.6%</td>
+<td>-4.44%</td><td>-15.79%</td></tr><tr><td>每日 net_ev 尾 1 名</td>
+<td>65</td><td>18</td><td class="bad">0%</td>
+<td>-0.99%</td><td>-2.25%</td></tr><tr><td>全部做多</td>
+<td>776</td><td>219</td><td class="bad">0.9%</td>
+<td>-2.77%</td><td>-4.42%</td></tr><tr><td>全部做空</td>
+<td>740</td><td>159</td><td class="bad">3.1%</td>
+<td>-1.47%</td><td>-4.67%</td></tr>
 </tbody></table>
 <p class="note">頭 1 名 vs 尾 1 名如果冇明顯差距 → <b>排名本身冇預測力</b>，唔應該用「EV 最高」做揀股理由。</p></div>
 
 <h2><span class="n">4</span>前向追蹤（訊號之後實際發生咩事）</h2>
 <div class="card"><div class="grid">
 <div class="kv"><span>追蹤訊號總數</span><b>1516</b></div>
-<div class="kv"><span>已結算（到目標/止損）</span><b>623</b></div>
-<div class="kv"><span>命中目標</span><b class="good">330</b></div>
-<div class="kv"><span>觸及止損</span><b class="bad">293</b></div>
-<div class="kv"><span>整體勝率</span><b>53%</b></div>
-<div class="kv"><span>平均 5 日回報</span><b>4.98%</b></div>
+<div class="kv"><span>已結算（到目標/止損）</span><b>378</b></div>
+<div class="kv"><span>命中目標</span><b class="good">7</b></div>
+<div class="kv"><span>觸及止損</span><b class="bad">371</b></div>
+<div class="kv"><span>整體勝率</span><b>1.9%</b></div>
+<div class="kv"><span>平均 5 日回報</span><b>-2.33%</b></div>
 </div>
 <details><summary>睇最近 40 條訊號嘅結果</summary>
 <table><thead><tr><th>日期</th><th>標的</th><th>方向</th><th>結果</th><th>第幾日</th><th>1日</th><th>5日</th><th>20日</th><th>乾淨</th></tr></thead><tbody>
@@ -542,79 +542,79 @@ notes: — ｜ 排除原因: <span class="bad">RR 無效 (rr_valid=false) / 淨 
 <td>✔</td></tr><tr><td>2026-10-16</td><td class="tk">ZW=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>6.58%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">ZC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>5.27%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">WDC</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>17.26%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">USDCAD=X</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>0.53%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">STX</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>16.29%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">SLV</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>10.53%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">SI=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>11.38%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">PL=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>9.25%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">PA=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>10.27%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">NZDUSD=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>0.96%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">NG=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>16.91%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">LRCX</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>13.90%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">JNJ</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>5.30%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">GC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>6.10%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">EURUSD=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.24%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">EURJPY=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.56%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">EURGBP=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.08%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">DX-Y.NYB</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>1.14%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr><tr><td>2026-10-16</td><td class="tk">CL=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>12.00%</td><td>—</td><td>—</td>
+<td>—</td><td>—</td><td>—</td><td>—</td>
 <td><span class="dim">✘</span></td></tr>
 </tbody></table></details></div>
 

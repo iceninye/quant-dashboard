@@ -35,6 +35,18 @@ console.log('方向判定');
 ok(E.sideOf('買') === 1 && E.sideOf('沽') === -1 && E.sideOf('觀望') === 0, 'sideOf');
 ok(E.sentiOf('可加倉') === 1 && E.sentiOf('強烈減持') === -1, 'sentiOf');
 
+console.log('前向追蹤：限價要成交先計回報');
+{
+  const mk = (date, close) => ({ date, ticker: 'X', name: 'X', action: '沽', close: String(close), entry: '110', target: '90', stop: '115', net_ev: '1' });
+  const days = Array.from({ length: 25 }, (_, i) => `2026-01-${String(i + 1).padStart(2, '0')}`);
+  const never = E.forwardTrack({ pmfx: days.map((d) => mk(d, 100)) })[0];
+  ok(never.outcome === 'unfilled' && never.r5 === null, '價從未升到 entry → unfilled、冇回報');
+  const px = [100, 111, 105, 104, 103, 102, 101].concat(Array(18).fill(101));
+  const hit = E.forwardTrack({ pmfx: days.map((d, i) => mk(d, px[i])) })[0];
+  ok(hit.filled && hit.fillDay === 1, '第 1 日收市 ≥ entry → 成交');
+  ok(Math.abs(hit.r5 - ((110 - 101) / 110 - E.CFG.costPct / 100)) < 1e-9, 'r5 由 entry 計、扣成本');
+}
+
 console.log('已 sync 數據');
 let total = 0;
 for (const fam of ['hk', 'us', 'sentinel', 'pmfx', 'macro']) {

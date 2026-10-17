@@ -37,7 +37,8 @@
 
 | 欄／欄名 | 實際意思 |
 |---|---|
-| `avgR5` / `avgR20`（Gate 階梯、rank edge）| **方向調整後嘅百分比回報**：做多 `(price−entry)/entry`、做空反號；5 / 20 個交易日。**唔係 R-multiple** |
+| `avgR5` / `avgR20`（Gate 階梯、rank edge）| **方向調整後嘅百分比回報，已扣 `costPct` 來回成本**：由限價 `entry` **成交之後**計 5 / 20 個交易日（收市價觸及 entry 先算成交，`fillDays` 內未觸及 = `unfilled`，唔計回報）。**唔係 R-multiple** |
+| `filled` / `fillDay` | 限價 entry 有冇成交、第幾個交易日成交。PMFX entry 係限價（做空平均高過收市 ~7.6%），2026-10-17 之前嘅版本冇檢查成交，將未發生嘅價差當咗回報 |
 | `winRate` | 已結算訊號中「先觸及目標」嘅比例（20 個交易日內；先觸及止損算輸）|
 | `net_ev` | **單位係標的價位**，唔可以跨資產比較（FX 0.01 vs BTC 6604）→ 跨資產要用 `net_rr` |
 | `stopPct` | 止損距離**絕對值**（做空嘅 stop 高於 entry，冇取絕對值會變負數）|
