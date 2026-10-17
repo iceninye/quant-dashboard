@@ -105,7 +105,7 @@ const FW = await import('./forward.mjs');
   const b2 = FW.forwardLog(rows, both, '2026-04-01', v2);
   ok(b2.newRows.length === a.newRows.length && b2.summary.mismatches.length === 0, '不同 rule version 同日並存，互不干擾');
   ok(b2.newRows[0].prev_hash === a.newRows.at(-1).hash, 'v2 接駁喺 v1 鏈尾');
-  { const f = path.join(ROOT, 'scripts', '.tmp-fwd.csv'); fs.writeFileSync(f, FW.LOG_COLS.join(',') + '\n' + 'x,x,x,x,x,x,x,x'); FW.appendLog(f, a.newRows.slice(0, 1)); const L = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean); fs.unlinkSync(f); ok(L.length === 3, 'appendLog 檔尾冇換行唔黏行'); }
+  { const d = path.join(ROOT, 'scripts', '.tmp-fwd'); fs.mkdirSync(d, { recursive: true }); const f = path.join(d, 'x.csv'); fs.writeFileSync(f, FW.LOG_COLS.join(',') + '\n' + 'x,x,x,x,x,x,x,x'); FW.appendLog(f, a.newRows.slice(0, 1)); const L = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean); fs.rmSync(d, { recursive: true, force: true }); ok(L.length === 3, 'appendLog 檔尾冇換行唔黏行'); }
   ok(FW.forwardLog(rows, [], '2026-04-20', rule).newRows[0].late === '1', '遲 build 標 late');
   const cut = rows.filter((r) => r.date < '2026-01-26' || r.date > '2026-02-13');
   ok(FW.signalDates([...new Set(cut.map((r) => r.date))].sort(), rule).length < FW.signalDates([...new Set(rows.map((r) => r.date))].sort(), rule).length, '簽名日缺數據 > 4 日 → 跳過');
