@@ -105,7 +105,7 @@ const FW = await import('./forward.mjs');
   const b2 = FW.forwardLog(rows, both, '2026-04-01', v2);
   ok(b2.newRows.length === a.newRows.length && b2.summary.mismatches.length === 0, '不同 rule version 同日並存，互不干擾');
   ok(b2.newRows[0].prev_hash === a.newRows.at(-1).hash, 'v2 接駁喺 v1 鏈尾');
-  { const f = path.join(ROOT, 'scripts', '.tmp-fwd.csv'); fs.writeFileSync(f, FW.LOG_COLS.join(',') + '\n' + 'x,x,x,x,x,x,x,x'); FW.appendLog(f, a.newRows.slice(0, 1)); const L = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean); fs.unlinkSync(f); ok(L.length === 3, 'appendLog 檔尾冇換行唔黏行'); }
+  { const d = path.join(ROOT, 'scripts', '.tmp-fwd'); fs.mkdirSync(d, { recursive: true }); const f = path.join(d, 'x.csv'); fs.writeFileSync(f, FW.LOG_COLS.join(',') + '\n' + 'x,x,x,x,x,x,x,x'); FW.appendLog(f, a.newRows.slice(0, 1)); const L = fs.readFileSync(f, 'utf8').split('\n').filter(Boolean); fs.rmSync(d, { recursive: true, force: true }); ok(L.length === 3, 'appendLog 檔尾冇換行唔黏行'); }
   ok(FW.forwardLog(rows, [], '2026-04-20', rule).newRows[0].late === '1', '遲 build 標 late');
   const cut = rows.filter((r) => r.date < '2026-01-26' || r.date > '2026-02-13');
   ok(FW.signalDates([...new Set(cut.map((r) => r.date))].sort(), rule).length < FW.signalDates([...new Set(rows.map((r) => r.date))].sort(), rule).length, '簽名日缺數據 > 4 日 → 跳過');
@@ -176,6 +176,29 @@ console.log('Forward v2（trailing 252 影子紀錄）');
   const ev = FW.evaluateLogged(hk, a.newRows, rule);
   ok(ev.periods.length === a.newRows.length && ev.unverifiable && ev.chainBad.length === 0, '評估已簽名單（唔重算）');
   ok(FW.evaluateLogged(hk, a.newRows.map((r, i) => (i ? r : { ...r, tickers: 'X.HK' })), rule).chainBad.length >= 1, '改名單斷鏈');
+}
+
+console.log('Anchor');
+{
+  const rows = [{ hash: 'a' }, { hash: 'b' }, { hash: 'c' }];
+  const an = FW.anchorOf(rows);
+  ok(FW.checkAnchor(rows, an) === null, 'anchor 一致');
+  ok(/少咗 1 行/.test(FW.checkAnchor(rows.slice(0, 2), an)), '尾部被刪偵測到（hash 鏈驗唔到）');
+  ok(/唔一致/.test(FW.checkAnchor([{ hash: 'a' }, { hash: 'b' }, { hash: 'x' }], an)), '改尾偵測到');
+  ok(FW.checkAnchor([...rows, { hash: 'd' }], an) === null, '多咗行（未更新 anchor）唔當錯');
+  ok(FW.checkAnchor([], null) === null && /未登記/.test(FW.checkAnchor(rows, null)), '未登記 anchor 嘅非空 log 要報');
+  const f = path.join(ROOT, 'scripts', '.tmp-anchor', 'x.csv');
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  FW.appendLog(f, [{ signal_date: 'd', rule: 'r', tickers: 't', mdd_hash: 'm', built_at: 'b', late: '0', prev_hash: '', hash: 'h1' }]);
+  FW.appendLog(f, [{ signal_date: 'e', rule: 'r', tickers: 't', mdd_hash: 'm', built_at: 'b', late: '0', prev_hash: 'h1', hash: 'h2' }]);
+  const a2 = FW.readAnchors(f)['x.csv'];
+  fs.rmSync(path.dirname(f), { recursive: true, force: true });
+  ok(a2.count === 2 && a2.tail === 'h2', 'appendLog 自動推進 anchor');
+  for (const [file, name] of [['hk-lowmdd.csv', 'v1'], ['hk-lowmdd-252.csv', 'v2']]) {
+    const lf = path.join(ROOT, 'data', 'forward', file);
+    if (!fs.existsSync(lf)) continue;
+    ok(FW.checkAnchor(FW.readLog(lf), FW.readAnchors(lf)[file]) === null, `repo ${name} 紀錄同 anchors.json 一致`);
+  }
 }
 
 console.log('引擎輸出');

@@ -189,4 +189,26 @@ export function appendLog(file, newRows) {
   const body = toCsv(LOG_COLS, newRows);
   // 檔尾冇換行就先補一個，否則新行會黏落最後一行
   fs.appendFileSync(file, (exists && !cur.endsWith('\n') ? '\n' : '') + (exists ? body.split('\n').slice(1).join('\n') : body));
+  writeAnchor(file, readLog(file));
+}
+
+// ---- anchors.json：每個 log 檔嘅 {count, tail}。hash 鏈驗唔到「尾部被刪」同「merge conflict 靜靜跌行」，anchor 補呢個洞。
+// 同樣靠 git history 做最終錨點；作用係令無聲刪行／改尾變成即時報錯。每次 appendLog 自動更新。
+export const anchorFile = (file) => file.replace(/[^/\\]*$/, '') + 'anchors.json';
+export const anchorOf = (rows) => ({ count: rows.length, tail: rows.at(-1)?.hash || '' });
+export function readAnchors(file) {
+  const f = anchorFile(file);
+  try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return {}; }
+}
+export function writeAnchor(file, rows) {
+  const a = readAnchors(file);
+  a[file.split(/[/\\]/).pop()] = anchorOf(rows);
+  fs.writeFileSync(anchorFile(file), JSON.stringify(a, null, 1) + '\n');
+}
+// 返回 null（正常）或問題描述。多咗行（未更新 anchor）唔當錯誤，因為 anchor 只喺 appendLog 時推進。
+export function checkAnchor(rows, anchor) {
+  if (!anchor) return rows.length ? '未有 anchor（未登記）' : null;
+  if (rows.length < anchor.count) return `少咗 ${anchor.count - rows.length} 行（anchor ${anchor.count}，實際 ${rows.length}）`;
+  if (anchor.count && rows[anchor.count - 1].hash !== anchor.tail) return `第 ${anchor.count} 行 hash 同 anchor 唔一致（紀錄被改或重排）`;
+  return null;
 }
