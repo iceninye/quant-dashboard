@@ -225,6 +225,9 @@ export function priceMap(fam) {
 // ---------- 數據核對：每次 build 都重算，結果放上 dashboard ----------
 export function dataAudit(fam) {
   const issues = [];
+  const splits = [];
+  priceSeries([...(fam.hk || []), ...(fam.us || [])], splits);
+  for (const e of splits) issues.push({ level: 'info', fam: e.ticker.endsWith('.HK') ? 'hk' : 'us', msg: `${e.ticker} ${e.from} → ${e.to} 疑似 ${e.k}:1 拆股（單日跌幅 > 30% 而且前後價比 ≈ ${e.k}），前向回報已按拆股調整` });
   const fams = ['hk', 'us', 'sentinel', 'pmfx', 'macro'];
   const cov = fams.map((f) => {
     const ds = [...new Set(fam[f].map((r) => r.date))].sort();

@@ -39,7 +39,7 @@ code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4p
 div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(--dim);margin:6px 0 4px}nav a{color:var(--acc);margin-right:12px;text-decoration:none}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
-<div class="sub">生成 17/10/2026 下午5:36:56 HKT ·
+<div class="sub">生成 17/10/2026 下午6:39:00 HKT ·
 數據日：HK 2026-10-16 · US 2026-10-17 · Sentinel 2026-10-16 · PMFX 2026-10-17</div>
 <nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
@@ -50,7 +50,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <ul>
 <li>PMFX：限價成交嘅 605 個歷史訊號，5 日平均 <b class="bad">-2.18%</b>，到目標 12 個、止損 390 個 → <b>唔好跟</b>（§4–5）。</li>
 <li>Sentinel「可加倉」對比「減持」：5 日 -0.92%、20 日 -4.21%（相對 29 隻等權）→ <b class="bad">跑輸，唔應該當加分</b>。</li>
-<li>樣本只有 50 個有效交易日、一個市況，12 項數據問題見 §6。所有結論信心偏低。</li>
+<li>樣本只有 50 個有效交易日、一個市況，13 項數據問題見 §6。所有結論信心偏低。</li>
 </ul></div>
 
 <h2 id="s1"><span class="n">1</span>觀察名單</h2>
@@ -106,18 +106,18 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <td class="gwatch">觀察</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
 <td>-1.10%</td><td class="dim">-4.38%</td><td class="good">3.28%</td>
 <td>4.39%</td><td>2.58%</td><td>100%</td><td>—</td><td class="dim">—</td>
+<td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">美股</td><td>5 日</td>
+<td>-0.27%</td><td class="dim">0.23%</td><td class="bad">-0.50%</td>
+<td>-0.32%</td><td>-0.66%</td><td>43%</td><td>-0.64</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
+<td>3.49%</td><td class="dim">-0.11%</td><td class="good">3.60%</td>
+<td>7.32%</td><td>0.63%</td><td>83%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">港股</td><td>5 日</td>
 <td>-0.38%</td><td class="dim">-0.94%</td><td class="good">0.56%</td>
 <td>0.51%</td><td>0.60%</td><td>70%</td><td>1.38</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
 <td>-1.30%</td><td class="dim">-4.38%</td><td class="good">3.08%</td>
 <td>4.62%</td><td>2.10%</td><td>100%</td><td>—</td><td class="dim">—</td>
-<td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.55%</td><td class="dim">0.18%</td><td class="bad">-0.73%</td>
-<td>-0.72%</td><td>-0.74%</td><td>40%</td><td>-0.97</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>2.09%</td><td class="dim">-0.38%</td><td class="good">2.47%</td>
-<td>5.06%</td><td>0.40%</td><td>83%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">港股</td><td>5 日</td>
 <td>-1.31%</td><td class="dim">-0.94%</td><td class="bad">-0.37%</td>
 <td>-0.55%</td><td>-0.20%</td><td>34%</td><td>-1.59</td><td class="dim">1.00</td>
@@ -131,29 +131,29 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <td>-3.45%</td><td class="dim">-4.38%</td><td class="good">0.93%</td>
 <td>2.83%</td><td>-0.27%</td><td>67%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>週反轉（上週最差）</td><td class="dim">美股</td><td>5 日</td>
-<td>0.24%</td><td class="dim">0.18%</td><td class="good">0.06%</td>
-<td>0.66%</td><td>-0.47%</td><td>40%</td><td>0.67</td><td class="dim">1.00</td>
+<td>0.24%</td><td class="dim">0.23%</td><td class="bad">0.00%</td>
+<td>0.56%</td><td>-0.49%</td><td>38%</td><td>0.57</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>0.40%</td><td class="dim">-0.38%</td><td class="good">0.78%</td>
-<td>3.24%</td><td>-1.18%</td><td>61%</td><td>—</td><td class="dim">—</td>
+<td>0.71%</td><td class="dim">-0.11%</td><td class="good">0.82%</td>
+<td>3.40%</td><td>-1.24%</td><td>61%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.27%</td><td class="dim">0.18%</td><td class="bad">-0.45%</td>
-<td>0.60%</td><td>-1.38%</td><td>55%</td><td>-0.62</td><td class="dim">1.00</td>
+<td>-0.27%</td><td class="dim">0.23%</td><td class="bad">-0.51%</td>
+<td>0.50%</td><td>-1.40%</td><td>55%</td><td>-0.69</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>0.31%</td><td class="dim">-0.38%</td><td class="good">0.69%</td>
-<td>1.38%</td><td>0.13%</td><td>67%</td><td>—</td><td class="dim">—</td>
+<td>0.46%</td><td class="dim">-0.11%</td><td class="good">0.57%</td>
+<td>1.19%</td><td>0.08%</td><td>50%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>5 日</td>
-<td>0.18%</td><td class="dim">0.18%</td><td class="bad">0.00%</td>
-<td>-0.45%</td><td>0.40%</td><td>47%</td><td>0.18</td><td class="dim">1.00</td>
+<td>0.18%</td><td class="dim">0.23%</td><td class="bad">-0.05%</td>
+<td>-0.54%</td><td>0.38%</td><td>43%</td><td>0.06</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-0.13%</td><td class="dim">-0.38%</td><td class="good">0.25%</td>
-<td>-0.56%</td><td>0.90%</td><td>56%</td><td>—</td><td class="dim">—</td>
+<td>-0.13%</td><td class="dim">-0.11%</td><td class="bad">-0.02%</td>
+<td>-1.09%</td><td>0.84%</td><td>50%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>5 日</td>
-<td>0.12%</td><td class="dim">0.18%</td><td class="bad">-0.06%</td>
-<td>-0.32%</td><td>0.16%</td><td>40%</td><td>0.07</td><td class="dim">1.00</td>
+<td>0.12%</td><td class="dim">0.23%</td><td class="bad">-0.12%</td>
+<td>-0.41%</td><td>0.14%</td><td>38%</td><td>-0.02</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-1.76%</td><td class="dim">-0.38%</td><td class="bad">-1.38%</td>
-<td>-2.59%</td><td>-0.41%</td><td>17%</td><td>—</td><td class="dim">—</td>
+<td>-1.76%</td><td class="dim">-0.11%</td><td class="bad">-1.65%</td>
+<td>-3.12%</td><td>-0.46%</td><td>17%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>週反轉（上週最差）</td><td class="dim">港股</td><td>5 日</td>
 <td>-1.37%</td><td class="dim">-0.94%</td><td class="bad">-0.43%</td>
 <td>-0.12%</td><td>-0.71%</td><td>34%</td><td>-1.14</td><td class="dim">1.00</td>
@@ -418,7 +418,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 
 <h2 id="s6"><span class="n">6</span>數據核對</h2>
 <div class="card">
-<div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>hk</b>：2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：欄位全空：beta</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-07-10 → 2026-07-31 缺 21 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-09-01 → 2026-09-09 缺 8 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：欄位全空：close</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-07-10 → 2026-07-31 缺 21 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-09-01 → 2026-09-09 缺 8 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：24/550 行 close 同 quant 相差 &gt; 1%（2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17），係上一行數據；前向追蹤已改用 quant 收市價</div><div class="bad" style="font-size:13.5px;margin:3px 0">✘ <b>pmfx</b>：2304/2340 行 error 欄非空（2026-06-18 至 2026-10-16），呢段 PMFX 數值唔可信</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：94 行 close 為空（2026-07-15）</div>
+<div class="info" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：APH 2026-09-03 → 2026-09-09 疑似 2:1 拆股（單日跌幅 &gt; 30% 而且前後價比 ≈ 2），前向回報已按拆股調整</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>hk</b>：2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：欄位全空：beta</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-07-10 → 2026-07-31 缺 21 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-09-01 → 2026-09-09 缺 8 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：欄位全空：close</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：2026-07-16 → 2026-07-31 缺 15 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-07-10 → 2026-07-31 缺 21 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-09-01 → 2026-09-09 缺 8 日數據；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：24/550 行 close 同 quant 相差 &gt; 1%（2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17），係上一行數據；前向追蹤已改用 quant 收市價</div><div class="bad" style="font-size:13.5px;margin:3px 0">✘ <b>pmfx</b>：2304/2340 行 error 欄非空（2026-06-18 至 2026-10-16），呢段 PMFX 數值唔可信</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：94 行 close 為空（2026-07-15）</div>
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>來源</th><th>行數</th><th>日數</th><th>首日</th><th>末日</th><th>重複</th></tr></thead><tbody>
 <tr><td>hk</td><td>6174</td><td>63</td><td>2026-06-18</td><td>2026-10-16</td><td class="dim">0</td></tr><tr><td>us</td><td>6138</td><td>62</td><td>2026-06-18</td><td>2026-10-17</td><td class="dim">0</td></tr><tr><td>sentinel</td><td>812</td><td>28</td><td>2026-06-18</td><td>2026-10-16</td><td class="dim">0</td></tr><tr><td>pmfx</td><td>2340</td><td>65</td><td>2026-06-18</td><td>2026-10-17</td><td class="dim">0</td></tr><tr><td>macro</td><td>28</td><td>28</td><td>2026-06-18</td><td>2026-10-16</td><td class="dim">0</td></tr>
 </tbody></table></div>
