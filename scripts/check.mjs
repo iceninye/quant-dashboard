@@ -59,12 +59,49 @@ for (const fam of ['hk', 'us', 'sentinel', 'pmfx', 'macro']) {
 }
 ok(total < E.CFG.budgetMB * 1048576, `總體積 ${(total / 1048576).toFixed(2)} MB < 預算 ${E.CFG.budgetMB} MB`);
 
+console.log('Holm / t 分佈');
+const FX = await import('./factors.mjs');
+ok(Math.abs(2 * FX.tPValue(2, 10) - 0.0734) < 0.0005, 't=2,df=10 雙尾 p ≈ 0.0734');
+ok(Math.abs(FX.tPValue(0, 5) - 0.5) < 1e-9, 't=0 單尾 p = 0.5');
+ok(JSON.stringify(FX.holm([0.01, 0.04, 0.03, null])) === JSON.stringify([0.03, 0.06, 0.06, null]), 'Holm step-down 單調 + 跳過 null');
+
+console.log('Forward log');
+const FW = await import('./forward.mjs');
+{
+  // 合成 HK：40 隻，每日 +0.1% 漂移；A00 回撤最淺（mdd 最高）
+  const rule = { ...FW.RULE, liveFrom: '2026-01-05', top: 5, stepDays: 28, costBps: 30, minNames: 30 };
+  const start = Date.parse('2026-01-05'), rows = [];
+  for (let d = 0; d < 80; d++) {
+    const dt = new Date(start + d * 86400000);
+    if ([0, 6].includes(dt.getUTCDay())) continue;
+    const date = dt.toISOString().slice(0, 10);
+    for (let i = 0; i < 40; i++) rows.push({ date, ticker: 'T' + String(i).padStart(2, '0'), close: String(100 * (1 + (i < 5 ? 0.002 : 0.001)) ** d), mdd: String(-0.01 * (i + 1)) });
+  }
+  const a = FW.forwardLog(rows, [], '2026-04-01', rule);
+  ok(a.newRows.length === a.summary.periods.length && a.newRows.length >= 3, `簽名期數 ${a.newRows.length}`);
+  ok(a.newRows[0].tickers === 'T00 T01 T02 T03 T04', '揀 mdd 最高頭 5 隻');
+  const p0 = a.summary.periods[0];
+  ok(p0.entry > p0.signalDate, '入場日喺簽名日之後（t+1）');
+  ok(p0.status === 'settled' && p0.cost === 0.003, '第一期換手 100% → 成本 30 bps');
+  ok(a.summary.periods[1].cost === 0, '組合不變 → 成本 0');
+  ok(p0.excess > 0 && p0.names === 5, '低 MDD 組漂移較高 → 超額為正');
+  ok(a.summary.periods.at(-1).status !== 'settled', '最後一期未結算');
+  const again = FW.forwardLog(rows, a.newRows, '2026-04-01', rule);
+  ok(again.newRows.length === 0 && again.summary.mismatches.length === 0, '重跑冪等，唔重複寫');
+  const tampered = a.newRows.map((r, i) => (i ? r : { ...r, tickers: 'T39 T38 T37 T36 T35' }));
+  ok(FW.forwardLog(rows, tampered, '2026-04-01', rule).summary.mismatches.length === 1, '改動紀錄被偵測到');
+  ok(FW.forwardLog(rows, [], '2026-04-20', rule).newRows[0].late === '1', '遲 build 標 late');
+  const cut = rows.filter((r) => r.date < '2026-01-26' || r.date > '2026-02-13');
+  ok(FW.signalDates([...new Set(cut.map((r) => r.date))].sort(), rule).length < FW.signalDates([...new Set(rows.map((r) => r.date))].sort(), rule).length, '簽名日缺數據 > 4 日 → 跳過');
+}
 console.log('引擎輸出');
 const res = E.run();
 ok(res.quality.total > 0, `PMFX 標的數 ${res.quality.total}`);
 ok(Array.isArray(res.opportunities) && res.opportunities.length === res.quality.total, 'opportunities 數量一致');
 ok(res.tracking.length > 0, `前向追蹤 ${res.tracking.length} 條`);
 ok(res.series.length > 0, `序列 ${res.series.length} 日`);
+ok(res.forward && res.forward.rule.version && res.pmfxNew.needed === 20, 'forward / pmfxNew 欄位');
+ok(res.factors.flatMap((f) => f.byH).every((h) => h.grade !== 'pass' || h.adjP < 0.05), '通過級一定 Holm 校正後 p < 0.05');
 ok(res.audit.ladder.length >= 5, 'gate 階梯');
 ok(res.quality.clean === 0 || res.opportunities.some((o) => o.tier !== 'EXCLUDED'), '通過 gate 數一致');
 

@@ -11,8 +11,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, num } from './lib/csv.mjs';
 import { priceSeries, validateFactors, picksFor } from './factors.mjs';
+import { forwardLog, readLog, appendLog } from './forward.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const FORWARD_FILE = path.join(ROOT, 'data', 'forward', 'hk-lowmdd.csv');
+const PMFX_FIXED_FROM = '2026-10-17';
 export const CFG = {
   minStopPct: 0.3,     // 止損距離 < 0.3% 視為退化（今日 BTC-USD 得 0.1%）
   maxStopPct: 12,      // 止損 > 12% 唔算「短線機會」
@@ -308,6 +311,12 @@ export function run() {
   const macro = fam.macro.filter((r) => r.date === latestDate(fam.macro))[0] || null;
   const factors = validateFactors(fam, priceMap(fam));
   const pmLatest = new Map(pmRows.map((r) => [r.ticker, r]));
+  const fl = forwardLog(fam.hk, readLog(FORWARD_FILE));
+  // PMFX 修正後（2026-10-17 起）嘅乾淨訊號結算樣本；結算夠 needed 個先重新評估
+  const newT = tracking.filter((x) => x.date >= PMFX_FIXED_FROM && x.clean && ['target', 'stop', 'timeout'].includes(x.outcome));
+  const r5s = newT.filter((x) => x.r5 !== null).map((x) => x.r5);
+  const pmfxNew = { since: PMFX_FIXED_FROM, settled: newT.length, needed: 20,
+    avgR5: r5s.length ? Math.round(1e4 * r5s.reduce((a, b) => a + b, 0) / r5s.length) / 1e4 : null };
   const picks = picksFor(fam, factors, ctx.ctx.sen, pmLatest);
   return {
     generatedAt: new Date().toISOString(),
@@ -319,7 +328,7 @@ export function run() {
     trackingStats: { clean: stat(byTier('clean')), all: stat(tracking) },
     audit: audit(fam, tracking),
     series: buildSeries(fam),
-    factors, picks,
+    factors, picks, forward: fl.summary, forwardNew: fl.newRows, pmfxNew,
     dataAudit: dataAudit(fam),
   };
 }
@@ -398,6 +407,8 @@ export function audit(fam, track = forwardTrack(fam)) {
 
 if (process.argv[1] && process.argv[1].endsWith('engine.mjs')) {
   const res = run();
+  appendLog(FORWARD_FILE, res.forwardNew);
+  delete res.forwardNew;
   const outDir = path.join(ROOT, 'docs', 'data');
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, 'dashboard.json'), JSON.stringify(res, null, 1));
@@ -418,7 +429,7 @@ if (process.argv[1] && process.argv[1].endsWith('engine.mjs')) {
     console.log(`${o.ticker.padEnd(11)}${String(o.action).padEnd(5)}${String(o.net_ev).padStart(7)}${String(o.rr).padStart(6)}${String(o.stopPct).padStart(7)}${String(o.cons).padStart(6)}   ${o.tier}   ${o.score}`);
   console.log('\n=== 因子驗證（t+1 入場、扣成本、頭 20% vs 等權）===');
   for (const f of res.factors) for (const h of f.byH)
-    console.log(`${(f.marketLabel + ' ' + f.label).padEnd(26)} H=${String(h.H).padEnd(3)} 超額 ${(100 * h.excess).toFixed(2).padStart(6)}%  IS ${(100 * h.isExcess).toFixed(2).padStart(6)}%  OOS ${(100 * h.oosExcess).toFixed(2).padStart(6)}%  t ${String(h.t).padStart(5)}  窗口 ${h.windows}  ${{ pass: '通過', watch: '觀察', fail: '—' }[h.grade]}`);
+    console.log(`${(f.marketLabel + ' ' + f.label).padEnd(26)} H=${String(h.H).padEnd(3)} 超額 ${(100 * h.excess).toFixed(2).padStart(6)}%  IS ${(100 * h.isExcess).toFixed(2).padStart(6)}%  OOS ${(100 * h.oosExcess).toFixed(2).padStart(6)}%  t ${String(h.t).padStart(5)}  adjP ${String(h.adjP).padStart(6)}  窗口 ${h.windows}  ${{ pass: '通過', watch: '觀察', fail: '—' }[h.grade]}`);
   console.log('\n數據核對:'); for (const i of res.dataAudit.issues) console.log(`  [${i.level}] ${i.fam}: ${i.msg}`);
   console.log('\n前向追蹤（乾淨訊號）:', JSON.stringify(res.trackingStats.clean));
   console.log('前向追蹤（全部）  :', JSON.stringify(res.trackingStats.all));

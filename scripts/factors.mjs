@@ -5,12 +5,13 @@
 //   2. 持有期跨越數據缺口（日曆日 > H×1.4+5）嘅窗口唔計，避免 15 日空檔被當成 5 日
 //   3. 每日揀因子頭 20%，同當日全體等權比（超額回報）
 //   4. 樣本按日期前後切半：前半 in-sample、後半 out-of-sample
-//   5. 通過 = IS 超額 > 0、OOS 超額 > 0、非重疊窗口 t ≥ 2（三樣都要）
-//      觀察 = IS、OOS 都 > 0，但 t 只係 1.5–2（未夠顯著，只入觀察名單）
+//   5. 通過 = IS 超額 > 0、OOS 超額 > 0、非重疊窗口 t ≥ 2，而且 Holm 校正後單尾 p < 0.05（四樣都要）
+//      Holm 校正針對「同時測咗 m 個因子 × 市場 × 持有期」嘅多重比較（m = 有 t 值嘅檢定數）
+//      觀察 = IS、OOS 都 > 0，但 t 只係 1.5–2，或者 t ≥ 2 但 Holm 校正後唔夠（只入觀察名單）
 import { num } from './lib/csv.mjs';
 import { CFG, sentiOf } from './engine.mjs';
 
-export const FCFG = { horizons: [5, 20], topFrac: 0.2, minNames: 30, minNamesSentinel: 10, tPass: 2, tWatch: 1.5 };
+export const FCFG = { horizons: [5, 20], topFrac: 0.2, minNames: 30, minNamesSentinel: 10, tPass: 2, tWatch: 1.5, alpha: 0.05 };
 
 const n = (v) => num(v);
 const DAY = 86400000;
@@ -48,6 +49,56 @@ const tstat = (a) => {
   const m = mean(a), sd = Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1));
   return sd > 0 ? m / sd * Math.sqrt(a.length) : null;
 };
+
+// ---- Student-t 單尾 p（正則化不完全 Beta，Lentz 連分數）----
+function lgamma(x) {
+  const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
+  let y = x, t = x + 5.5; t -= (x + 0.5) * Math.log(t);
+  let ser = 1.000000000190015;
+  for (const k of c) ser += k / ++y;
+  return -t + Math.log(2.5066282746310005 * ser / x);
+}
+function betacf(a, b, x) {
+  const TINY = 1e-30;
+  let c = 1, d = 1 - (a + b) * x / (a + 1);
+  if (Math.abs(d) < TINY) d = TINY;
+  d = 1 / d; let h = d;
+  for (let m = 1; m <= 200; m++) {
+    const m2 = 2 * m;
+    let aa = m * (b - m) * x / ((a + m2 - 1) * (a + m2));
+    d = 1 + aa * d; if (Math.abs(d) < TINY) d = TINY;
+    c = 1 + aa / c; if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d; h *= d * c;
+    aa = -(a + m) * (a + b + m) * x / ((a + m2) * (a + m2 + 1));
+    d = 1 + aa * d; if (Math.abs(d) < TINY) d = TINY;
+    c = 1 + aa / c; if (Math.abs(c) < TINY) c = TINY;
+    d = 1 / d;
+    const del = d * c; h *= del;
+    if (Math.abs(del - 1) < 3e-12) break;
+  }
+  return h;
+}
+function ibeta(x, a, b) {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+  return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+}
+// P(T ≥ t)，df 自由度
+export function tPValue(t, df) {
+  if (t === null || !(df >= 1)) return null;
+  const two = ibeta(df / (df + t * t), df / 2, 0.5);
+  return t >= 0 ? two / 2 : 1 - two / 2;
+}
+// Holm step-down：輸入 p 陣列（null 跳過），返回同序校正後 p
+export function holm(ps) {
+  const idx = ps.map((p, i) => [p, i]).filter((x) => x[0] !== null).sort((a, b) => a[0] - b[0]);
+  const m = idx.length, out = ps.map(() => null);
+  let run = 0;
+  idx.forEach(([p, i], k) => { run = Math.max(run, Math.min(1, (m - k) * p)); out[i] = run; });
+  return out;
+}
+
 const r4 = (v) => (v === null ? null : Math.round(v * 1e4) / 1e4);
 const r2 = (v) => (v === null ? null : Math.round(v * 100) / 100);
 
@@ -88,7 +139,8 @@ function testFactor(rows, series, valueOf, H, minNames, discrete) {
     excess: r4(mean(daily.map((x) => x.excess))), spread: r4(mean(daily.map((x) => x.spread))),
     beatRate: Math.round(100 * daily.filter((x) => x.excess > 0).length / daily.length),
     isExcess: r4(isEx), oosExcess: r4(oosEx), t: r2(t),
-    grade: isEx > 0 && oosEx > 0 && t !== null && t >= FCFG.tPass ? 'pass'
+    p: t === null ? null : tPValue(t, nonOverlap.length - 1), adjP: null,
+    grade: isEx > 0 && oosEx > 0 && t !== null && t >= FCFG.tPass ? 'pass'   // 未做 Holm；validateFactors 再降級
       : isEx > 0 && oosEx > 0 && t !== null && t >= FCFG.tWatch ? 'watch' : 'fail',
   };
 }
@@ -113,9 +165,18 @@ export function validateFactors(fam, prices) {
     const series = m === 'sentinel' ? prices : priceSeries(rows);
     const res = FCFG.horizons.map((H) => testFactor(rows, series, f.valueOf, H, minNames, f.discrete)).filter(Boolean);
     if (!res.length) continue;
-    const grade = res.some((x) => x.grade === 'pass') ? 'pass' : res.some((x) => x.grade === 'watch') ? 'watch' : 'fail';
-    out.push({ key: f.key, label: f.label, market: m, marketLabel: MARKET[m], byH: res, grade });
+    out.push({ key: f.key, label: f.label, market: m, marketLabel: MARKET[m], byH: res });
   }
+  // 多重比較：所有有 t 值嘅檢定一齊做 Holm
+  const all = out.flatMap((f) => f.byH);
+  const adj = holm(all.map((h) => h.p));
+  const mTests = adj.filter((x) => x !== null).length;
+  all.forEach((h, i) => {
+    h.adjP = adj[i] === null ? null : r4(adj[i]); h.p = h.p === null ? null : r4(h.p); h.m = mTests;
+    if (h.grade === 'pass' && !(adj[i] < FCFG.alpha)) h.grade = 'watch';
+  });
+  for (const f of out)
+    f.grade = f.byH.some((x) => x.grade === 'pass') ? 'pass' : f.byH.some((x) => x.grade === 'watch') ? 'watch' : 'fail';
   const rank = { pass: 0, watch: 1, fail: 2 };
   const bestEx = (f) => Math.max(...f.byH.map((h) => h.excess ?? -1));
   return out.sort((a, b) => rank[a.grade] - rank[b.grade] || bestEx(b) - bestEx(a));
