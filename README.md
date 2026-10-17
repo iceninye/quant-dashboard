@@ -49,6 +49,7 @@ scripts/{sync,engine,build,check}.mjs + lib/{csv,sources}.mjs
 | [docs/PIPELINE.md](docs/PIPELINE.md) | 系統全景：產生層 4 個 Python project + 分析層 JS，每隻函數嘅行號同作用 |
 | [docs/FIXES.md](docs/FIXES.md) | 2026-10-17 Sentinel PMFX 修復記錄：3 個 root cause、5 處改動、前後實測數字、rollback |
 | [docs/APP.md](docs/APP.md) | 本 dashboard 嘅運作流程同設計取態 |
+| [docs/DATA-COVERAGE.md](docs/DATA-COVERAGE.md) | 每個 family 嘅日期覆蓋、缺口原因、已知污染期間 |
 | [src/](https://github.com/iceninye/quant-dashboard/tree/main/src) | **四份報告嘅 Python 原始碼快照**（2026-10-17，24 檔，已過安全掃描）|
 
 ## 免責
