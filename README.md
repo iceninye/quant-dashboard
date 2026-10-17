@@ -17,11 +17,12 @@
 
 ## 核心方法
 
-1. **機會來源只有 PMFX** — 4 份報告中只有佢提供 `entry / target / stop / expected_value / net_ev`。
-2. **Quality gate**（`scripts/engine.mjs`）：`rr_valid` + `net_rr_valid` + 止損距離 0.3%–12% + `net_ev > 0` + `error` 欄為空。
-3. **跨報告加成**：quant Sharpe 百分位、月動量、Sentinel 風險／方向 → 加減共識分。
-4. **前向追蹤**：每個訊號用之後實際價格計 1/5/20 日回報，睇有冇觸及目標或止損 —— 呢個係唯一可以證明「機會」真定假嘅方法。
-5. **Gate 階梯審計**：每加一層 filter，睇勝率／平均回報係升定跌（跌 = gate 揀錯）。
+1. **因子驗證**（`scripts/factors.mjs`）：用 HK / US quant 同 Sentinel 歷史數據，測 6 個訊號（低 MDD、低波動、Sharpe、月動量、週反轉、Sentinel 建議）。t+1 入場、持有 5 / 20 日、扣成本，頭 20% 對當日等權；前半 / 後半樣本都正 + 非重疊 t ≥ 2 先算「通過」，t 1.5–2 算「觀察」。
+2. **PMFX 前向追蹤**（`scripts/engine.mjs`）：限價 entry 要被收市價觸及先算成交，回報由成交後計、扣成本。價格優先用 HK / US quant 收市（PMFX 約 4% 行 close 慢咗一行）。
+3. **Quality gate**：`rr_valid` + `net_rr_valid` + 止損距離 0.3%–12% + `net_ev > 0` + `error` 欄為空。
+4. **數據核對**（`dataAudit`）：每次 build 重算缺口、重複行、全空欄位、PMFX 同 quant 收市價差異、PMFX error 行，結果放 dashboard §5。
+
+Dashboard 次序：今日結論 → 名單（只列通過 / 觀察級因子）→ 因子驗證 → PMFX 訊號（未驗證）→ PMFX 追蹤 → 數據核對 → 宏觀。
 
 ## 用法
 
@@ -29,7 +30,7 @@
 node scripts/sync.mjs --days=120   # 4 報告 → data/*.csv（append-only，跳過已存在日期）
 node scripts/build.mjs             # engine + docs/index.html
 node scripts/build.mjs             # （build 會自動先跑 engine）
-node scripts/check.mjs             # smoke test
+node scripts/check.mjs             # smoke test（32 項）
 ```
 
 ## 目錄
@@ -38,7 +39,7 @@ node scripts/check.mjs             # smoke test
 data/{hk,us,sentinel,pmfx,macro}/<YYYY-MM>.csv   # 按月分片，append-only
 docs/index.html                                  # 生成嘅 dashboard（單檔、零 CDN）
 docs/data/dashboard.json                         # 完整引擎輸出（供程式用）
-scripts/{sync,engine,build,check}.mjs + lib/{csv,sources}.mjs
+scripts/{sync,engine,factors,build,check}.mjs + lib/{csv,sources}.mjs
 ```
 
 ## 文件
