@@ -11,7 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, num } from './lib/csv.mjs';
 import { priceSeries, validateFactors, picksFor } from './factors.mjs';
-import { forwardLog, readLog, appendLog, evaluateLogged } from './forward.mjs';
+import { forwardLog, readLog, appendLog, evaluateLogged, readAnchors, checkAnchor } from './forward.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FORWARD_FILE = path.join(ROOT, 'data', 'forward', 'hk-lowmdd.csv');
@@ -325,9 +325,12 @@ export function run() {
   const macro = fam.macro.filter((r) => r.date === latestDate(fam.macro))[0] || null;
   const factors = validateFactors(fam, priceMap(fam));
   const pmLatest = new Map(pmRows.map((r) => [r.ticker, r]));
-  const fl = forwardLog(fam.hk, readLog(FORWARD_FILE));
+  const fv1rows = readLog(FORWARD_FILE);
+  const fl = forwardLog(fam.hk, fv1rows);
   const fv2 = readLog(FORWARD_V2_FILE);
+  fl.summary.anchorIssue = checkAnchor(fv1rows, readAnchors(FORWARD_FILE)['hk-lowmdd.csv']);
   const forwardV2 = fv2.length ? evaluateLogged(fam.hk, fv2) : null;   // 影子紀錄：只評估已簽名單
+  if (forwardV2) forwardV2.anchorIssue = checkAnchor(fv2, readAnchors(FORWARD_V2_FILE)['hk-lowmdd-252.csv']);
   // PMFX 修正後（2026-10-17 起）嘅乾淨訊號結算樣本；結算夠 needed 個先重新評估
   const newT = tracking.filter((x) => x.date >= PMFX_FIXED_FROM && x.clean && ['target', 'stop', 'timeout'].includes(x.outcome));
   const r5s = newT.filter((x) => x.r5 !== null).map((x) => x.r5);

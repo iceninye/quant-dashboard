@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-17T12:18:02.952Z",
+ "generatedAt": "2026-10-17T12:28:08.218Z",
  "dates": {
   "hk": "2026-10-16",
   "us": "2026-10-17",
@@ -34696,7 +34696,8 @@
   "chainBad": [],
   "future": [],
   "mismatches": [],
-  "lateCount": 0
+  "lateCount": 0,
+  "anchorIssue": null
  },
  "forwardV2": {
   "rule": {
@@ -34739,7 +34740,8 @@
   "future": [],
   "mismatches": [],
   "unverifiable": true,
-  "lateCount": 0
+  "lateCount": 0,
+  "anchorIssue": null
  },
  "pmfxNew": {
   "since": "2026-10-17",

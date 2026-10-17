@@ -124,6 +124,7 @@ ${D.factors.map((f) => f.byH.map((h, i) => `<tr><td>${i ? '' : esc(f.label)}</td
 <div class="kv"><span>補記（late）</span><b>${FW.lateCount}</b></div></div>
 ${FW.mismatches.length ? `<p class="warn">⚠ 紀錄同重算唔一致：${FW.mismatches.map((m) => `${m.date}（${{ 'log-edited': '輸入冇變但名單變 = 紀錄被改', restated: '名單同輸入都變 = 上游 restate 或兩邊被改', 'input-restated': '名單冇變但 mdd 值變咗 = 上游 restate' }[m.kind]}）`).join('、')}</p>` : ''}
 ${FW.chainBad.length || FW.future.length ? `<p class="warn">⚠ 紀錄鏈驗證失敗：${[...FW.chainBad, ...FW.future.map((d) => d + '（未來日期）')].join('、')}</p>` : ''}
+${FW.anchorIssue ? `<p class="warn">⚠ v1 紀錄 anchor 檢查失敗：${esc(FW.anchorIssue)}</p>` : ''}
 ${FW.inconclusive ? '<p class="warn">平均超額 ≤ 0：所需期數唔計（INCONCLUSIVE）。</p>' : ''}
 <div class="scroll"><table><thead><tr><th>簽名日</th><th>入場</th><th>出場</th><th>狀態</th><th>毛回報</th><th>成本</th><th>淨回報</th><th>等權</th><th>超額</th></tr></thead><tbody>
 ${FW.periods.slice().reverse().map((p) => `<tr><td>${p.signalDate}</td><td>${p.entry || '—'}</td><td>${p.exit || '—'}</td><td class="dim">${{ 'pending-entry': '等入場日', open: '持有中', settled: '已結算' }[p.status]}</td>
@@ -133,6 +134,7 @@ ${FW.periods.slice().reverse().map((p) => `<tr><td>${p.signalDate}</td><td>${p.e
 ${V2 ? `<div class="grid"><div class="kv"><span>已簽期數</span><b>${V2.periods.length}</b></div><div class="kv"><span>已結算</span><b>${V2.settled}</b></div>
 <div class="kv"><span>平均每期超額</span><b class="${(V2.meanExcess || 0) > 0 ? 'good' : 'bad'}">${pct(V2.meanExcess)}</b></div>
 <div class="kv"><span>v1 − v2（同期）</span><b>${V2pair.n ? pct(V2pair.diff) + '（' + V2pair.n + ' 期）' : '—'}</b></div></div>
+${V2.anchorIssue ? `<p class="warn">⚠ v2 紀錄 anchor 檢查失敗：${esc(V2.anchorIssue)}</p>` : ''}
 ${V2.chainBad.length || V2.future.length ? `<p class="warn">⚠ v2 紀錄鏈驗證失敗：${[...V2.chainBad, ...V2.future].join('、')}</p>` : ''}
 <p class="note">v2 名單係本機用 prices 檔簽名，repo 重算唔到，所以只驗鏈完整性，唔驗名單。影子紀錄，不入觀察 / 通過。</p>`
 : '<p class="dim">未有簽名。由本機行 <code>node scripts/sign_v2.mjs --prices &lt;prices_*.csv&gt; --apply</code> 簽。</p>'}</div>

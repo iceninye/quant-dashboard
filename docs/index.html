@@ -39,7 +39,7 @@ code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4p
 div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(--dim);margin:6px 0 4px}nav a{color:var(--acc);margin-right:12px;text-decoration:none}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
-<div class="sub">生成 17/10/2026 下午8:18:02 HKT ·
+<div class="sub">生成 17/10/2026 下午8:28:08 HKT ·
 數據日：HK 2026-10-16 · US 2026-10-17 · Sentinel 2026-10-16 · PMFX 2026-10-17</div>
 <nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
@@ -183,6 +183,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 
 
 
+
 <div class="scroll"><table><thead><tr><th>簽名日</th><th>入場</th><th>出場</th><th>狀態</th><th>毛回報</th><th>成本</th><th>淨回報</th><th>等權</th><th>超額</th></tr></thead><tbody>
 <tr><td>2026-10-16</td><td>—</td><td>—</td><td class="dim">等入場日</td>
 <td>—</td><td class="dim">—</td><td>—</td><td class="dim">—</td><td class="bad">—</td></tr>
@@ -191,6 +192,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <div class="grid"><div class="kv"><span>已簽期數</span><b>1</b></div><div class="kv"><span>已結算</span><b>0</b></div>
 <div class="kv"><span>平均每期超額</span><b class="bad">—</b></div>
 <div class="kv"><span>v1 − v2（同期）</span><b>—</b></div></div>
+
 
 <p class="note">v2 名單係本機用 prices 檔簽名，repo 重算唔到，所以只驗鏈完整性，唔驗名單。影子紀錄，不入觀察 / 通過。</p></div>
 <p class="note">統計力：回測每期超額 sd 約 5%，要 |t| = 2 約需 89 期（≈ 7.4 年）。12 個月只有約 13 期，所以頭幾年只可以講「方向一致 / 唔一致」，<b>唔可以講驗證通過</b>。
