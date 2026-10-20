@@ -80,7 +80,7 @@ export function sentinelRows(file, iso) {
     name: x.name,
     market: x.market,
     sector: x.sector,
-    close: '',
+    close: x.last_price ? r(x.last_price, 6) : '',   // 2026-10-20 起 sentinel 輸出 last_price；舊檔冇 → 留空
     sharpe: r(x.sharpe, 4),
     vol: r(x.volatility, 6),
     mdd: r(x.max_drawdown, 6),

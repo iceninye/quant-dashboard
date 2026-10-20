@@ -81,7 +81,14 @@ def main():
 
     # 3. Compute metrics
     print(f"[3/5] Computing risk metrics...")
-    bench_returns = calc_returns(price_data["0005.HK"]["Close"]) if "0005.HK" in price_data else pd.Series()
+    # 【2026-10-20】原本用 0005.HK（滙豐）做 beta 基準，同 config.BENCHMARK_TICKER（2800.HK 盈富）唔一致
+    # 基準唔喺名單時另外下載；只用嚟計 beta，唔加入 metrics 名單
+    bench_df = price_data.get(BENCHMARK_TICKER)
+    if bench_df is None:
+        bench_df = download_price_data([BENCHMARK_TICKER]).get(BENCHMARK_TICKER)
+    bench_returns = calc_returns(bench_df["Close"]) if bench_df is not None else pd.Series(dtype=float)
+    if bench_returns.empty:
+        print(f"  ⚠️ 基準 {BENCHMARK_TICKER} 下載失敗，beta 會留空")
 
     metrics_rows = []
     for ticker, df in price_data.items():
