@@ -22,7 +22,7 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 
-from config import CFG, BASE_DIR, OUTPUT_DIR, CHARTS_DIR, DATA_DIR, REPORTS_DIR, RAW_DIR, FALLBACK_TICKERS
+from config import CFG, BASE_DIR, OUTPUT_DIR, CHARTS_DIR, DATA_DIR, REPORTS_DIR, RAW_DIR, FALLBACK_TICKERS, BENCHMARK_TICKER
 from core import (
     get_risk_free_rate, get_tickers, download_price_data, fetch_option_chain,
     calc_returns, calc_sharpe, calc_sortino, calc_max_drawdown,
@@ -75,7 +75,14 @@ def main():
 
     # 3. Compute metrics
     print(f"[3/6] Computing risk metrics...")
-    bench_returns = calc_returns(price_data["SPY"]["Close"]) if "SPY" in price_data else pd.Series()
+    # 【2026-10-20】基準唔喺 most-active 名單時另外下載；原本 SPY 唔喺 price_data → beta 全部 NaN
+    # 只用嚟計 beta，唔加入 metrics 名單（universe 不變）
+    bench_df = price_data.get(BENCHMARK_TICKER)
+    if bench_df is None:
+        bench_df = download_price_data([BENCHMARK_TICKER]).get(BENCHMARK_TICKER)
+    bench_returns = calc_returns(bench_df["Close"]) if bench_df is not None else pd.Series(dtype=float)
+    if bench_returns.empty:
+        print(f"  ⚠️ 基準 {BENCHMARK_TICKER} 下載失敗，beta 會留空")
 
     metrics_rows = []
     for ticker, df in price_data.items():

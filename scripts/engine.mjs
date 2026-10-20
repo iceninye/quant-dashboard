@@ -245,12 +245,19 @@ export function dataAudit(fam) {
   for (const c of cov) {
     for (const g of c.gaps) {
       const bf = !['hk', 'us'].includes(c.fam) ? 0 : new Set((fam.backfill || []).filter((r) => r.date > g.from && r.date < g.to).map((r) => r.date)).size;
-      issues.push({ level: 'warn', fam: c.fam, msg: bf >= 3
-        ? `${g.from} → ${g.to} 缺 ${g.days} 日訊號數據；收市價已由 backfill 補 ${bf} 日（持有期可計，但呢段冇訊號，亦冇 mdd 等欄）`
-        : `${g.from} → ${g.to} 缺 ${g.days} 日數據；跨越呢段嘅持有期唔計` });
+      issues.push(bf >= 3
+        ? { level: 'info', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日訊號數據；收市價已由 backfill 補 ${bf} 日，持有期可計（呢段冇訊號、冇 mdd 等欄，上游當日冇跑，冇得重建）` }
+        : { level: 'warn', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計` });
     }
     if (c.dup) issues.push({ level: 'bad', fam: c.fam, msg: `${c.dup} 行重複 (date, ticker)` });
-    if (c.empty.length) issues.push({ level: 'warn', fam: c.fam, msg: `欄位全空：${c.empty.join(', ')}` });
+    const PENDING = {   // 上游已修、等本機部署嘅欄位（部署後新數據有值，警告會自動消失）
+      'us|beta': 'quant-us 原本用 SPY 做基準但 SPY 唔喺 most-active 名單 → 全部 NaN；src/quant-us/src/main.py 已改為另外下載基準。beta 唔影響任何因子',
+      'sentinel|close': 'Sentinel CSV 原本冇輸出收市價；src/sentinel/src/core.py 已加 last_price。期間 Sentinel 因子用 HK/US quant 收市價，唔受影響',
+    };
+    for (const col of c.empty) {
+      const why = PENDING[c.fam + '|' + col];
+      issues.push({ level: 'warn', fam: c.fam, msg: `欄位全空：${col}${why ? `（${why}；要喺本機部署修正）` : ''}` });
+    }
   }
   // PMFX close vs quant close（同日同標的）
   const q = new Map();
@@ -263,16 +270,21 @@ export function dataAudit(fam) {
     both++;
     if (Math.abs(a / b - 1) > 0.01) { off++; offDates.add(r.date); }
   }
-  if (off) issues.push({ level: 'warn', fam: 'pmfx', msg: `${off}/${both} 行 close 同 quant 相差 > 1%（${[...offDates].sort().join('、')}），係上一行數據；前向追蹤已改用 quant 收市價` });
+  if (off) issues.push({ level: 'info', fam: 'pmfx', msg: `${off}/${both} 行 close 同 quant 相差 > 1%（${[...offDates].sort().join('、')}），係上一行數據；前向追蹤已改用 quant 收市價` });
   const pmErr = fam.pmfx.filter((r) => r.err === '1');
   if (pmErr.length) {
     const ds = [...new Set(pmErr.map((r) => r.date))].sort();
-    issues.push({ level: 'bad', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}），呢段 PMFX 數值唔可信` });
+    const latest = latestDate(fam.pmfx), nowErr = fam.pmfx.filter((r) => r.date === latest && r.err === '1').length;
+    issues.push(nowErr
+      ? { level: 'bad', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}），最新一日 ${latest} 仍有 ${nowErr} 行，PMFX 數值唔可信` }
+      : { level: 'warn', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}，上游 bug），最新一日 ${latest} 已冇 error；歷史行由 gate 排除，所以 PMFX 仲未有可用嘅歷史樣本（冇得補）` });
   }
   const usNull = fam.us.filter((r) => r.close === '');
   if (usNull.length) {
     const ds = [...new Set(usNull.map((r) => r.date))];
-    issues.push({ level: 'warn', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}）` });
+    const bfk = new Set((fam.backfill || []).map((r) => r.date + '|' + r.ticker));
+    const left = usNull.filter((r) => !bfk.has(r.date + '|' + r.ticker)).length;
+    issues.push({ level: left ? 'warn' : 'info', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；backfill 補到 ${usNull.length - left} 行，其餘 ${left} 行因緊接嘅缺口內有除息，比例驗唔到所以唔補。只影響用呢日做入場／出場價嘅窗口` });
   }
   return { coverage: cov, issues };
 }

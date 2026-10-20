@@ -243,6 +243,7 @@ def calculate_metrics(data: pd.DataFrame, rf_rate: float) -> pd.DataFrame:
             "name": DISPLAY_NAMES.get(ticker, ticker),
             "sector": SECTOR_MAP.get(ticker, "—"),
             "market": market,
+            "last_price": float(prices.dropna().iloc[-1]),   # 【2026-10-20】輸出收市價，Dashboard 要用
             "cagr": cagr,
             "volatility": volatility,
             "sharpe": sharpe,

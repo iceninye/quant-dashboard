@@ -53,6 +53,9 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.9",
 }
 
+# Beta 基準（唔一定喺當日 most-active 名單入面，main.py 會另外下載）
+BENCHMARK_TICKER = "SPY"
+
 # ──────────────────────────────────────
 # Fallback Tickers
 # ──────────────────────────────────────
