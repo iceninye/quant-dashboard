@@ -40,6 +40,13 @@ const oppRow = (o) => `<tr><td class="tk">${esc(o.ticker)}<div class="dim" style
 const html = `<!DOCTYPE html>
 <html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quant Board">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <title>Quant Dashboard — 4 報告交叉驗證</title>
 <style>
 :root{--bg:#0b0f14;--panel:#121924;--panel2:#0f1620;--line:#1e2836;--tx:#dfe7f1;--dim:#8fa0b5;

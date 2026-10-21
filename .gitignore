@@ -19,3 +19,9 @@ venv/
 *.png
 *.zip
 *.gz
+
+# 但 PWA 圖示要入 repo（手機「加入主畫面」會向 server 抓圖）
+!apple-touch-icon.png
+!android-chrome-192x192.png
+!android-chrome-512x512.png
+!android-chrome-maskable-512x512.png
