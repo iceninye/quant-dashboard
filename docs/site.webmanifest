@@ -1,0 +1,32 @@
+{
+  "name": "Quant Dashboard — 4 報告交叉驗證",
+  "short_name": "Quant Board",
+  "description": "港股、美股、跨境及多資產期貨四份量化報告的交叉驗證儀表板。Cross-validation dashboard for four quantitative research reports.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#0b0f14",
+  "orientation": "any",
+  "lang": "zh-Hant",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "android-chrome-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
