@@ -219,6 +219,14 @@ ok(fs.existsSync(idx), 'docs/index.html 存在');
 const h = fs.readFileSync(idx, 'utf8');
 ok(!/https?:\/\//.test(h.replace(/https:\/\/iceninye[^"']*/g, '')), '冇外部 CDN 依賴');
 ok(h.includes('免責'), '含免責聲明');
+{
+  const sj = path.join(ROOT, 'docs', 'data', 'scan.json');
+  if (fs.existsSync(sj)) {
+    const sc = JSON.parse(fs.readFileSync(sj, 'utf8'));
+    ok(Array.isArray(sc.samples) && sc.samples.every((x) => x.market && x.asof && Array.isArray(x.top)), 'scan.json 結構');
+    ok(h.includes('id="s2b"'), '§2b 長樣本掃描有顯示');
+  }
+}
 
 console.log(`\n${pass} 通過 / ${fail} 失敗`);
 process.exit(fail ? 1 : 0);
