@@ -30,6 +30,31 @@ const watch = D.factors.filter((f) => f.grade === 'watch' && f.market !== 'senti
 const bestW = watch.length ? watch[0].byH.filter((h) => h.grade === 'watch').sort((a, b) => b.t - a.t)[0] : null;
 const sen = D.factors.find((f) => f.market === 'sentinel');
 const pmFilled = D.tracking.filter((t) => t.filled).length;
+// 本機長樣本多因子掃描（analysis/make_scan_json.py 產出；冇檔就唔顯示）
+const SJ = path.join(DOCS, 'data', 'scan.json');
+const SC = fs.existsSync(SJ) ? JSON.parse(fs.readFileSync(SJ, 'utf8')) : null;
+const scanMk = { hk: '港股', us: '美股' };
+const scanStrong = (m) => SC.samples.filter((s) => s.market === m).some((s) => s.counts?.pass > 0)
+  || SC.samples.filter((s) => s.market === m && (s.counts?.watch || 0) > 0).length >= 2;
+const gcls = (g) => ({ PASS: 'gpass', WATCH: 'gwatch' }[g] || 'gfail');
+const scanHtml = !SC ? '' : `<h2 id="s2b"><span class="n">2b</span>長樣本多因子掃描（本機跑，${esc(SC.run || '')}）</h2>
+<div class="card scroll"><table><thead><tr><th>樣本</th><th>數據</th><th>檢定</th><th>PASS</th><th>WATCH</th><th>最好檢定</th><th>每期超額</th><th>t</th><th>Holm p</th><th>正年份</th><th>跟最好因子（最長持有期）</th></tr></thead><tbody>
+${SC.samples.map((s) => { const b = s.top[0] || {}; const m = s.meta[s.meta.length - 1];
+  return `<tr><td>${scanMk[s.market] || esc(s.market)} ${esc(s.label)}</td><td class="dim">${esc(s.start)} → ${esc(s.asof)} · ${s.tickers} 隻</td>
+<td>${s.counts?.tests ?? '—'}</td><td class="${s.counts?.pass ? 'gpass' : 'dim'}">${s.counts?.pass ?? '—'}</td><td>${s.counts?.watch ?? '—'}</td>
+<td>${esc(b.signal || '—')} @${b.H ?? '—'} 日 <span class="${gcls(b.grade)}">${esc(b.grade || '')}</span></td>
+<td class="${(b.excess || 0) > 0 ? 'good' : 'bad'}">${fmt(b.excess)}%</td><td>${fmt(b.t)}</td><td class="dim">${fmt(b.holm, 3)}</td><td class="dim">${esc(b.years_pos || '—')}</td>
+<td class="dim">${m ? `${m.H} 日 t ${fmt(m.t)}，每期 ${fmt(m.excess)}%` : '—'}</td></tr>`; }).join('')}
+</tbody></table></div>
+${Object.entries(SC.consensus).map(([m, list]) => scanStrong(m) && list.length ? `<div class="card"><b>${scanMk[m] || esc(m)}共識名單</b> <span class="dim">— PASS／WATCH 因子今日頭 10 名入面出現次數（同一類防守股，唔係已證實 edge）</span>
+<div class="scroll"><table><thead><tr><th>標的</th><th>出現</th><th></th></tr></thead><tbody>
+${list.map((x) => `<tr><td class="tk">${esc(x.ticker)}</td><td>${x.count}/${x.of}</td><td style="text-align:left"><span class="bar"><i style="width:${Math.round(x.count / x.of * 100)}%"></i></span></td></tr>`).join('')}
+</tbody></table></div></div>` : `<p class="dim">${scanMk[m] || esc(m)}：冇足夠一致嘅因子（最多只得單一樣本 WATCH），唔列名單。</p>`).join('')}
+<p class="note">方法：17 個價格因子 × 5 / 21 / 63 日持有，t+1 入場、按換手扣成本，同全 universe 等權比；全部檢定一齊 Holm 校正，另計 Deflated Sharpe、前後半段、逐年同牛熊分拆。「跟最好因子」= 每期只用已完結數據揀當時最好嘅因子，係計埋揀因子運氣嘅誠實數字。
+<b>限制：</b>universe 係今日 most-active 名單（metrics 名單最早只到 2026-05，冇股票跌出過），倖存者偏差減唔到，絕對回報偏高；數字嚟自本機輸出，冇喺 cloud 獨立重跑。更新：本機跑 <code>analysis/run_local_validation.sh</code> → <code>python3 analysis/make_scan_json.py</code> → <code>publish.sh</code>。</p>`;
+const scanHero = !SC ? '' : (() => { const hk = SC.samples.filter((s) => s.market === 'hk'); const p = hk.find((s) => s.counts?.pass);
+  const lng = hk.find((s) => s.variant === 'union');
+  return `<li>長樣本掃描（§2b）：${p ? `港股 ${esc(p.label)} 有 <b class="gpass">${p.counts.pass} 個 PASS</b>（${esc(p.top[0].signal)}）` : '港股冇 PASS'}${lng ? `，但 6 年樣本最好只係 <b class="${gcls(lng.top[0]?.grade)}">${esc(lng.top[0]?.grade || '—')}</b>` : ''} → 防守型大藍籌係最好選擇，但<b>未證實</b>；美股冇因子可信。</li>`; })();
 const okOpp = D.opportunities.filter((o) => o.tier !== 'EXCLUDED');
 const oppRow = (o) => `<tr><td class="tk">${esc(o.ticker)}<div class="dim" style="font-size:11.5px">${esc(o.name)}</div></td>
 <td class="${o.action === '買' ? 'good' : o.action === '沽' ? 'bad' : 'dim'}">${esc(o.action)}</td>
@@ -87,7 +112,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
 <div class="sub">生成 ${new Date(D.generatedAt).toLocaleString('zh-HK', { timeZone: 'Asia/Hong_Kong' })} HKT ·
 數據日：HK ${D.dates.hk || '—'} · US ${D.dates.us || '—'} · Sentinel ${D.dates.sen || '—'} · PMFX ${D.pmfxDate}</div>
-<nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
+<nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a>${SC ? '<a href="#s2b">2b 長樣本</a>' : ''}<a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
 <div class="hero"><h2>今日結論</h2>
 ${pass.length ? `<b class="good">已通過驗證：${pass.map((f) => esc(f.marketLabel + ' ' + f.label)).join('、')}</b>，名單見 §1。`
@@ -98,6 +123,7 @@ ${pass.length ? `<b class="good">已通過驗證：${pass.map((f) => esc(f.marke
 <ul>
 <li>PMFX：限價成交嘅 ${pmFilled} 個歷史訊號，5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個 → <b>唔好跟</b>（§4–5）。</li>
 ${sen ? `<li>Sentinel「可加倉」對比「減持」：${sen.byH.map((h) => `${h.H} 日 ${pct(h.excess)}`).join('、')}（相對 29 隻等權）→ ${(sen.byH[0].excess || 0) < 0 ? '<b class="bad">跑輸，唔應該當加分</b>' : '有正面作用'}。</li>` : ''}
+${scanHero}
 <li>樣本只有 ${D.factors[0] ? D.factors[0].byH[0].days : '—'} 個有效交易日、一個市況，${D.dataAudit.issues.filter((i) => i.level !== 'info').length} 項未解決數據問題見 §6。所有結論信心偏低。</li>
 </ul></div>
 
@@ -120,6 +146,8 @@ ${D.factors.map((f) => f.byH.map((h, i) => `<tr><td>${i ? '' : esc(f.label)}</td
 <p class="note">方法：訊號日之後第一個收市價入場，持有 5 / 20 個交易日，扣 ${D.cfg.costPct}% 來回成本；每日揀頭 20%（Sentinel 用「可加倉」對「減持」），同當日全體等權比。
 樣本按日期切半做前半 / 後半。<b>通過</b> = 前後半都正 + 非重疊窗口 t ≥ ${FT} + <b>Holm 校正</b>（同時測 ${D.factors[0]?.byH[0].m ?? '—'} 個檢定，校正後單尾 p < 0.05）；<b>觀察</b> = 前後半都正但 t 只有 1.5–${FT}，或 t ≥ ${FT} 但校正後唔夠。持有期跨越數據缺口嘅窗口唔計。
 非重疊窗口少於 ${D.cfg.minWindows ?? 8} 個（現時 20 日通常只有 1–3 個）一律唔評級，t 只作參考；校正 p 一欄「—」= 窗口太少，唔算入檢定數。</p></div>
+
+${scanHtml}
 
 <h2 id="s3"><span class="n">3</span>前向紀錄 — 港股低 MDD（事前凍結、事後照記）</h2>
 <div class="card"><p>回測用「當日最活躍名單」有倖存者偏差，唯一無偏差嘅證據係<b>事前凍結規則、之後照記</b>。規則 <code>${esc(FW.rule.version)}</code>：

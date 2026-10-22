@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-Hant"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quant Board">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <title>Quant Dashboard — 4 報告交叉驗證</title>
 <style>
 :root{--bg:#0b0f14;--panel:#121924;--panel2:#0f1620;--line:#1e2836;--tx:#dfe7f1;--dim:#8fa0b5;
@@ -39,9 +46,9 @@ code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4p
 div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(--dim);margin:6px 0 4px}nav a{color:var(--acc);margin-right:12px;text-decoration:none}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
-<div class="sub">生成 20/10/2026 下午2:07:37 HKT ·
+<div class="sub">生成 22/10/2026 下午9:39:25 HKT ·
 數據日：HK 2026-10-16 · US 2026-10-17 · Sentinel 2026-10-16 · PMFX 2026-10-17</div>
-<nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
+<nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a><a href="#s2b">2b 長樣本</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
 <div class="hero"><h2>今日結論</h2>
 <b>今日冇訊號通過驗證。</b>證據最強係 <b class="gwatch">港股 回撤最淺（低 MDD）</b>：
@@ -50,6 +57,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <ul>
 <li>PMFX：限價成交嘅 604 個歷史訊號，5 日平均 <b class="bad">-1.62%</b>，到目標 14 個、止損 381 個 → <b>唔好跟</b>（§4–5）。</li>
 <li>Sentinel「可加倉」對比「減持」：5 日 -0.89%、20 日 -2.99%（相對 29 隻等權）→ <b class="bad">跑輸，唔應該當加分</b>。</li>
+<li>長樣本掃描（§2b）：港股 今日名單 2 年 有 <b class="gpass">1 個 PASS</b>（combo_lowmdd_mom），但 6 年樣本最好只係 <b class="gwatch">WATCH</b> → 防守型大藍籌係最好選擇，但<b>未證實</b>；美股冇因子可信。</li>
 <li>樣本只有 57 個有效交易日、一個市況，9 項未解決數據問題見 §6。所有結論信心偏低。</li>
 </ul></div>
 
@@ -171,6 +179,41 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <p class="note">方法：訊號日之後第一個收市價入場，持有 5 / 20 個交易日，扣 0.2% 來回成本；每日揀頭 20%（Sentinel 用「可加倉」對「減持」），同當日全體等權比。
 樣本按日期切半做前半 / 後半。<b>通過</b> = 前後半都正 + 非重疊窗口 t ≥ 2 + <b>Holm 校正</b>（同時測 10 個檢定，校正後單尾 p < 0.05）；<b>觀察</b> = 前後半都正但 t 只有 1.5–2，或 t ≥ 2 但校正後唔夠。持有期跨越數據缺口嘅窗口唔計。
 非重疊窗口少於 8 個（現時 20 日通常只有 1–3 個）一律唔評級，t 只作參考；校正 p 一欄「—」= 窗口太少，唔算入檢定數。</p></div>
+
+<h2 id="s2b"><span class="n">2b</span>長樣本多因子掃描（本機跑，2026-10-22 19:47:13）</h2>
+<div class="card scroll"><table><thead><tr><th>樣本</th><th>數據</th><th>檢定</th><th>PASS</th><th>WATCH</th><th>最好檢定</th><th>每期超額</th><th>t</th><th>Holm p</th><th>正年份</th><th>跟最好因子（最長持有期）</th></tr></thead><tbody>
+<tr><td>港股 今日名單 2 年</td><td class="dim">2024-10-22 → 2026-10-22 · 98 隻</td>
+<td>34</td><td class="gpass">1</td><td>17</td>
+<td>combo_lowmdd_mom @21 日 <span class="gpass">PASS</span></td>
+<td class="good">2.83%</td><td>4.14</td><td class="dim">0.034</td><td class="dim">2/2</td>
+<td class="dim">21 日 t 1.41，每期 3.34%</td></tr><tr><td>美股 今日名單 2 年</td><td class="dim">2024-10-22 → 2026-10-21 · 99 隻</td>
+<td>34</td><td class="dim">0</td><td>0</td>
+<td>trend_200 @5 日 <span class="gfail">FAIL</span></td>
+<td class="good">1.24%</td><td>1.64</td><td class="dim">1.000</td><td class="dim">2/2</td>
+<td class="dim">21 日 t 0.18，每期 1.56%</td></tr><tr><td>港股 曾入榜 6 年</td><td class="dim">2020-10-22 → 2026-10-22 · 98 隻</td>
+<td>51</td><td class="dim">0</td><td>1</td>
+<td>combo_hi52_lowvol @63 日 <span class="gwatch">WATCH</span></td>
+<td class="good">4.07%</td><td>1.86</td><td class="dim">1.000</td><td class="dim">6/6</td>
+<td class="dim">63 日 t 0.97，每期 2.72%</td></tr><tr><td>港股 曾入榜 6 年（只計入榜後）</td><td class="dim">2020-10-22 → 2026-10-22 · 98 隻</td>
+<td>19</td><td class="dim">0</td><td>9</td>
+<td>lowvol_252 @5 日 <span class="gwatch">WATCH</span></td>
+<td class="good">0.91%</td><td>2.45</td><td class="dim">0.235</td><td class="dim">1/1</td>
+<td class="dim">5 日 t 2.24，每期 0.83%</td></tr><tr><td>美股 曾入榜 6 年</td><td class="dim">2020-10-22 → 2026-10-20 · 99 隻</td>
+<td>51</td><td class="dim">0</td><td>1</td>
+<td>trend_200 @63 日 <span class="gwatch">WATCH</span></td>
+<td class="good">5.97%</td><td>2.21</td><td class="dim">1.000</td><td class="dim">5/6</td>
+<td class="dim">63 日 t 1.59，每期 6.39%</td></tr><tr><td>美股 曾入榜 6 年（只計入榜後）</td><td class="dim">2020-10-22 → 2026-10-20 · 99 隻</td>
+<td>19</td><td class="dim">0</td><td>0</td>
+<td>rev_1w @5 日 <span class="gfail">FAIL</span></td>
+<td class="good">1.07%</td><td>1.00</td><td class="dim">1.000</td><td class="dim">1/1</td>
+<td class="dim">5 日 t 0.83，每期 1.05%</td></tr>
+</tbody></table></div>
+<div class="card"><b>港股共識名單</b> <span class="dim">— PASS／WATCH 因子今日頭 10 名入面出現次數（同一類防守股，唔係已證實 edge）</span>
+<div class="scroll"><table><thead><tr><th>標的</th><th>出現</th><th></th></tr></thead><tbody>
+<tr><td class="tk">0002.HK</td><td>9/9</td><td style="text-align:left"><span class="bar"><i style="width:100%"></i></span></td></tr><tr><td class="tk">3988.HK</td><td>8/9</td><td style="text-align:left"><span class="bar"><i style="width:89%"></i></span></td></tr><tr><td class="tk">1398.HK</td><td>7/9</td><td style="text-align:left"><span class="bar"><i style="width:78%"></i></span></td></tr><tr><td class="tk">0006.HK</td><td>7/9</td><td style="text-align:left"><span class="bar"><i style="width:78%"></i></span></td></tr><tr><td class="tk">1038.HK</td><td>7/9</td><td style="text-align:left"><span class="bar"><i style="width:78%"></i></span></td></tr><tr><td class="tk">0939.HK</td><td>6/9</td><td style="text-align:left"><span class="bar"><i style="width:67%"></i></span></td></tr><tr><td class="tk">0270.HK</td><td>6/9</td><td style="text-align:left"><span class="bar"><i style="width:67%"></i></span></td></tr><tr><td class="tk">0941.HK</td><td>6/9</td><td style="text-align:left"><span class="bar"><i style="width:67%"></i></span></td></tr><tr><td class="tk">3968.HK</td><td>6/9</td><td style="text-align:left"><span class="bar"><i style="width:67%"></i></span></td></tr><tr><td class="tk">0003.HK</td><td>5/9</td><td style="text-align:left"><span class="bar"><i style="width:56%"></i></span></td></tr>
+</tbody></table></div></div><p class="dim">美股：冇足夠一致嘅因子（最多只得單一樣本 WATCH），唔列名單。</p>
+<p class="note">方法：17 個價格因子 × 5 / 21 / 63 日持有，t+1 入場、按換手扣成本，同全 universe 等權比；全部檢定一齊 Holm 校正，另計 Deflated Sharpe、前後半段、逐年同牛熊分拆。「跟最好因子」= 每期只用已完結數據揀當時最好嘅因子，係計埋揀因子運氣嘅誠實數字。
+<b>限制：</b>universe 係今日 most-active 名單（metrics 名單最早只到 2026-05，冇股票跌出過），倖存者偏差減唔到，絕對回報偏高；數字嚟自本機輸出，冇喺 cloud 獨立重跑。更新：本機跑 <code>analysis/run_local_validation.sh</code> → <code>python3 analysis/make_scan_json.py</code> → <code>publish.sh</code>。</p>
 
 <h2 id="s3"><span class="n">3</span>前向紀錄 — 港股低 MDD（事前凍結、事後照記）</h2>
 <div class="card"><p>回測用「當日最活躍名單」有倖存者偏差，唯一無偏差嘅證據係<b>事前凍結規則、之後照記</b>。規則 <code>hk-lowmdd-v1</code>：
