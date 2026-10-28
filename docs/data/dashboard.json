@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-28T06:52:04.094Z",
+ "generatedAt": "2026-10-28T08:52:19.686Z",
  "dates": {
   "hk": "2026-10-27",
   "us": "2026-10-28",
@@ -1207,7 +1207,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-18",
@@ -1228,7 +1228,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 90
+   "daysObserved": 94
   },
   {
    "date": "2026-06-18",
@@ -1249,7 +1249,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-18",
@@ -1289,9 +1289,9 @@
    "hitDay": 6,
    "r1": -0.018043857539563946,
    "r5": -0.10561003186858814,
-   "r10": -0.089112056995004,
-   "r20": -0.006622182627082552,
-   "daysObserved": 93
+   "r10": -0.09334230696258962,
+   "r20": -0.005776132633565427,
+   "daysObserved": 94
   },
   {
    "date": "2026-06-18",
@@ -1711,7 +1711,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 92
+   "daysObserved": 93
   },
   {
    "date": "2026-06-19",
@@ -1732,7 +1732,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 89
+   "daysObserved": 93
   },
   {
    "date": "2026-06-19",
@@ -1745,15 +1745,15 @@
    "net_ev": 20.3767,
    "stopPct": 17.47,
    "clean": false,
-   "filled": true,
-   "fillDay": 20,
-   "outcome": "stop",
-   "hitDay": 29,
-   "r1": -0.07132136072902157,
-   "r5": -0.026383063941269602,
-   "r10": -0.16640819161325027,
-   "r20": -0.15403387800502885,
-   "daysObserved": 92
+   "filled": false,
+   "fillDay": null,
+   "outcome": "unfilled",
+   "hitDay": null,
+   "r1": null,
+   "r5": null,
+   "r10": null,
+   "r20": null,
+   "daysObserved": 93
   },
   {
    "date": "2026-06-19",
@@ -1793,9 +1793,9 @@
    "hitDay": 5,
    "r1": -0.018043857539563946,
    "r5": -0.10561003186858814,
-   "r10": -0.089112056995004,
-   "r20": -0.006622182627082552,
-   "daysObserved": 92
+   "r10": -0.09334230696258962,
+   "r20": -0.005776132633565427,
+   "daysObserved": 93
   },
   {
    "date": "2026-06-19",
@@ -2299,7 +2299,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 91
+   "daysObserved": 92
   },
   {
    "date": "2026-06-22",
@@ -2315,12 +2315,12 @@
    "filled": true,
    "fillDay": 3,
    "outcome": "stop",
-   "hitDay": 5,
-   "r1": -0.06390298756814822,
-   "r5": -0.04424227173873808,
-   "r10": -0.07072405224365777,
-   "r20": -0.04624846723153505,
-   "daysObserved": 88
+   "hitDay": 6,
+   "r1": -0.07152650901229689,
+   "r5": -0.05146457551280707,
+   "r10": -0.020167925825174814,
+   "r20": -0.031001381486278304,
+   "daysObserved": 92
   },
   {
    "date": "2026-06-22",
@@ -2334,14 +2334,14 @@
    "stopPct": 14.43,
    "clean": false,
    "filled": true,
-   "fillDay": 19,
+   "fillDay": 20,
    "outcome": "stop",
-   "hitDay": 28,
+   "hitDay": 29,
    "r1": -0.05261499021661739,
    "r5": -0.00677344670713282,
    "r10": -0.14961303880190346,
    "r20": -0.13699000508190062,
-   "daysObserved": 91
+   "daysObserved": 92
   },
   {
    "date": "2026-06-22",
@@ -2378,12 +2378,12 @@
    "filled": true,
    "fillDay": 2,
    "outcome": "stop",
-   "hitDay": 4,
+   "hitDay": 5,
    "r1": -0.011195402495544187,
-   "r5": -0.09718492067274444,
-   "r10": -0.03044678716208151,
-   "r20": 0.012334067652445943,
-   "daysObserved": 91
+   "r5": -0.09547368648016322,
+   "r10": -0.07878915310249765,
+   "r20": 0.004633513785831013,
+   "daysObserved": 92
   },
   {
    "date": "2026-06-22",
@@ -2929,7 +2929,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-23",
@@ -2943,14 +2943,14 @@
    "stopPct": 14.352,
    "clean": false,
    "filled": true,
-   "fillDay": 18,
+   "fillDay": 19,
    "outcome": "stop",
-   "hitDay": 27,
+   "hitDay": 28,
    "r1": -0.06274329541770698,
    "r5": -0.017390802334307218,
    "r10": -0.15870654165214695,
    "r20": -0.1462181739915008,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-23",
@@ -3517,7 +3517,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 89
+   "daysObserved": 90
   },
   {
    "date": "2026-06-24",
@@ -3531,14 +3531,14 @@
    "stopPct": 10.766,
    "clean": false,
    "filled": true,
-   "fillDay": 6,
+   "fillDay": 7,
    "outcome": "stop",
-   "hitDay": 17,
+   "hitDay": 18,
    "r1": -0.014936962058594249,
    "r5": 0.06074635077325327,
    "r10": -0.04546468488152422,
    "r20": -0.21336716040763967,
-   "daysObserved": 89
+   "daysObserved": 90
   },
   {
    "date": "2026-06-24",
@@ -3552,14 +3552,14 @@
    "stopPct": 23.056,
    "clean": false,
    "filled": true,
-   "fillDay": 13,
+   "fillDay": 14,
    "outcome": "stop",
-   "hitDay": 26,
+   "hitDay": 27,
    "r1": -0.02977766203702327,
    "r5": -0.1919092006127733,
    "r10": -0.15959627159592807,
    "r20": -0.22252144915504782,
-   "daysObserved": 89
+   "daysObserved": 90
   },
   {
    "date": "2026-06-24",
@@ -3601,7 +3601,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 89
+   "daysObserved": 90
   },
   {
    "date": "2026-06-24",
@@ -36795,9 +36795,9 @@
   },
   "all": {
    "signals": 1695,
-   "decided": 429,
+   "decided": 428,
    "wins": 14,
-   "losses": 415,
+   "losses": 414,
    "winRate": 3.3,
    "avgR5": -0.0199
   }
@@ -36807,34 +36807,34 @@
    {
     "gate": "全部有 EV 訊號",
     "n": 1695,
-    "decided": 429,
+    "decided": 428,
     "winRate": 3.3,
     "avgR5": -0.01991,
-    "avgR20": -0.04313
+    "avgR20": -0.04289
    },
    {
     "gate": "net_ev > 0",
     "n": 1695,
-    "decided": 429,
+    "decided": 428,
     "winRate": 3.3,
     "avgR5": -0.01991,
-    "avgR20": -0.04313
+    "avgR20": -0.04289
    },
    {
     "gate": "+ rr_valid",
     "n": 1463,
-    "decided": 395,
+    "decided": 394,
     "winRate": 2.8,
     "avgR5": -0.02007,
-    "avgR20": -0.04188
+    "avgR20": -0.04162
    },
    {
     "gate": "+ 止損 ≥ 0.3%",
     "n": 1463,
-    "decided": 395,
+    "decided": 394,
     "winRate": 2.8,
     "avgR5": -0.02007,
-    "avgR20": -0.04188
+    "avgR20": -0.04162
    },
    {
     "gate": "+ 引擎無 error",
@@ -36872,10 +36872,10 @@
   "bySide": {
    "buy": {
     "n": 802,
-    "decided": 266,
+    "decided": 265,
     "winRate": 1.5,
-    "avgR5": -0.02493,
-    "avgR20": -0.04982
+    "avgR5": -0.02494,
+    "avgR20": -0.04948
    },
    "sell": {
     "n": 893,
@@ -37802,16 +37802,16 @@
      "H": 5,
      "days": 64,
      "windows": 13,
-     "top": 0.0018,
-     "ew": -0.0054,
-     "excess": 0.0072,
-     "spread": 0.0203,
-     "beatRate": 70,
-     "isExcess": 0.0086,
+     "top": 0.0015,
+     "ew": -0.006,
+     "excess": 0.0075,
+     "spread": 0.0208,
+     "beatRate": 72,
+     "isExcess": 0.0091,
      "oosExcess": 0.0055,
-     "t": 1.72,
-     "p": 0.056,
-     "adjP": 0.56,
+     "t": 1.74,
+     "p": 0.0541,
+     "adjP": 0.5413,
      "grade": "watch",
      "m": 10
     },
@@ -37819,15 +37819,15 @@
      "H": 20,
      "days": 49,
      "windows": 3,
-     "top": 0.0192,
-     "ew": -0.0111,
-     "excess": 0.0303,
-     "spread": 0.0681,
-     "beatRate": 88,
-     "isExcess": 0.0298,
+     "top": 0.0182,
+     "ew": -0.0114,
+     "excess": 0.0296,
+     "spread": 0.0667,
+     "beatRate": 84,
+     "isExcess": 0.0288,
      "oosExcess": 0.0316,
-     "t": 2.78,
-     "p": 0.0544,
+     "t": 1.44,
+     "p": 0.1438,
      "adjP": null,
      "grade": "fail",
      "m": 10
@@ -37845,15 +37845,15 @@
      "H": 5,
      "days": 64,
      "windows": 13,
-     "top": -0.0005,
-     "ew": -0.0054,
-     "excess": 0.0049,
-     "spread": 0.0185,
+     "top": -0.0007,
+     "ew": -0.006,
+     "excess": 0.0053,
+     "spread": 0.0191,
      "beatRate": 69,
-     "isExcess": 0.0044,
+     "isExcess": 0.0051,
      "oosExcess": 0.0055,
-     "t": 1.05,
-     "p": 0.1566,
+     "t": 1.19,
+     "p": 0.1294,
      "adjP": 1,
      "grade": "fail",
      "m": 10
@@ -37862,15 +37862,15 @@
      "H": 20,
      "days": 49,
      "windows": 3,
-     "top": 0.0152,
-     "ew": -0.0111,
-     "excess": 0.0263,
-     "spread": 0.0791,
+     "top": 0.0144,
+     "ew": -0.0114,
+     "excess": 0.0259,
+     "spread": 0.0778,
      "beatRate": 88,
-     "isExcess": 0.0264,
+     "isExcess": 0.0257,
      "oosExcess": 0.0263,
-     "t": 1.92,
-     "p": 0.0978,
+     "t": 1.01,
+     "p": 0.2087,
      "adjP": null,
      "grade": "fail",
      "m": 10
@@ -38061,14 +38061,14 @@
      "days": 64,
      "windows": 13,
      "top": -0.0092,
-     "ew": -0.0054,
-     "excess": -0.0038,
-     "spread": 0.0019,
-     "beatRate": 36,
-     "isExcess": 0.0012,
+     "ew": -0.006,
+     "excess": -0.0033,
+     "spread": 0.0025,
+     "beatRate": 38,
+     "isExcess": 0.0022,
      "oosExcess": -0.0098,
-     "t": -1.22,
-     "p": 0.8768,
+     "t": -1.11,
+     "p": 0.8562,
      "adjP": 1,
      "grade": "fail",
      "m": 10
@@ -38077,15 +38077,15 @@
      "H": 20,
      "days": 49,
      "windows": 3,
-     "top": -0.0133,
-     "ew": -0.0111,
-     "excess": -0.0022,
-     "spread": 0.0132,
-     "beatRate": 51,
-     "isExcess": 0.0099,
+     "top": -0.0149,
+     "ew": -0.0114,
+     "excess": -0.0035,
+     "spread": 0.0117,
+     "beatRate": 49,
+     "isExcess": 0.0082,
      "oosExcess": -0.0325,
-     "t": 0.08,
-     "p": 0.4706,
+     "t": -0.14,
+     "p": 0.5487,
      "adjP": null,
      "grade": "fail",
      "m": 10
@@ -38103,15 +38103,15 @@
      "H": 5,
      "days": 64,
      "windows": 13,
-     "top": -0.0102,
-     "ew": -0.0054,
-     "excess": -0.0048,
-     "spread": 0.0042,
+     "top": -0.0105,
+     "ew": -0.006,
+     "excess": -0.0046,
+     "spread": 0.0046,
      "beatRate": 31,
-     "isExcess": -0.0077,
+     "isExcess": -0.0073,
      "oosExcess": -0.0012,
-     "t": -1.51,
-     "p": 0.9212,
+     "t": -1.35,
+     "p": 0.8983,
      "adjP": 1,
      "grade": "fail",
      "m": 10
@@ -38120,15 +38120,15 @@
      "H": 20,
      "days": 49,
      "windows": 3,
-     "top": -0.014,
-     "ew": -0.0111,
-     "excess": -0.0029,
-     "spread": 0.0192,
+     "top": -0.0152,
+     "ew": -0.0114,
+     "excess": -0.0037,
+     "spread": 0.0178,
      "beatRate": 49,
-     "isExcess": -0.0035,
+     "isExcess": -0.0047,
      "oosExcess": -0.0012,
-     "t": -0.53,
-     "p": 0.6761,
+     "t": -0.58,
+     "p": 0.6894,
      "adjP": null,
      "grade": "fail",
      "m": 10
@@ -38146,15 +38146,15 @@
      "H": 5,
      "days": 64,
      "windows": 13,
-     "top": -0.0115,
-     "ew": -0.0054,
-     "excess": -0.006,
+     "top": -0.0119,
+     "ew": -0.006,
+     "excess": -0.0059,
      "spread": -0.0037,
      "beatRate": 33,
-     "isExcess": -0.0047,
+     "isExcess": -0.0045,
      "oosExcess": -0.0077,
-     "t": -1,
-     "p": 0.8316,
+     "t": -0.99,
+     "p": 0.8287,
      "adjP": 1,
      "grade": "fail",
      "m": 10
@@ -38163,15 +38163,15 @@
      "H": 20,
      "days": 49,
      "windows": 3,
-     "top": -0.0168,
-     "ew": -0.0111,
-     "excess": -0.0057,
-     "spread": 0.0108,
+     "top": -0.0169,
+     "ew": -0.0114,
+     "excess": -0.0054,
+     "spread": 0.0111,
      "beatRate": 37,
-     "isExcess": -0.0015,
+     "isExcess": -0.0011,
      "oosExcess": -0.0163,
-     "t": -4.02,
-     "p": 0.9716,
+     "t": -3,
+     "p": 0.9523,
      "adjP": null,
      "grade": "fail",
      "m": 10
@@ -38232,15 +38232,15 @@
      "H": 5,
      "days": 28,
      "windows": 6,
-     "top": -0.0131,
-     "ew": -0.0038,
-     "excess": -0.0093,
-     "spread": -0.0067,
+     "top": -0.0129,
+     "ew": -0.0042,
+     "excess": -0.0087,
+     "spread": -0.0058,
      "beatRate": 32,
-     "isExcess": -0.0052,
+     "isExcess": -0.004,
      "oosExcess": -0.0134,
-     "t": -2.07,
-     "p": 0.9532,
+     "t": -1.86,
+     "p": 0.9393,
      "adjP": null,
      "grade": "fail",
      "m": 10
@@ -38278,16 +38278,16 @@
     "H": 5,
     "days": 64,
     "windows": 13,
-    "top": 0.0018,
-    "ew": -0.0054,
-    "excess": 0.0072,
-    "spread": 0.0203,
-    "beatRate": 70,
-    "isExcess": 0.0086,
+    "top": 0.0015,
+    "ew": -0.006,
+    "excess": 0.0075,
+    "spread": 0.0208,
+    "beatRate": 72,
+    "isExcess": 0.0091,
     "oosExcess": 0.0055,
-    "t": 1.72,
-    "p": 0.056,
-    "adjP": 0.56,
+    "t": 1.74,
+    "p": 0.0541,
+    "adjP": 0.5413,
     "grade": "watch",
     "m": 10
    },
@@ -38717,6 +38717,11 @@
    {
     "level": "info",
     "fam": "hk",
+    "msg": "87 行收市價已由 data/backfill/corrections.csv 更正（2026-06-26 上游抓咗上一交易日收市；原始 CSV 不動）"
+   },
+   {
+    "level": "info",
+    "fam": "hk",
     "msg": "2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 10 日，持有期可計（呢段冇訊號、冇 mdd 等欄；唔事後重建，會用到未來數據；本機搵到原檔先可還原：node scripts/gap_sources.mjs）"
    },
    {
@@ -38752,7 +38757,7 @@
    {
     "level": "info",
     "fam": "pmfx",
-    "msg": "28/615 行 close 同 quant 相差 > 1%（2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17、2026-10-22），係上一行數據；前向追蹤已改用 quant 收市價"
+    "msg": "31/615 行 close 同 quant 相差 > 1%（2026-06-26、2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17、2026-10-22），係上一行數據；前向追蹤已改用 quant 收市價"
    },
    {
     "level": "limit",
@@ -38762,7 +38767,7 @@
    {
     "level": "warn",
     "fam": "us",
-    "msg": "94 行 close 為空（2026-07-15，上游當日抓價失敗）；backfill 補到 7 行，其餘 87 行用復權價驗唔到比例（緊接缺口內有除息）。可補：本機 python3 analysis/download_raw_closes.py --market us，再 node scripts/backfill_prices.mjs --prices <輸出檔> --apply（用未復權收市價，唔受除息影響，仍然要通過 0.3% 比例核對）。只影響用呢日做入場／出場價嘅窗口"
+    "msg": "94 行 close 為空（2026-07-15，上游當日抓價失敗）；backfill 補到 7 行，其餘 87 行用復權價驗唔到比例（緊接缺口內有除息）。可補：本機 python3 analysis/download_raw_closes.py --market us，再 node scripts/backfill_prices.mjs --prices <輸出檔> --rebuild --apply（用未復權收市價，唔受除息影響，仍然要通過 0.3% 比例核對）。只影響用呢日做入場／出場價嘅窗口"
    }
   ]
  }
