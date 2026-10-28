@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-28T08:54:02.631Z",
+ "generatedAt": "2026-10-28T13:17:32.727Z",
  "dates": {
   "hk": "2026-10-27",
   "us": "2026-10-28",
@@ -38730,14 +38730,14 @@
     "msg": "2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 12 日，持有期可計（呢段冇訊號、冇 mdd 等欄；唔事後重建，會用到未來數據；本機搵到原檔先可還原：node scripts/gap_sources.mjs）"
    },
    {
-    "level": "warn",
+    "level": "limit",
     "fam": "sentinel",
-    "msg": "2026-07-10 → 2026-07-31 缺 21 日數據（上游當日冇產出報告？）；跨越呢段嘅持有期唔計。本機有機會補到：node scripts/gap_sources.mjs 搵 mirror／iCloud archive／Obsidian 嘅原檔；搵唔到先算冇得補"
+    "msg": "2026-07-10 → 2026-07-31 缺 21 日數據：本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計"
    },
    {
-    "level": "warn",
+    "level": "limit",
     "fam": "sentinel",
-    "msg": "2026-09-01 → 2026-09-09 缺 8 日數據（上游當日冇產出報告？）；跨越呢段嘅持有期唔計。本機有機會補到：node scripts/gap_sources.mjs 搵 mirror／iCloud archive／Obsidian 嘅原檔；搵唔到先算冇得補"
+    "msg": "2026-09-01 → 2026-09-09 缺 8 日數據：本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計"
    },
    {
     "level": "limit",
@@ -38745,14 +38745,14 @@
     "msg": "2026-07-16 → 2026-07-31 缺 15 日 PMFX 數據；呢段喺上游 bug 時期（至 2026-10-16，行內 error 欄非空，gate 一律排除），即使補到原檔都用唔到，所以唔補"
    },
    {
-    "level": "warn",
+    "level": "limit",
     "fam": "macro",
-    "msg": "2026-07-10 → 2026-07-31 缺 21 日數據（上游當日冇產出報告？）；跨越呢段嘅持有期唔計。本機有機會補到：node scripts/gap_sources.mjs 搵 mirror／iCloud archive／Obsidian 嘅原檔；搵唔到先算冇得補"
+    "msg": "2026-07-10 → 2026-07-31 缺 21 日數據：macro 抽自 Sentinel summary，同批缺口；本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計"
    },
    {
-    "level": "warn",
+    "level": "limit",
     "fam": "macro",
-    "msg": "2026-09-01 → 2026-09-09 缺 8 日數據（上游當日冇產出報告？）；跨越呢段嘅持有期唔計。本機有機會補到：node scripts/gap_sources.mjs 搵 mirror／iCloud archive／Obsidian 嘅原檔；搵唔到先算冇得補"
+    "msg": "2026-09-01 → 2026-09-09 缺 8 日數據：macro 抽自 Sentinel summary，同批缺口；本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計"
    },
    {
     "level": "info",

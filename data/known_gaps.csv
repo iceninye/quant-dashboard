@@ -1,1 +1,5 @@
 fam,from,to,reason
+sentinel,2026-07-10,2026-07-31,本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實
+sentinel,2026-09-01,2026-09-09,本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實
+macro,2026-07-10,2026-07-31,macro 抽自 Sentinel summary，同批缺口；本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實
+macro,2026-09-01,2026-09-09,macro 抽自 Sentinel summary，同批缺口；本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實
