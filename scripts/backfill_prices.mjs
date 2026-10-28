@@ -55,7 +55,7 @@ export function planBackfill(wide, repoRows, existing = [], source = 'prices', o
   const lag = opts.lag ?? (stable(build(1)) > stable(build(0)) ? 1 : 0);
   const file = build(lag);
   const done = new Set(existing.map((r) => r.ticker + '|' + r.date));
-  const add = [], perTicker = [];
+  const add = [], perTicker = [], skips = [];
   let overlapN = 0;
   for (const [t, fm] of file) {
     const rm = repo.get(t);
@@ -67,9 +67,9 @@ export function planBackfill(wide, repoRows, existing = [], source = 'prices', o
     let ok = 0, skipped = 0;
     for (const d of todo) {
       const b = ov.filter((x) => x < d).at(-1), a = ov.find((x) => x > d);
-      if (!b || !a) { skipped++; continue; }
+      if (!b || !a) { skipped++; skips.push({ ticker: t, date: d, why: '缺前或後重疊' }); continue; }
       const rb = rm.get(b) / fm.get(b), ra = rm.get(a) / fm.get(a);
-      if (Math.abs(rb / ra - 1) > LIMITS.ratioTol) { skipped++; continue; }
+      if (Math.abs(rb / ra - 1) > LIMITS.ratioTol) { skipped++; skips.push({ ticker: t, date: d, why: `前後比例差 ${(100 * (rb / ra - 1)).toFixed(2)}%` }); continue; }
       let scale = (rb + ra) / 2;
       if (Math.abs(scale - 1) <= LIMITS.ratioTol) scale = 1;       // 未復權檔：貼近 1 就當 1，唔引入雜訊
       add.push({ date: d, ticker: t, close: (fm.get(d) * scale).toFixed(4), source, scale: scale.toFixed(6) });
@@ -81,7 +81,7 @@ export function planBackfill(wide, repoRows, existing = [], source = 'prices', o
   const rejected = overlapN < LIMITS.minOverlap ? '重疊日少於 30 個，無法核對'
     : withGap && accepted / withGap < LIMITS.minAccepted ? `只有 ${accepted}/${withGap} 隻股票前後比例一致，低於 ${100 * LIMITS.minAccepted}%`
     : null;
-  return { add, overlap: { n: overlapN }, perTicker, accepted, withGap, rejected, range: [first, last], lag };
+  return { add, overlap: { n: overlapN }, perTicker, accepted, withGap, rejected, range: [first, last], lag, skips };
 }
 
 if (process.argv[1] && process.argv[1].endsWith('backfill_prices.mjs')) {
@@ -97,12 +97,20 @@ if (process.argv[1] && process.argv[1].endsWith('backfill_prices.mjs')) {
   const keep = rebuild ? prev.filter((r) => !tick.has(r.ticker)) : prev;          // --rebuild：只替換本檔有嘅 ticker 嘅舊行
   const plan = planBackfill(wideF, [...fam.hk, ...fam.us], keep, path.basename(f), lagArg != null ? { lag: Number(lagArg) } : {});
   console.log(`日期對齊 lag=${plan.lag}（${plan.lag ? '報告日 = 交易日 + 1' : '報告日 = 交易日'}）${rebuild ? '｜--rebuild：替換 ' + (prev.length - keep.length) + ' 行舊行' : ''}`);
+  // --rebuild 唔刪「新計劃補唔到」嘅舊行：只替換新計劃有重算嘅 (date,ticker)
+  const fresh = new Set(plan.add.map((r) => r.ticker + '|' + r.date));
+  const kept = rebuild ? prev.filter((r) => tick.has(r.ticker) && !fresh.has(r.ticker + '|' + r.date)) : [];
+  if (rebuild) console.log(`保留 ${kept.length} 行新計劃補唔到嘅舊行；實際替換 ${prev.length - keep.length - kept.length} 行`);
   const dates = [...new Set(plan.add.map((r) => r.date))].sort();
   console.log(`repo 區間 ${plan.range.join(' → ')} | 重疊 ${plan.overlap.n} 點 | 有缺口嘅股票 ${plan.withGap}，可補 ${plan.accepted}`);
   console.log(`可補 ${plan.add.length} 行 / ${dates.length} 日（${dates[0] || '—'} → ${dates.at(-1) || '—'}）；跳過（缺口內有除息 / 拆股，或缺前後重疊）${plan.perTicker.reduce((a, x) => a + x.skipped, 0)} 點`);
+  if (process.argv.includes('--list-skip')) {
+    const by = new Map(); for (const k of plan.skips) (by.get(k.why.replace(/[\d.-]+%/, 'x%')) || by.set(k.why.replace(/[\d.-]+%/, 'x%'), []).get(k.why.replace(/[\d.-]+%/, 'x%'))).push(k);
+    for (const [w, a] of by) console.log(`  跳過 ${a.length} 點（${w}）：` + a.slice(0, 12).map((k) => `${k.ticker}@${k.date}`).join('、') + (a.length > 12 ? ' …' : ''));
+  }
   if (plan.rejected && !process.argv.includes('--force')) { console.error('拒絕：' + plan.rejected); process.exit(1); }
   if (!process.argv.includes('--apply')) { console.log('dry-run，冇寫檔。加 --apply 先寫入。'); process.exit(0); }
   fs.mkdirSync(path.dirname(BACKFILL_FILE), { recursive: true });
-  fs.writeFileSync(BACKFILL_FILE, toCsv(COLS, [...keep, ...plan.add]));
+  fs.writeFileSync(BACKFILL_FILE, toCsv(COLS, [...keep, ...kept, ...plan.add]));
   console.log('已寫 ' + path.relative(ROOT, BACKFILL_FILE));
 }
