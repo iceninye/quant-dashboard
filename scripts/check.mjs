@@ -250,6 +250,14 @@ console.log('缺口：未復權補價 / 已知限制 / 原檔搜尋');
   ok(!pr.rejected && pr.add.length === 40 && pr.add.every((x) => x.date === dts[hole] && Math.abs(Number(x.close) / px(Number(x.ticker.slice(1)), hole) - 1) < 1e-9), '未復權檔：40 隻 × 1 日全部補到，數值同當日真實收市一致');
   const drift = raw.map((w, di) => (di > hole ? { ...w, T0: String(Number(w.T0) * 1.02) } : w));
   ok(!BF.planBackfill(drift, repo, []).add.some((x) => x.ticker === 'T0'), '未復權檔前後比例不符（>0.3%）→ 照樣唔補，核對冇放寬');
+  // 日期對齊：repo 日期 = 檔案交易日 + 1（US 報告日用前一交易日收市）
+  const sh = (d) => new Date(Date.parse(d) + 864e5).toISOString().slice(0, 10);
+  const repo1 = [];
+  const rawV = raw.map((w, di) => { const o = { date: w.date }; for (let i = 0; i < 40; i++) o['T' + i] = String(100 + i + 4 * Math.sin(di * 1.3)); return o; });   // 日波幅夠大，lag 錯就核對唔過
+  rawV.forEach((w, di) => { for (let i = 0; i < 40; i++) repo1.push({ date: sh(w.date), ticker: 'T' + i, close: di === hole ? '' : w['T' + i] }); });
+  const p1 = BF.planBackfill(rawV, repo1, []);
+  ok(p1.lag === 1 && !p1.rejected && p1.add.length === 40 && p1.add.every((x) => x.date === sh(dts[hole]) && x.scale === '1.000000'), '自動偵測 lag=1：補返報告日 D 嘅 D−1 收市，scale 固定 1');
+  ok(BF.planBackfill(rawV, repo1, [], 'x', { lag: 0 }).rejected, '指定錯 lag → 比例核對照樣拒絕');
 }
 {
   // 2) 審計分級：已知限制 / PMFX error 時期缺口 / 未解決

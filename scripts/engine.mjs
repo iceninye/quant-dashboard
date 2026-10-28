@@ -306,7 +306,7 @@ export function dataAudit(fam, opts = {}) {
     const bfk = new Set((fam.backfill || []).map((r) => r.date + '|' + r.ticker));
     const left = usNull.filter((r) => !bfk.has(r.date + '|' + r.ticker)).length;
     issues.push(left
-      ? { level: 'warn', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；backfill 補到 ${usNull.length - left} 行，其餘 ${left} 行用復權價驗唔到比例（緊接缺口內有除息）。可補：本機 python3 analysis/download_raw_closes.py --market us，再 node scripts/backfill_prices.mjs --prices <輸出檔> --apply（用未復權收市價，唔受除息影響，仍然要通過 0.3% 比例核對）。只影響用呢日做入場／出場價嘅窗口` }
+      ? { level: 'warn', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；backfill 補到 ${usNull.length - left} 行，其餘 ${left} 行用復權價驗唔到比例（緊接缺口內有除息）。可補：本機 python3 analysis/download_raw_closes.py --market us，再 node scripts/backfill_prices.mjs --prices <輸出檔> --rebuild --apply（用未復權收市價，唔受除息影響，仍然要通過 0.3% 比例核對）。只影響用呢日做入場／出場價嘅窗口` }
       : { level: 'info', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；已由 backfill 補返，只影響用呢日做入場／出場價嘅窗口` });
   }
   return { coverage: cov, issues };
