@@ -82,8 +82,11 @@ function doFamily(family, dateMap, rowFn, label) {
   const todo = REFRESHING ? dates : dates.filter((d) => !present.has(d));
   const rows = [];
   for (const d of todo) {
-    try { rows.push(...rowFn(dateMap.get(d), d)); }
-    catch (e) { console.error(`  ⚠️  ${label} ${d}: ${e.message}`); }
+    try {
+      const got = rowFn(dateMap.get(d), d);
+      if (!got.length) console.error(`  ⚠️  ${label} ${d}: 來源檔冇資料行（空檔？），跳過；上游要重出`);
+      rows.push(...got);
+    } catch (e) { console.error(`  ⚠️  ${label} ${d}: ${e.message}`); }
   }
   const replace = REFRESH_ALL ? new Set(todo) : REFRESH_DATES;
   const stats = rows.length ? appendRows(family, rows, replace) : [];
