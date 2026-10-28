@@ -40,6 +40,11 @@ function loadBackfill() {
   const f = path.join(ROOT, 'data', 'backfill', 'closes.csv');
   return fs.existsSync(f) ? parseCsv(fs.readFileSync(f, 'utf8')) : [];
 }
+// 本機搜過、確認冇得補嘅缺口（data/known_gaps.csv：fam,from,to,reason）。審計欄位由人確認，唔係引擎自己猜。
+export function loadKnownGaps() {
+  const f = path.join(ROOT, 'data', 'known_gaps.csv');
+  return fs.existsSync(f) ? parseCsv(fs.readFileSync(f, 'utf8')) : [];
+}
 export function loadAll() {
   const fam = {};
   for (const f of ['hk', 'us', 'sentinel', 'pmfx', 'macro']) fam[f] = loadFamily(f);
@@ -224,8 +229,9 @@ export function priceMap(fam) {
 }
 
 // ---------- 數據核對：每次 build 都重算，結果放上 dashboard ----------
-export function dataAudit(fam) {
+export function dataAudit(fam, opts = {}) {
   const issues = [];
+  const known = opts.known || loadKnownGaps();
   const splits = [];
   priceSeries([...(fam.hk || []), ...(fam.us || [])], splits);
   for (const e of splits) issues.push({ level: 'info', fam: e.ticker.endsWith('.HK') ? 'hk' : 'us', msg: `${e.ticker} ${e.from} → ${e.to} 疑似 ${e.k}:1 拆股（單日跌幅 > 30% 而且前後價比 ≈ ${e.k}），前向回報已按拆股調整` });
@@ -242,12 +248,20 @@ export function dataAudit(fam) {
     const empty = cols.filter((c) => fam[f].every((r) => r[c] === ''));
     return { fam: f, rows: fam[f].length, days: ds.length, first: ds[0] || null, last: ds.at(-1) || null, gaps, dup, empty };
   });
+  // PMFX 上游 bug 時期（有 error 行嘅最後一日）：呢段嘅缺口，即使補到原檔都係 error 行，gate 一律排除
+  const pmLastErr = fam.pmfx.filter((r) => r.err === '1').reduce((m, r) => (r.date > m ? r.date : m), '');
+  const RECOVER = '本機有機會補到：node scripts/gap_sources.mjs 搵 mirror／iCloud archive／Obsidian 嘅原檔；搵唔到先算冇得補';
   for (const c of cov) {
     for (const g of c.gaps) {
       const bf = !['hk', 'us'].includes(c.fam) ? 0 : new Set((fam.backfill || []).filter((r) => r.date > g.from && r.date < g.to).map((r) => r.date)).size;
-      issues.push(bf >= 3
-        ? { level: 'info', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日訊號數據；收市價已由 backfill 補 ${bf} 日，持有期可計（呢段冇訊號、冇 mdd 等欄，上游當日冇跑，冇得重建）` }
-        : { level: 'warn', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計` });
+      const kg = known.find((k) => k.fam === c.fam && k.from === g.from && k.to === g.to);
+      issues.push(kg
+        ? { level: 'limit', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日數據：${kg.reason}（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計` }
+        : c.fam === 'pmfx' && pmLastErr && g.to <= pmLastErr
+          ? { level: 'limit', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日 PMFX 數據；呢段喺上游 bug 時期（至 ${pmLastErr}，行內 error 欄非空，gate 一律排除），即使補到原檔都用唔到，所以唔補` }
+          : bf >= 3
+            ? { level: 'info', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日訊號數據；收市價已由 backfill 補 ${bf} 日，持有期可計（呢段冇訊號、冇 mdd 等欄；唔事後重建，會用到未來數據；本機搵到原檔先可還原：node scripts/gap_sources.mjs）` }
+            : { level: 'warn', fam: c.fam, msg: `${g.from} → ${g.to} 缺 ${g.days} 日數據（上游當日冇產出報告？）；跨越呢段嘅持有期唔計。${RECOVER}` });
     }
     if (c.dup) issues.push({ level: 'bad', fam: c.fam, msg: `${c.dup} 行重複 (date, ticker)` });
     const PENDING = {   // 上游已修、等本機部署嘅欄位（部署後新數據有值，警告會自動消失）
@@ -275,16 +289,25 @@ export function dataAudit(fam) {
   if (pmErr.length) {
     const ds = [...new Set(pmErr.map((r) => r.date))].sort();
     const latest = latestDate(fam.pmfx), nowErr = fam.pmfx.filter((r) => r.date === latest && r.err === '1').length;
+    // 放寬測試：error 行但通過 gate 其餘規則嘅訊號，前向結果點？（證明 gate 唔係過嚴，而唔係靠估）
+    const sens = (() => {
+      const rows = new Map(fam.pmfx.map((r) => [r.date + '|' + r.ticker, r]));
+      const sub = (opts.tracking || forwardTrack(fam)).filter((x) => { const r = rows.get(x.date + '|' + x.ticker); return !x.clean && r && r.err === '1' && quality({ ...r, err: '0' }).ok; });
+      const filled = sub.filter((x) => x.filled), r5 = filled.filter((x) => x.r5 !== null).map((x) => x.r5);
+      return r5.length ? { n: sub.length, filled: filled.length, avg: r5.reduce((a, b) => a + b, 0) / r5.length, pos: r5.filter((v) => v > 0).length, r5n: r5.length } : null;
+    })();
     issues.push(nowErr
       ? { level: 'bad', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}），最新一日 ${latest} 仍有 ${nowErr} 行，PMFX 數值唔可信` }
-      : { level: 'warn', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}，上游 bug），最新一日 ${latest} 已冇 error；歷史行由 gate 排除，所以 PMFX 仲未有可用嘅歷史樣本（冇得補）` });
+      : { level: 'limit', fam: 'pmfx', msg: `${pmErr.length}/${fam.pmfx.length} 行 error 欄非空（${ds[0]} 至 ${ds.at(-1)}，上游 bug，已修；最新一日 ${latest} 已冇 error）。歷史行冇得重新判斷：error 行嘅風險欄缺失、止損距離亦受影響，gate 一律排除。${sens ? `放寬測試：error 行但通過其餘 gate 規則嘅 ${sens.n} 個訊號，成交 ${sens.filled}，5 日平均 ${(100 * sens.avg).toFixed(2)}%，${sens.pos}/${sens.r5n} 為正 → 放寬都冇 edge，gate 唔算過嚴。` : ''}乾淨樣本要等新數據累積` });
   }
   const usNull = fam.us.filter((r) => r.close === '');
   if (usNull.length) {
     const ds = [...new Set(usNull.map((r) => r.date))];
     const bfk = new Set((fam.backfill || []).map((r) => r.date + '|' + r.ticker));
     const left = usNull.filter((r) => !bfk.has(r.date + '|' + r.ticker)).length;
-    issues.push({ level: left ? 'warn' : 'info', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；backfill 補到 ${usNull.length - left} 行，其餘 ${left} 行因緊接嘅缺口內有除息，比例驗唔到所以唔補。只影響用呢日做入場／出場價嘅窗口` });
+    issues.push(left
+      ? { level: 'warn', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；backfill 補到 ${usNull.length - left} 行，其餘 ${left} 行用復權價驗唔到比例（緊接缺口內有除息）。可補：本機 python3 analysis/download_raw_closes.py --market us，再 node scripts/backfill_prices.mjs --prices <輸出檔> --apply（用未復權收市價，唔受除息影響，仍然要通過 0.3% 比例核對）。只影響用呢日做入場／出場價嘅窗口` }
+      : { level: 'info', fam: 'us', msg: `${usNull.length} 行 close 為空（${ds.join('、')}，上游當日抓價失敗）；已由 backfill 補返，只影響用呢日做入場／出場價嘅窗口` });
   }
   return { coverage: cov, issues };
 }
@@ -360,7 +383,7 @@ export function run() {
     audit: audit(fam, tracking),
     series: buildSeries(fam),
     factors, picks, forward: fl.summary, forwardNew: fl.newRows, forwardV2, pmfxNew,
-    dataAudit: dataAudit(fam),
+    dataAudit: dataAudit(fam, { tracking }),
   };
 }
 

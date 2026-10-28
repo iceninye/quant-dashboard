@@ -1,12 +1,14 @@
 // check.mjs — smoke test（唔靠外部報告檔，只驗邏輯 + 已 sync 嘅數據）
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, toCsv } from './lib/csv.mjs';
 import * as E from './engine.mjs';
 import * as S from './lib/sources.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SRCROOT = path.join(os.homedir(), 'hermes-projects');
 let pass = 0, fail = 0;
 const ok = (c, m) => { c ? (pass++, console.log('  ✓ ' + m)) : (fail++, console.error('  ✗ ' + m)); };
 
@@ -226,6 +228,63 @@ ok(h.includes('免責'), '含免責聲明');
     ok(Array.isArray(sc.samples) && sc.samples.every((x) => x.market && x.asof && Array.isArray(x.top)), 'scan.json 結構');
     ok(h.includes('id="s2b"'), '§2b 長樣本掃描有顯示');
   }
+}
+
+console.log('缺口：未復權補價 / 已知限制 / 原檔搜尋');
+{
+  // 1) 未復權價唔受除息影響：缺口只有 1 日（有 null close），之後除息令復權檔前後比例變 → 復權檔唔補，未復權檔補得
+  const dts = []; for (let i = 0; i < 60; i++) dts.push(new Date(Date.parse('2026-06-01') + i * 86400000).toISOString().slice(0, 10));
+  const px = (i, d) => 100 + i + d * 0.5, hole = 25;
+  const repo = [], adj = [], raw = [];
+  dts.forEach((d, di) => {
+    const a = { date: d }, r = { date: d };
+    for (let i = 0; i < 40; i++) {
+      const t = 'T' + i;
+      a[t] = String(px(i, di) * (di <= hole ? 1.07 : 1.05)); r[t] = String(px(i, di));     // 復權檔：缺口後多一次除息
+      repo.push({ date: d, ticker: t, close: di === hole ? '' : String(px(i, di)) });
+    }
+    adj.push(a); raw.push(r);
+  });
+  ok(BF.planBackfill(adj, repo, []).add.length === 0, '復權檔：缺口內除息 → 比例驗唔到，唔補');
+  const pr = BF.planBackfill(raw, repo, []);
+  ok(!pr.rejected && pr.add.length === 40 && pr.add.every((x) => x.date === dts[hole] && Math.abs(Number(x.close) / px(Number(x.ticker.slice(1)), hole) - 1) < 1e-9), '未復權檔：40 隻 × 1 日全部補到，數值同當日真實收市一致');
+  const drift = raw.map((w, di) => (di > hole ? { ...w, T0: String(Number(w.T0) * 1.02) } : w));
+  ok(!BF.planBackfill(drift, repo, []).add.some((x) => x.ticker === 'T0'), '未復權檔前後比例不符（>0.3%）→ 照樣唔補，核對冇放寬');
+}
+{
+  // 2) 審計分級：已知限制 / PMFX error 時期缺口 / 未解決
+  const mk = (ds, extra = {}) => ds.map((d) => ({ date: d, ticker: 'X', close: '1', ...extra }));
+  const base = { hk: [], us: [], macro: [], backfill: [], sentinel: mk(['2026-07-10', '2026-07-31', '2026-09-01', '2026-09-09']), pmfx: [...mk(['2026-07-10', '2026-07-31'], { err: '1', net_ev: '1', entry: '1' }), ...mk(['2026-10-20'], { err: '0', net_ev: '1', entry: '1' }), { date: '2026-10-16', ticker: 'X', close: '1', err: '1', net_ev: '1', entry: '1' }] };
+  const A = E.dataAudit(base, { known: [], tracking: [] });
+  const g = (fam, from) => A.issues.find((i) => i.fam === fam && i.msg.startsWith(from));
+  ok(g('sentinel', '2026-07-10')?.level === 'warn' && /gap_sources/.test(g('sentinel', '2026-07-10').msg), '冇確認嘅缺口 = 未解決，並指向搜尋工具');
+  const K = E.dataAudit(base, { known: [{ fam: 'sentinel', from: '2026-07-10', to: '2026-07-31', reason: '測試：本機搵唔到' }], tracking: [] });
+  ok(K.issues.find((i) => i.fam === 'sentinel' && i.msg.startsWith('2026-07-10')).level === 'limit', 'known_gaps 有確認 → 已知限制');
+  ok(K.issues.find((i) => i.fam === 'sentinel' && i.msg.startsWith('2026-09-01')).level === 'warn', 'known_gaps 只認完全相同嘅區間，其他缺口仍然未解決');
+  ok(g('pmfx', '2026-07-10')?.level === 'limit', 'PMFX 缺口喺 error 時期 → 已知限制（補咗都被 gate 排除）');
+  ok(A.issues.find((i) => i.fam === 'pmfx' && /行 error 欄非空/.test(i.msg))?.level === 'limit', 'PMFX 最新日已冇 error → 歷史 error 行列為已知限制');
+  const dirty = { ...base, pmfx: [...base.pmfx, { date: '2026-10-21', ticker: 'X', close: '1', err: '1', net_ev: '1', entry: '1' }] };
+  ok(E.dataAudit(dirty, { tracking: [] }).issues.find((i) => i.fam === 'pmfx' && /行 error 欄非空/.test(i.msg)).level === 'bad', '最新日仍有 error → 照樣 bad（唔會被降級）');
+}
+{
+  // 3) gap_sources：只讀搜尋，按檔案內容分類
+  const GS = await import('./gap_sources.mjs');
+  ok(GS.gapDates('2026-07-10', '2026-07-14').join() === '2026-07-11,2026-07-12,2026-07-13', 'gapDates 不含兩端');
+  ok(GS.expected('sentinel', '2026-07-14') && !GS.expected('sentinel', '2026-07-15') && !GS.expected('hk', '2026-07-18') && GS.expected('us', '2026-07-18'), '預期運行日（Sentinel 二五、HK 一至五、US 二至六）');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'gapsrc-'));
+  const put = (rel, text) => { const f = path.join(tmp, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, text); return f; };
+  put('mirror/Quant Research/20-07-2026/data/metrics_20-07-2026.csv', 'ticker,last_price,max_drawdown\n0005.HK,100,-0.1\n');
+  put('mirror/Quant Research US/21-07-2026/data/metrics_21-07-2026.csv', 'ticker,last_price,max_drawdown\nAAPL,100,-0.1\n');
+  put('icloud/archive/2026-07/sentinel/signals_21-07-2026.csv', 'ticker,name,risk_level,action\nAAPL,x,1,買\n');
+  put('icloud/archive/2026-07/sentinel/summary_21-07-2026.md', '# x\n- **VIX**: 15\n');
+  put('icloud/archive/2026-07/pmfx/signals_21-07-2026.csv', 'ticker,vote_score,opportunity_score\nGC=F,1,2\n');
+  put('mirror/empty/metrics_22-07-2026.csv', '');
+  const got = GS.locate([tmp], [{ fam: 'hk', date: '2026-07-20' }, { fam: 'us', date: '2026-07-21' }, { fam: 'sentinel', date: '2026-07-21' }, { fam: 'pmfx', date: '2026-07-21' }, { fam: 'hk', date: '2026-07-22' }]);
+  const has = (fam, kind) => got.some((x) => x.fam === fam && x.kind === kind);
+  ok(has('hk', 'metrics') && has('us', 'metrics') && has('sentinel', 'signals') && has('sentinel', 'summary') && has('pmfx', 'signals'), '按檔案內容分出 hk / us / sentinel（含 summary）/ pmfx');
+  ok(!got.some((x) => x.date === '2026-07-22'), '0 byte 空檔唔當原檔');
+  ok(got.every((x) => x.target.startsWith(SRCROOT)) && got.find((x) => x.fam === 'pmfx').target.endsWith(path.join('21-07-2026', 'data', 'signals_21-07-2026.csv')), '還原目標路徑同 sync.mjs 讀取位置一致');
+  fs.rmSync(tmp, { recursive: true, force: true });
 }
 
 console.log(`\n${pass} 通過 / ${fail} 失敗`);

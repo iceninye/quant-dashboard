@@ -124,7 +124,7 @@ ${pass.length ? `<b class="good">已通過驗證：${pass.map((f) => esc(f.marke
 <li>PMFX：限價成交嘅 ${pmFilled} 個歷史訊號，5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個 → <b>唔好跟</b>（§4–5）。</li>
 ${sen ? `<li>Sentinel「可加倉」對比「減持」：${sen.byH.map((h) => `${h.H} 日 ${pct(h.excess)}`).join('、')}（相對 29 隻等權）→ ${(sen.byH[0].excess || 0) < 0 ? '<b class="bad">跑輸，唔應該當加分</b>' : '有正面作用'}。</li>` : ''}
 ${scanHero}
-<li>樣本只有 ${D.factors[0] ? D.factors[0].byH[0].days : '—'} 個有效交易日、一個市況，${D.dataAudit.issues.filter((i) => i.level !== 'info').length} 項未解決數據問題見 §6。所有結論信心偏低。</li>
+<li>樣本只有 ${D.factors[0] ? D.factors[0].byH[0].days : '—'} 個有效交易日、一個市況，${D.dataAudit.issues.filter((i) => i.level === 'bad' || i.level === 'warn').length} 項未解決數據問題（另有 ${D.dataAudit.issues.filter((i) => i.level === 'limit').length} 項已知限制）見 §6。所有結論信心偏低。</li>
 </ul></div>
 
 <h2 id="s1"><span class="n">1</span>${pass.length ? '已驗證機會名單' : '觀察名單'}</h2>
@@ -212,9 +212,12 @@ ${D.tracking.slice(-40).reverse().map((t) => `<tr><td>${t.date}</td><td class="t
 <h2 id="s6"><span class="n">6</span>數據核對</h2>
 <div class="card">
 ${(() => {
-  const row = (i) => `<div class="${i.level === 'info' ? 'dim' : i.level}" style="font-size:13.5px;margin:3px 0">${{ bad: '✘', warn: '⚠', info: '✓' }[i.level]} <b>${esc(i.fam)}</b>：${esc(i.msg)}</div>`;
-  const open = D.dataAudit.issues.filter((i) => i.level !== 'info'), done = D.dataAudit.issues.filter((i) => i.level === 'info');
-  return `<p><b>未解決 ${open.length} 項</b></p>${open.map(row).join('')}<p style="margin-top:10px"><b>已處理 ${done.length} 項</b>（數據有缺陷，但已喺計算入面修正或排除）</p>${done.map(row).join('')}`;
+  const row = (i) => `<div class="${i.level === 'info' || i.level === 'limit' ? 'dim' : i.level}" style="font-size:13.5px;margin:3px 0">${{ bad: '✘', warn: '⚠', limit: '⊘', info: '✓' }[i.level]} <b>${esc(i.fam)}</b>：${esc(i.msg)}</div>`;
+  const lv = (...l) => D.dataAudit.issues.filter((i) => l.includes(i.level));
+  const open = lv('bad', 'warn'), lim = lv('limit'), done = lv('info');
+  return `<p><b>未解決 ${open.length} 項</b>（有補回或修復路徑，見各項說明）</p>${open.map(row).join('') || '<div class="dim" style="font-size:13.5px">冇</div>'}`
+    + `<p style="margin-top:10px"><b>已知限制 ${lim.length} 項</b>（補唔到或補咗都用唔到；已寫明原因同對結論嘅影響，唔係被隱藏）</p>${lim.map(row).join('') || '<div class="dim" style="font-size:13.5px">冇</div>'}`
+    + `<p style="margin-top:10px"><b>已處理 ${done.length} 項</b>（數據有缺陷，但已喺計算入面修正或排除）</p>${done.map(row).join('')}`;
 })()}
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>來源</th><th>行數</th><th>日數</th><th>首日</th><th>末日</th><th>重複</th></tr></thead><tbody>
 ${D.dataAudit.coverage.map((c) => `<tr><td>${c.fam}</td><td>${c.rows}</td><td>${c.days}</td><td>${c.first}</td><td>${c.last}</td><td class="${c.dup ? 'bad' : 'dim'}">${c.dup}</td></tr>`).join('')}
