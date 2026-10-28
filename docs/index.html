@@ -46,134 +46,134 @@ code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4p
 div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(--dim);margin:6px 0 4px}nav a{color:var(--acc);margin-right:12px;text-decoration:none}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
-<div class="sub">生成 22/10/2026 下午9:39:25 HKT ·
-數據日：HK 2026-10-16 · US 2026-10-17 · Sentinel 2026-10-16 · PMFX 2026-10-17</div>
+<div class="sub">生成 28/10/2026 上午9:56:16 HKT ·
+數據日：HK 2026-10-27 · US 2026-10-28 · Sentinel 2026-10-27 · PMFX 2026-10-28</div>
 <nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a><a href="#s2b">2b 長樣本</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
 <div class="hero"><h2>今日結論</h2>
 <b>今日冇訊號通過驗證。</b>證據最強係 <b class="gwatch">港股 回撤最淺（低 MDD）</b>：
-持有 5 日，頭 20% 平均跑贏等權 <b>0.75%</b>（已扣成本；絕對回報 0.40% 對等權 -0.35%，即係「跌少啲」多過「賺錢」），前半段 0.70%、後半段 0.82% 都係正，
-但 t = 1.56（單尾 p 0.074；同時測 10 個檢定，Holm 校正後 p 0.74，要 < 0.05 先算通過）→ <b>只列觀察名單，唔係買入訊號</b>。
+持有 5 日，頭 20% 平均跑贏等權 <b>0.72%</b>（已扣成本；絕對回報 0.18% 對等權 -0.54%，即係「跌少啲」多過「賺錢」），前半段 0.86%、後半段 0.55% 都係正，
+但 t = 1.72（單尾 p 0.056；同時測 10 個檢定，Holm 校正後 p 0.56，要 < 0.05 先算通過）→ <b>只列觀察名單，唔係買入訊號</b>。
 <ul>
-<li>PMFX：限價成交嘅 604 個歷史訊號，5 日平均 <b class="bad">-1.62%</b>，到目標 14 個、止損 381 個 → <b>唔好跟</b>（§4–5）。</li>
-<li>Sentinel「可加倉」對比「減持」：5 日 -0.89%、20 日 -2.99%（相對 29 隻等權）→ <b class="bad">跑輸，唔應該當加分</b>。</li>
+<li>PMFX：限價成交嘅 638 個歷史訊號，5 日平均 <b class="bad">-1.99%</b>，到目標 14 個、止損 415 個 → <b>唔好跟</b>（§4–5）。</li>
+<li>Sentinel「可加倉」對比「減持」：5 日 -0.93%、20 日 -3.51%（相對 29 隻等權）→ <b class="bad">跑輸，唔應該當加分</b>。</li>
 <li>長樣本掃描（§2b）：港股 今日名單 2 年 有 <b class="gpass">1 個 PASS</b>（combo_lowmdd_mom），但 6 年樣本最好只係 <b class="gwatch">WATCH</b> → 防守型大藍籌係最好選擇，但<b>未證實</b>；美股冇因子可信。</li>
-<li>樣本只有 57 個有效交易日、一個市況，9 項未解決數據問題見 §6。所有結論信心偏低。</li>
+<li>樣本只有 64 個有效交易日、一個市況，7 項未解決數據問題見 §6。所有結論信心偏低。</li>
 </ul></div>
 
 <h2 id="s1"><span class="n">1</span>觀察名單</h2>
-<div class="card"><div><b class="gwatch">觀察</b> · 港股 回撤最淺（低 MDD） 頭 20% · 2026-10-16 收市 ·
-<span class="dim">5 日超額 0.75%，贏等權比率 70%</span></div>
+<div class="card"><div><b class="gwatch">觀察</b> · 港股 回撤最淺（低 MDD） 頭 20% · 2026-10-27 收市 ·
+<span class="dim">5 日超額 0.72%，贏等權比率 70%</span></div>
 <div class="scroll"><table><thead><tr><th>標的</th><th>收市</th><th>MDD</th><th>波動</th><th>Sharpe</th><th>月回報</th><th>Sentinel</th><th>PMFX</th></tr></thead><tbody>
-<tr><td class="tk">0002.HK</td><td>77.15</td><td>-5.9%</td><td>11.5%</td>
-<td>0.71</td><td class="good">0.4%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">2388.HK</td><td>50.15</td><td>-11.1%</td><td>23.5%</td>
-<td>1.63</td><td class="bad">-2.1%</td>
-<td class="dim">—</td><td class="dim">觀望</td></tr><tr><td class="tk">0941.HK</td><td>80.95</td><td>-12.8%</td><td>12.6%</td>
-<td>0.56</td><td class="good">2.4%</td>
-<td class="dim">觀望</td><td class="dim">—</td></tr><tr><td class="tk">1398.HK</td><td>7.59</td><td>-12.9%</td><td>21.0%</td>
-<td>1.32</td><td class="good">3.4%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">3988.HK</td><td>6.14</td><td>-13.2%</td><td>20.6%</td>
-<td>1.33</td><td class="good">3.1%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0939.HK</td><td>9.87</td><td>-14.2%</td><td>22.0%</td>
-<td>1.29</td><td class="good">2.7%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0003.HK</td><td>7.21</td><td>-14.3%</td><td>15.6%</td>
-<td>0.62</td><td class="good">1.7%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0006.HK</td><td>60.55</td><td>-14.9%</td><td>16.6%</td>
-<td>0.64</td><td class="good">1.6%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0270.HK</td><td>8.95</td><td>-15.4%</td><td>24.9%</td>
-<td>1.33</td><td class="good">1.5%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0066.HK</td><td>32.38</td><td>-17.6%</td><td>18.6%</td>
-<td>0.37</td><td class="bad">-0.4%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1088.HK</td><td>42.54</td><td>-18.8%</td><td>26.7%</td>
-<td>0.63</td><td class="bad">-3.9%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1113.HK</td><td>44.50</td><td>-19.3%</td><td>21.9%</td>
-<td>0.76</td><td class="bad">-4.1%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1038.HK</td><td>67.95</td><td>-19.7%</td><td>19.6%</td>
-<td>0.65</td><td class="good">5.6%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1658.HK</td><td>5.51</td><td>-20.1%</td><td>21.3%</td>
-<td>0.48</td><td class="good">3.5%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0267.HK</td><td>12.87</td><td>-20.1%</td><td>27.9%</td>
-<td>0.79</td><td class="bad">-0.8%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0836.HK</td><td>19.83</td><td>-20.3%</td><td>23.3%</td>
-<td>0.05</td><td class="good">5.7%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0005.HK</td><td>149.70</td><td>-20.3%</td><td>25.9%</td>
-<td>1.71</td><td class="bad">-6.2%</td>
-<td class="dim">可加倉</td><td class="dim">觀望</td></tr><tr><td class="tk">3968.HK</td><td>53.25</td><td>-20.4%</td><td>24.8%</td>
-<td>0.69</td><td class="good">4.0%</td>
-<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0823.HK</td><td>38.20</td><td>-20.6%</td><td>20.2%</td>
-<td>0.22</td><td class="good">3.8%</td>
+<tr><td class="tk">0002.HK</td><td>77.60</td><td>-5.9%</td><td>11.5%</td>
+<td>0.68</td><td class="good">0.4%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">2388.HK</td><td>48.14</td><td>-11.1%</td><td>23.7%</td>
+<td>1.51</td><td class="bad">-6.2%</td>
+<td class="dim">—</td><td class="dim">沽</td></tr><tr><td class="tk">0941.HK</td><td>78.10</td><td>-12.8%</td><td>12.9%</td>
+<td>0.52</td><td class="bad">-0.9%</td>
+<td class="dim">觀望</td><td class="dim">—</td></tr><tr><td class="tk">1398.HK</td><td>7.60</td><td>-12.9%</td><td>21.1%</td>
+<td>1.37</td><td class="good">3.2%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">3988.HK</td><td>6.06</td><td>-13.2%</td><td>20.6%</td>
+<td>1.34</td><td class="good">1.0%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0939.HK</td><td>10.00</td><td>-14.2%</td><td>21.9%</td>
+<td>1.33</td><td class="good">3.5%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0003.HK</td><td>7.29</td><td>-14.3%</td><td>15.6%</td>
+<td>0.65</td><td class="good">2.8%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0006.HK</td><td>63.35</td><td>-14.9%</td><td>16.8%</td>
+<td>0.70</td><td class="good">5.9%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0270.HK</td><td>8.67</td><td>-15.4%</td><td>24.9%</td>
+<td>1.21</td><td class="good">0.0%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0066.HK</td><td>33.24</td><td>-17.0%</td><td>18.6%</td>
+<td>0.48</td><td class="good">1.8%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1088.HK</td><td>41.70</td><td>-18.8%</td><td>27.0%</td>
+<td>0.63</td><td class="bad">-4.1%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1113.HK</td><td>46.22</td><td>-19.3%</td><td>22.1%</td>
+<td>0.93</td><td class="bad">-0.6%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1038.HK</td><td>70.15</td><td>-19.7%</td><td>19.7%</td>
+<td>0.73</td><td class="good">7.5%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">1658.HK</td><td>5.51</td><td>-20.1%</td><td>21.4%</td>
+<td>0.55</td><td class="good">2.4%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0267.HK</td><td>12.13</td><td>-20.1%</td><td>28.1%</td>
+<td>0.65</td><td class="bad">-7.3%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0836.HK</td><td>18.72</td><td>-20.3%</td><td>22.8%</td>
+<td>0.08</td><td class="bad">-0.4%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0005.HK</td><td>134.30</td><td>-20.3%</td><td>26.4%</td>
+<td>1.44</td><td class="bad">-15.8%</td>
+<td class="dim">可加倉</td><td class="dim">沽</td></tr><tr><td class="tk">3968.HK</td><td>52.60</td><td>-20.4%</td><td>24.5%</td>
+<td>0.71</td><td class="good">2.6%</td>
+<td class="dim">—</td><td class="dim">—</td></tr><tr><td class="tk">0823.HK</td><td>39.30</td><td>-20.6%</td><td>20.4%</td>
+<td>0.38</td><td class="good">4.2%</td>
 <td class="dim">—</td><td class="dim">—</td></tr>
 </tbody></table></div></div>
 
 <h2 id="s2"><span class="n">2</span>因子驗證 — 邊個訊號有前向回報</h2>
 <div class="card scroll"><table><thead><tr><th>因子</th><th>市場</th><th>持有</th><th>頭 20%</th><th>等權</th><th>超額</th><th>前半</th><th>後半</th><th>贏等權</th><th>t</th><th>校正 p</th><th>結果</th></tr></thead><tbody>
 <tr><td>回撤最淺（低 MDD）</td><td class="dim">港股</td><td>5 日</td>
-<td>0.40%</td><td class="dim">-0.35%</td><td class="good">0.75%</td>
-<td>0.70%</td><td>0.82%</td><td>70%</td><td>1.56</td><td class="dim">0.74</td>
+<td>0.18%</td><td class="dim">-0.54%</td><td class="good">0.72%</td>
+<td>0.86%</td><td>0.55%</td><td>70%</td><td>1.72</td><td class="dim">0.56</td>
 <td class="gwatch">觀察</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>2.30%</td><td class="dim">-0.61%</td><td class="good">2.91%</td>
-<td>2.99%</td><td>2.67%</td><td>86%</td><td>2.78</td><td class="dim">—</td>
-<td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.29%</td><td class="dim">0.20%</td><td class="bad">-0.49%</td>
-<td>-0.30%</td><td>-0.66%</td><td>40%</td><td>-0.56</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>3.33%</td><td class="dim">-0.09%</td><td class="good">3.43%</td>
-<td>7.16%</td><td>0.71%</td><td>79%</td><td>—</td><td class="dim">—</td>
+<td>1.92%</td><td class="dim">-1.11%</td><td class="good">3.03%</td>
+<td>2.98%</td><td>3.16%</td><td>88%</td><td>2.78</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">港股</td><td>5 日</td>
-<td>0.05%</td><td class="dim">-0.35%</td><td class="good">0.40%</td>
-<td>0.24%</td><td>0.59%</td><td>65%</td><td>0.73</td><td class="dim">1.00</td>
+<td>-0.05%</td><td class="dim">-0.54%</td><td class="good">0.49%</td>
+<td>0.44%</td><td>0.55%</td><td>69%</td><td>1.05</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>1.89%</td><td class="dim">-0.61%</td><td class="good">2.50%</td>
-<td>2.62%</td><td>2.17%</td><td>86%</td><td>1.92</td><td class="dim">—</td>
-<td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">港股</td><td>5 日</td>
-<td>-0.52%</td><td class="dim">-0.35%</td><td class="bad">-0.17%</td>
-<td>0.05%</td><td>-0.44%</td><td>40%</td><td>-0.91</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-0.05%</td><td class="dim">-0.61%</td><td class="good">0.56%</td>
-<td>0.86%</td><td>-0.29%</td><td>60%</td><td>0.08</td><td class="dim">—</td>
+<td>1.52%</td><td class="dim">-1.11%</td><td class="good">2.63%</td>
+<td>2.64%</td><td>2.63%</td><td>88%</td><td>1.92</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>週反轉（上週最差）</td><td class="dim">美股</td><td>5 日</td>
-<td>0.22%</td><td class="dim">0.20%</td><td class="good">0.03%</td>
-<td>0.61%</td><td>-0.49%</td><td>40%</td><td>0.45</td><td class="dim">1.00</td>
+<td>-0.21%</td><td class="dim">0.25%</td><td class="bad">-0.46%</td>
+<td>0.46%</td><td>-1.25%</td><td>35%</td><td>-0.60</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>0.35%</td><td class="dim">-0.09%</td><td class="good">0.44%</td>
-<td>3.34%</td><td>-1.66%</td><td>58%</td><td>—</td><td class="dim">—</td>
-<td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.32%</td><td class="dim">0.20%</td><td class="bad">-0.52%</td>
-<td>0.51%</td><td>-1.43%</td><td>51%</td><td>-0.63</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>0.28%</td><td class="dim">-0.09%</td><td class="good">0.38%</td>
-<td>0.87%</td><td>0.02%</td><td>47%</td><td>—</td><td class="dim">—</td>
+<td>1.48%</td><td class="dim">0.34%</td><td class="good">1.14%</td>
+<td>3.29%</td><td>-0.54%</td><td>64%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>5 日</td>
-<td>0.13%</td><td class="dim">0.20%</td><td class="bad">-0.07%</td>
-<td>-0.52%</td><td>0.32%</td><td>43%</td><td>0.09</td><td class="dim">1.00</td>
+<td>0.29%</td><td class="dim">0.25%</td><td class="good">0.05%</td>
+<td>-0.35%</td><td>0.38%</td><td>46%</td><td>0.47</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-0.11%</td><td class="dim">-0.09%</td><td class="bad">-0.01%</td>
-<td>-0.95%</td><td>0.67%</td><td>42%</td><td>—</td><td class="dim">—</td>
+<td>1.29%</td><td class="dim">0.34%</td><td class="good">0.96%</td>
+<td>-0.96%</td><td>2.46%</td><td>56%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>5 日</td>
-<td>0.10%</td><td class="dim">0.20%</td><td class="bad">-0.10%</td>
-<td>-0.34%</td><td>0.10%</td><td>40%</td><td>0.03</td><td class="dim">1.00</td>
+<td>0.35%</td><td class="dim">0.25%</td><td class="good">0.10%</td>
+<td>-0.22%</td><td>0.39%</td><td>46%</td><td>0.56</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-1.71%</td><td class="dim">-0.09%</td><td class="bad">-1.61%</td>
-<td>-2.92%</td><td>-0.67%</td><td>21%</td><td>—</td><td class="dim">—</td>
+<td>0.52%</td><td class="dim">0.34%</td><td class="good">0.18%</td>
+<td>-2.88%</td><td>2.59%</td><td>40%</td><td>—</td><td class="dim">—</td>
+<td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">美股</td><td>5 日</td>
+<td>-0.81%</td><td class="dim">0.25%</td><td class="bad">-1.06%</td>
+<td>-0.37%</td><td>-1.65%</td><td>35%</td><td>-1.06</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
+<td>0.36%</td><td class="dim">0.34%</td><td class="good">0.02%</td>
+<td>6.39%</td><td>-4.98%</td><td>60%</td><td>—</td><td class="dim">—</td>
+<td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">港股</td><td>5 日</td>
+<td>-0.92%</td><td class="dim">-0.54%</td><td class="bad">-0.38%</td>
+<td>0.12%</td><td>-0.98%</td><td>36%</td><td>-1.22</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
+<td>-1.33%</td><td class="dim">-1.11%</td><td class="bad">-0.22%</td>
+<td>0.99%</td><td>-3.25%</td><td>51%</td><td>0.08</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">港股</td><td>5 日</td>
-<td>-0.91%</td><td class="dim">-0.35%</td><td class="bad">-0.57%</td>
-<td>-0.82%</td><td>-0.26%</td><td>26%</td><td>-1.39</td><td class="dim">1.00</td>
+<td>-1.02%</td><td class="dim">-0.54%</td><td class="bad">-0.48%</td>
+<td>-0.77%</td><td>-0.12%</td><td>31%</td><td>-1.51</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-0.75%</td><td class="dim">-0.61%</td><td class="bad">-0.14%</td>
-<td>-0.72%</td><td>1.48%</td><td>55%</td><td>-0.53</td><td class="dim">—</td>
+<td>-1.40%</td><td class="dim">-1.11%</td><td class="bad">-0.29%</td>
+<td>-0.35%</td><td>-0.12%</td><td>49%</td><td>-0.53</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>週反轉（上週最差）</td><td class="dim">港股</td><td>5 日</td>
-<td>-0.85%</td><td class="dim">-0.35%</td><td class="bad">-0.50%</td>
-<td>-0.40%</td><td>-0.62%</td><td>35%</td><td>-0.76</td><td class="dim">1.00</td>
+<td>-1.15%</td><td class="dim">-0.54%</td><td class="bad">-0.60%</td>
+<td>-0.47%</td><td>-0.77%</td><td>33%</td><td>-1.00</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-1.17%</td><td class="dim">-0.61%</td><td class="bad">-0.56%</td>
-<td>0.17%</td><td>-2.63%</td><td>36%</td><td>-4.02</td><td class="dim">—</td>
+<td>-1.68%</td><td class="dim">-1.11%</td><td class="bad">-0.57%</td>
+<td>-0.15%</td><td>-1.63%</td><td>37%</td><td>-4.02</td><td class="dim">—</td>
+<td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">美股</td><td>5 日</td>
+<td>-0.45%</td><td class="dim">0.25%</td><td class="bad">-0.70%</td>
+<td>0.39%</td><td>-1.64%</td><td>46%</td><td>-0.88</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
+<td>-0.56%</td><td class="dim">0.34%</td><td class="bad">-0.90%</td>
+<td>0.15%</td><td>-1.72%</td><td>36%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>Sentinel 建議（可加倉 &gt; 觀望 &gt; 減持）</td><td class="dim">Sentinel 29 隻</td><td>5 日</td>
-<td>-1.19%</td><td class="dim">-0.30%</td><td class="bad">-0.89%</td>
-<td>-0.68%</td><td>-1.12%</td><td>32%</td><td>-2.08</td><td class="dim">—</td>
+<td>-1.31%</td><td class="dim">-0.38%</td><td class="bad">-0.93%</td>
+<td>-0.52%</td><td>-1.34%</td><td>32%</td><td>-2.07</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-2.89%</td><td class="dim">0.09%</td><td class="bad">-2.99%</td>
-<td>-2.28%</td><td>-3.81%</td><td>15%</td><td>—</td><td class="dim">—</td>
+<td>-3.85%</td><td class="dim">-0.34%</td><td class="bad">-3.51%</td>
+<td>-2.06%</td><td>-4.96%</td><td>13%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr>
 </tbody></table>
 <p class="note">方法：訊號日之後第一個收市價入場，持有 5 / 20 個交易日，扣 0.2% 來回成本；每日揀頭 20%（Sentinel 用「可加倉」對「減持」），同當日全體等權比。
@@ -228,7 +228,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 
 
 <div class="scroll"><table><thead><tr><th>簽名日</th><th>入場</th><th>出場</th><th>狀態</th><th>毛回報</th><th>成本</th><th>淨回報</th><th>等權</th><th>超額</th></tr></thead><tbody>
-<tr><td>2026-10-16</td><td>—</td><td>—</td><td class="dim">等入場日</td>
+<tr><td>2026-10-16</td><td>2026-10-19</td><td>—</td><td class="dim">持有中</td>
 <td>—</td><td class="dim">—</td><td>—</td><td class="dim">—</td><td class="bad">—</td></tr>
 </tbody></table></div>
 <div class="card" style="margin-top:10px"><b>影子紀錄 v2（trailing 252 日 MDD，<code>hk-lowmdd-252-v1</code>）</b>
@@ -242,245 +242,257 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 注意：呢度用 repo 嘅 <code>mdd</code> 欄（約 2 年回撤），同 <code>docs/WFO.md</code> 用嘅 trailing W（63/126/252 日）係兩個唔同嘅訊號定義。</p></div>
 
 <h2 id="s4"><span class="n">4</span>PMFX 今日訊號（未驗證）</h2>
-<p class="warn">PMFX 嘅歷史訊號成交後平均蝕錢（§4），跨報告「共識」加分亦未驗證。下表只顯示過咗 quality gate 嘅 17/36 個，<b>唔構成機會</b>。</p>
-<details><summary>17 個過 gate 嘅 PMFX 訊號（預設收埋，修正後結算樣本 0/20，未夠重新評估）</summary>
+<p class="warn">PMFX 嘅歷史訊號成交後平均蝕錢（§4），跨報告「共識」加分亦未驗證。下表只顯示過咗 quality gate 嘅 20/36 個，<b>唔構成機會</b>。</p>
+<details><summary>20 個過 gate 嘅 PMFX 訊號（預設收埋，修正後結算樣本 0/20，未夠重新評估）</summary>
 <div class="scroll"><table><thead><tr><th>標的</th><th>方向</th><th>收市</th><th>限價 entry</th><th>距收市</th><th>目標%</th><th>止損%</th><th>RR</th><th>共識</th><th>Grade</th></tr></thead><tbody>
-<tr><td class="tk">PA=F<div class="dim" style="font-size:11.5px">鈀金期貨 (PA)</div></td>
+<tr><td class="tk">2840.HK<div class="dim" style="font-size:11.5px">SPDR金ETF (2840)</div></td>
 <td class="bad">沽</td>
-<td>1115.00</td><td>1219.07</td><td>9.3%</td>
-<td>17.22</td><td>2.24</td><td>7.68</td>
+<td>2881.00</td><td>3067.26</td><td>6.5%</td>
+<td>9.38</td><td>1.39</td><td>6.76</td>
+<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">PA=F<div class="dim" style="font-size:11.5px">鈀金期貨 (PA)</div></td>
+<td class="bad">沽</td>
+<td>1034.50</td><td>1118.54</td><td>8.1%</td>
+<td>17.04</td><td>2.02</td><td>8.42</td>
 <td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">STX<div class="dim" style="font-size:11.5px">STX</div></td>
 <td class="bad">沽</td>
-<td>690.81</td><td>825.27</td><td>19.5%</td>
-<td>21.25</td><td>9.78</td><td>2.17</td>
-<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">WDC<div class="dim" style="font-size:11.5px">WDC</div></td>
-<td class="bad">沽</td>
-<td>356.45</td><td>431.01</td><td>20.9%</td>
-<td>22.69</td><td>8.68</td><td>2.62</td>
-<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">LRCX<div class="dim" style="font-size:11.5px">LRCX</div></td>
-<td class="bad">沽</td>
-<td>277.46</td><td>322.48</td><td>16.2%</td>
-<td>19.56</td><td>6.42</td><td>3.05</td>
+<td>667.85</td><td>800.35</td><td>19.8%</td>
+<td>21.35</td><td>8.21</td><td>2.60</td>
 <td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">ZW=F<div class="dim" style="font-size:11.5px">小麥期貨 (Wheat)</div></td>
 <td class="bad">沽</td>
-<td>659.75</td><td>695.53</td><td>5.4%</td>
-<td>9.59</td><td>3.46</td><td>2.77</td>
+<td>611.00</td><td>643.33</td><td>5.3%</td>
+<td>9.58</td><td>3.33</td><td>2.88</td>
+<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">LRCX<div class="dim" style="font-size:11.5px">LRCX</div></td>
+<td class="bad">沽</td>
+<td>240.85</td><td>278.30</td><td>15.6%</td>
+<td>19.80</td><td>7.94</td><td>2.49</td>
+<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">2359.HK<div class="dim" style="font-size:11.5px">2359.HK</div></td>
+<td class="bad">沽</td>
+<td>185.60</td><td>213.33</td><td>14.9%</td>
+<td>17.71</td><td>3.49</td><td>5.07</td>
+<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">ZC=F<div class="dim" style="font-size:11.5px">玉米期貨 (Corn)</div></td>
+<td class="bad">沽</td>
+<td>450.00</td><td>469.49</td><td>4.3%</td>
+<td>7.73</td><td>3.01</td><td>2.56</td>
 <td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">CL=F<div class="dim" style="font-size:11.5px">原油期貨 (WTI)</div></td>
 <td class="good">買</td>
-<td>99.04</td><td>91.24</td><td>-7.9%</td>
-<td>19.23</td><td>6.48</td><td>2.97</td>
-<td class="good">1.00</td><td class="tB">B</td></tr><tr><td class="tk">1347.HK<div class="dim" style="font-size:11.5px">1347.HK</div></td>
+<td>99.91</td><td>92.23</td><td>-7.7%</td>
+<td>19.26</td><td>6.98</td><td>2.76</td>
+<td class="good">1.00</td><td class="tB">B</td></tr><tr><td class="tk">JNJ<div class="dim" style="font-size:11.5px">JNJ</div></td>
+<td class="good">買</td>
+<td>268.73</td><td>263.48</td><td>-2.0%</td>
+<td>8.06</td><td>6.59</td><td>1.22</td>
+<td class="good">1.25</td><td class="tB">B</td></tr><tr><td class="tk">1347.HK<div class="dim" style="font-size:11.5px">1347.HK</div></td>
 <td class="bad">沽</td>
-<td>74.95</td><td>89.34</td><td>19.2%</td>
-<td>25.61</td><td>9.14</td><td>2.80</td>
-<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">JNJ<div class="dim" style="font-size:11.5px">JNJ</div></td>
+<td>64.55</td><td>76.33</td><td>18.2%</td>
+<td>25.64</td><td>11.30</td><td>2.27</td>
+<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">0005.HK<div class="dim" style="font-size:11.5px">0005.HK</div></td>
 <td class="bad">沽</td>
-<td>253.28</td><td>267.45</td><td>5.6%</td>
-<td>7.40</td><td>2.70</td><td>2.74</td>
-<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">SI=F<div class="dim" style="font-size:11.5px">白銀期貨 (SI)</div></td>
+<td>134.30</td><td>145.00</td><td>8.0%</td>
+<td>9.90</td><td>3.90</td><td>2.54</td>
+<td class="bad">-2.00</td><td class="tC">C</td></tr><tr><td class="tk">SLV<div class="dim" style="font-size:11.5px">白銀ETF (SLV)</div></td>
 <td class="bad">沽</td>
-<td>57.13</td><td>64.13</td><td>12.2%</td>
-<td>18.56</td><td>3.06</td><td>6.07</td>
+<td>49.16</td><td>54.69</td><td>11.2%</td>
+<td>17.66</td><td>2.41</td><td>7.34</td>
 <td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">2269.HK<div class="dim" style="font-size:11.5px">2269.HK</div></td>
 <td class="bad">沽</td>
-<td>48.20</td><td>55.33</td><td>14.8%</td>
-<td>18.60</td><td>5.70</td><td>3.26</td>
-<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">SLV<div class="dim" style="font-size:11.5px">白銀ETF (SLV)</div></td>
+<td>44.66</td><td>50.90</td><td>14.0%</td>
+<td>18.61</td><td>9.21</td><td>2.02</td>
+<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">2388.HK<div class="dim" style="font-size:11.5px">2388.HK</div></td>
 <td class="bad">沽</td>
-<td>51.92</td><td>58.04</td><td>11.8%</td>
-<td>17.70</td><td>3.49</td><td>5.07</td>
-<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">AUDJPY=X<div class="dim" style="font-size:11.5px">澳元/日圓 (AUD/JPY)</div></td>
-<td class="bad">沽</td>
-<td>109.75</td><td>112.40</td><td>2.4%</td>
-<td>4.00</td><td>0.66</td><td>6.03</td>
-<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">DX-Y.NYB<div class="dim" style="font-size:11.5px">美元指數 (DXY)</div></td>
+<td>48.14</td><td>51.65</td><td>7.3%</td>
+<td>8.93</td><td>2.56</td><td>3.48</td>
+<td class="bad">-1.25</td><td class="tC">C</td></tr><tr><td class="tk">DX-Y.NYB<div class="dim" style="font-size:11.5px">美元指數 (DXY)</div></td>
 <td class="good">買</td>
-<td>101.78</td><td>100.39</td><td>-1.4%</td>
-<td>2.62</td><td>0.96</td><td>2.72</td>
+<td>102.36</td><td>100.97</td><td>-1.4%</td>
+<td>2.62</td><td>0.69</td><td>3.77</td>
 <td class="good">1.00</td><td class="tA">A</td></tr><tr><td class="tk">EURJPY=X<div class="dim" style="font-size:11.5px">歐元/日圓 (EUR/JPY)</div></td>
 <td class="bad">沽</td>
-<td>177.58</td><td>180.72</td><td>1.8%</td>
-<td>2.79</td><td>0.96</td><td>2.92</td>
-<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">EURGBP=X<div class="dim" style="font-size:11.5px">歐元/英鎊 (EUR/GBP)</div></td>
+<td>175.82</td><td>178.75</td><td>1.7%</td>
+<td>2.80</td><td>0.87</td><td>3.23</td>
+<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">HG=F<div class="dim" style="font-size:11.5px">銅期貨 (HG)</div></td>
+<td class="good">買</td>
+<td>6.66</td><td>6.32</td><td>-5.0%</td>
+<td>13.84</td><td>2.20</td><td>6.30</td>
+<td class="good">1.00</td><td class="tA">A</td></tr><tr><td class="tk">EURGBP=X<div class="dim" style="font-size:11.5px">歐元/英鎊 (EUR/GBP)</div></td>
 <td class="bad">沽</td>
-<td>0.84</td><td>0.85</td><td>0.9%</td>
-<td>1.66</td><td>0.62</td><td>2.68</td>
+<td>0.84</td><td>0.84</td><td>0.9%</td>
+<td>1.66</td><td>0.56</td><td>2.99</td>
 <td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">EURUSD=X<div class="dim" style="font-size:11.5px">歐元/美元 (EUR/USD)</div></td>
 <td class="bad">沽</td>
-<td>1.12</td><td>1.14</td><td>1.5%</td>
-<td>2.72</td><td>0.99</td><td>2.73</td>
-<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">AUDUSD=X<div class="dim" style="font-size:11.5px">澳元/美元 (AUD/USD)</div></td>
-<td class="bad">沽</td>
-<td>0.69</td><td>0.71</td><td>2.0%</td>
-<td>3.62</td><td>1.15</td><td>3.16</td>
-<td class="bad">-1.00</td><td class="tC">C</td></tr>
+<td>1.11</td><td>1.13</td><td>1.5%</td>
+<td>2.72</td><td>0.81</td><td>3.35</td>
+<td class="bad">-1.00</td><td class="tC">C</td></tr><tr><td class="tk">USDCHF=X<div class="dim" style="font-size:11.5px">美元/瑞郎 (USD/CHF)</div></td>
+<td class="good">買</td>
+<td>0.83</td><td>0.81</td><td>-1.8%</td>
+<td>3.21</td><td>1.01</td><td>3.18</td>
+<td class="good">1.00</td><td class="tA">A</td></tr>
 </tbody></table></div>
-<details><summary>未過 gate 嘅 19 個（排除原因）</summary><div class="scroll"><table><tbody>
-<tr><td class="tk">BTC-USD</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">GC=F</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">2840.HK</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">PL=F</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">USDCHF=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">GBPUSD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">USDCAD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">NZDUSD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">HG=F</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">NG=F</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">CADJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">2388.HK</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">USDJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">GBPJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">0005.HK</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">2359.HK</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">ZC=F</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">MU</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">XAUUSD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr>
+<details><summary>未過 gate 嘅 16 個（排除原因）</summary><div class="scroll"><table><tbody>
+<tr><td class="tk">GC=F</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">XAUUSD=X</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">PL=F</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">SI=F</td><td>沽</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false)</td></tr><tr><td class="tk">USDCAD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">GBPUSD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">AUDUSD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">NZDUSD=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">NG=F</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / 止損太遠 (15.63% &gt; 12%) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">AUDJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">USDJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">CADJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">GBPJPY=X</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">WDC</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / 止損太遠 (13.71% &gt; 12%) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">MU</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr><tr><td class="tk">BTC-USD</td><td>觀望</td><td class="bad" style="text-align:left">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr>
 </tbody></table></div></details>
 </details>
 
 <h2 id="s5"><span class="n">5</span>PMFX 前向追蹤 — 訊號之後實際發生咩事</h2>
 <div class="card"><div class="grid">
-<div class="kv"><span>追蹤訊號</span><b>1516</b></div>
-<div class="kv"><span>限價有成交</span><b>604</b></div>
-<div class="kv"><span>20 日內冇成交</span><b class="dim">478</b></div>
-<div class="kv"><span>到目標 / 止損</span><b><span class="good">14</span> / <span class="bad">381</span></b></div>
-<div class="kv"><span>平均 5 日（扣成本）</span><b class="bad">-1.62%</b></div>
+<div class="kv"><span>追蹤訊號</span><b>1695</b></div>
+<div class="kv"><span>限價有成交</span><b>638</b></div>
+<div class="kv"><span>20 日內冇成交</span><b class="dim">614</b></div>
+<div class="kv"><span>到目標 / 止損</span><b><span class="good">14</span> / <span class="bad">415</span></b></div>
+<div class="kv"><span>平均 5 日（扣成本）</span><b class="bad">-1.99%</b></div>
 </div>
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>組別 / 累加 gate</th><th>訊號</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
-<tr><td>全部有 EV 訊號</td><td>1516</td><td>395</td>
-<td class="bad">3.5%</td><td>-1.62%</td><td>-4.19%</td></tr><tr><td>net_ev &gt; 0</td><td>1516</td><td>395</td>
-<td class="bad">3.5%</td><td>-1.62%</td><td>-4.19%</td></tr><tr><td>+ rr_valid</td><td>1316</td><td>361</td>
-<td class="bad">3%</td><td>-1.61%</td><td>-3.99%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td>1316</td><td>361</td>
-<td class="bad">3%</td><td>-1.61%</td><td>-3.99%</td></tr><tr><td>+ 引擎無 error</td><td>17</td><td>0</td>
-<td class="bad">—</td><td>—</td><td>—</td></tr><tr><td>+ 止損 ≤ 5%</td><td>11</td><td>0</td>
-<td class="bad">—</td><td>—</td><td>—</td></tr><tr><td>每日 net_ev 頭 1 名</td><td>65</td><td>18</td>
-<td class="bad">5.6%</td><td>-4.44%</td><td>-15.79%</td></tr><tr><td>每日 net_ev 尾 1 名</td><td>65</td><td>18</td>
-<td class="bad">0%</td><td>-0.99%</td><td>-1.72%</td></tr><tr><td>全部做多</td><td>776</td><td>232</td>
-<td class="bad">1.7%</td><td>-1.97%</td><td>-4.29%</td></tr><tr><td>全部做空</td><td>740</td><td>163</td>
-<td class="bad">6.1%</td><td>-0.92%</td><td>-4.03%</td></tr>
+<tr><td>全部有 EV 訊號</td><td>1695</td><td>429</td>
+<td class="bad">3.3%</td><td>-1.99%</td><td>-4.31%</td></tr><tr><td>net_ev &gt; 0</td><td>1695</td><td>429</td>
+<td class="bad">3.3%</td><td>-1.99%</td><td>-4.31%</td></tr><tr><td>+ rr_valid</td><td>1463</td><td>395</td>
+<td class="bad">2.8%</td><td>-2.01%</td><td>-4.19%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td>1463</td><td>395</td>
+<td class="bad">2.8%</td><td>-2.01%</td><td>-4.19%</td></tr><tr><td>+ 引擎無 error</td><td>164</td><td>0</td>
+<td class="bad">—</td><td>—</td><td>—</td></tr><tr><td>+ 止損 ≤ 5%</td><td>112</td><td>0</td>
+<td class="bad">—</td><td>—</td><td>—</td></tr><tr><td>每日 net_ev 頭 1 名</td><td>73</td><td>18</td>
+<td class="bad">5.6%</td><td>-4.44%</td><td>-15.17%</td></tr><tr><td>每日 net_ev 尾 1 名</td><td>73</td><td>19</td>
+<td class="bad">0%</td><td>-0.96%</td><td>-1.63%</td></tr><tr><td>全部做多</td><td>802</td><td>266</td>
+<td class="bad">1.5%</td><td>-2.49%</td><td>-4.98%</td></tr><tr><td>全部做空</td><td>893</td><td>163</td>
+<td class="bad">6.1%</td><td>-0.91%</td><td>-3.08%</td></tr>
 </tbody></table></div>
 <p class="note">回報由限價 entry <b>成交之後</b>先計（收市價觸及 entry 先算成交，20 個交易日內冇觸及 = 冇成交）。加 gate 之後勝率或回報下跌 = gate 冇用。
 2026-10-17 之前嘅 PMFX 行上游有 bug，新版仲未有結算樣本。</p>
 <details><summary>最近 40 條訊號</summary><div class="scroll"><table><thead><tr><th>日期</th><th>標的</th><th>方向</th><th>結果</th><th>成交日</th><th>5日</th><th>20日</th></tr></thead><tbody>
-<tr><td>2026-10-17</td><td class="tk">ZW=F</td>
+<tr><td>2026-10-28</td><td class="tk">ZW=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">WDC</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">ZC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">STX</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">XAUUSD=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">SLV</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">SI=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">PL=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">PA=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">LRCX</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">JNJ</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">GC=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">EURUSD=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">EURJPY=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">EURGBP=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">DX-Y.NYB</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">USDCHF=X</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">CL=F</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">STX</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">SLV</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">SI=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">PL=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">PA=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">LRCX</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">JNJ</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">BTC-USD</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">AUDUSD=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">AUDJPY=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">2840.HK</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">2269.HK</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-17</td><td class="tk">1347.HK</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">ZW=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">ZC=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">WDC</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">USDCAD=X</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">HG=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">STX</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">GC=F</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">SLV</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">EURUSD=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">SI=F</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">EURJPY=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">PL=F</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">EURGBP=X</td>
 <td class="bad">空</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">PA=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">NZDUSD=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">NG=F</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">DX-Y.NYB</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">LRCX</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">JNJ</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">GC=F</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">EURUSD=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">EURJPY=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">EURGBP=X</td>
-<td class="bad">空</td>
-<td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">DX-Y.NYB</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">CL=F</td>
 <td class="good">多</td>
 <td class="dim">pending</td>
-<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-16</td><td class="tk">CL=F</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">2840.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">2388.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">2359.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">2269.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">1347.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-28</td><td class="tk">0005.HK</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">ZW=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">ZC=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">XAUUSD=X</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">WDC</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">USDCHF=X</td>
 <td class="good">多</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">STX</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">SLV</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">SI=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">PL=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">PA=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">MU</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">LRCX</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">JNJ</td>
+<td class="good">多</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">HG=F</td>
+<td class="good">多</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">GC=F</td>
+<td class="bad">空</td>
+<td class="dim">pending</td>
+<td>—</td><td>—</td><td>—</td></tr><tr><td>2026-10-27</td><td class="tk">EURUSD=X</td>
+<td class="bad">空</td>
 <td class="dim">pending</td>
 <td>—</td><td>—</td><td>—</td></tr>
 </tbody></table></div></details></div>
 
 <h2 id="s6"><span class="n">6</span>數據核對</h2>
 <div class="card">
-<p><b>未解決 9 項</b></p><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：欄位全空：beta（quant-us 原本用 SPY 做基準但 SPY 唔喺 most-active 名單 → 全部 NaN；src/quant-us/src/main.py 已改為另外下載基準。beta 唔影響任何因子；要喺本機部署修正）</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-07-10 → 2026-07-31 缺 21 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-09-01 → 2026-09-09 缺 8 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：欄位全空：close（Sentinel CSV 原本冇輸出收市價；src/sentinel/src/core.py 已加 last_price。期間 Sentinel 因子用 HK/US quant 收市價，唔受影響；要喺本機部署修正）</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：2026-07-16 → 2026-07-31 缺 15 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-07-10 → 2026-07-31 缺 21 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-09-01 → 2026-09-09 缺 8 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：2304/2340 行 error 欄非空（2026-06-18 至 2026-10-16，上游 bug），最新一日 2026-10-17 已冇 error；歷史行由 gate 排除，所以 PMFX 仲未有可用嘅歷史樣本（冇得補）</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：94 行 close 為空（2026-07-15，上游當日抓價失敗）；backfill 補到 7 行，其餘 87 行因緊接嘅缺口內有除息，比例驗唔到所以唔補。只影響用呢日做入場／出場價嘅窗口</div><p style="margin-top:10px"><b>已處理 4 項</b>（數據有缺陷，但已喺計算入面修正或排除）</p><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：APH 2026-09-03 → 2026-09-09 疑似 2:1 拆股（單日跌幅 &gt; 30% 而且前後價比 ≈ 2），前向回報已按拆股調整</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>hk</b>：2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 10 日，持有期可計（呢段冇訊號、冇 mdd 等欄，上游當日冇跑，冇得重建）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 10 日，持有期可計（呢段冇訊號、冇 mdd 等欄，上游當日冇跑，冇得重建）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>pmfx</b>：24/550 行 close 同 quant 相差 &gt; 1%（2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17），係上一行數據；前向追蹤已改用 quant 收市價</div>
+<p><b>未解決 7 項</b></p><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-07-10 → 2026-07-31 缺 21 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>sentinel</b>：2026-09-01 → 2026-09-09 缺 8 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：2026-07-16 → 2026-07-31 缺 15 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-07-10 → 2026-07-31 缺 21 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>macro</b>：2026-09-01 → 2026-09-09 缺 8 日數據（上游當日冇產出報告，冇得補）；跨越呢段嘅持有期唔計</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>pmfx</b>：2304/2628 行 error 欄非空（2026-06-18 至 2026-10-16，上游 bug），最新一日 2026-10-28 已冇 error；歷史行由 gate 排除，所以 PMFX 仲未有可用嘅歷史樣本（冇得補）</div><div class="warn" style="font-size:13.5px;margin:3px 0">⚠ <b>us</b>：94 行 close 為空（2026-07-15，上游當日抓價失敗）；backfill 補到 7 行，其餘 87 行因緊接嘅缺口內有除息，比例驗唔到所以唔補。只影響用呢日做入場／出場價嘅窗口</div><p style="margin-top:10px"><b>已處理 4 項</b>（數據有缺陷，但已喺計算入面修正或排除）</p><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：APH 2026-09-03 → 2026-09-09 疑似 2:1 拆股（單日跌幅 &gt; 30% 而且前後價比 ≈ 2），前向回報已按拆股調整</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>hk</b>：2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 10 日，持有期可計（呢段冇訊號、冇 mdd 等欄，上游當日冇跑，冇得重建）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 10 日，持有期可計（呢段冇訊號、冇 mdd 等欄，上游當日冇跑，冇得重建）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>pmfx</b>：28/615 行 close 同 quant 相差 &gt; 1%（2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17、2026-10-22），係上一行數據；前向追蹤已改用 quant 收市價</div>
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>來源</th><th>行數</th><th>日數</th><th>首日</th><th>末日</th><th>重複</th></tr></thead><tbody>
-<tr><td>hk</td><td>6174</td><td>63</td><td>2026-06-18</td><td>2026-10-16</td><td class="dim">0</td></tr><tr><td>us</td><td>6138</td><td>62</td><td>2026-06-18</td><td>2026-10-17</td><td class="dim">0</td></tr><tr><td>sentinel</td><td>812</td><td>28</td><td>2026-06-18</td><td>2026-10-16</td><td class="dim">0</td></tr><tr><td>pmfx</td><td>2340</td><td>65</td><td>2026-06-18</td><td>2026-10-17</td><td class="dim">0</td></tr><tr><td>macro</td><td>28</td><td>28</td><td>2026-06-18</td><td>2026-10-16</td><td class="dim">0</td></tr>
+<tr><td>hk</td><td>6860</td><td>70</td><td>2026-06-18</td><td>2026-10-27</td><td class="dim">0</td></tr><tr><td>us</td><td>6831</td><td>69</td><td>2026-06-18</td><td>2026-10-28</td><td class="dim">0</td></tr><tr><td>sentinel</td><td>899</td><td>31</td><td>2026-06-18</td><td>2026-10-27</td><td class="dim">0</td></tr><tr><td>pmfx</td><td>2628</td><td>73</td><td>2026-06-18</td><td>2026-10-28</td><td class="dim">0</td></tr><tr><td>macro</td><td>31</td><td>31</td><td>2026-06-18</td><td>2026-10-27</td><td class="dim">0</td></tr>
 </tbody></table></div>
 <div class="dim" style="font-size:12.5px;margin-top:10px">PMFX 每日 error 行比例（紅 = 有異常）</div>
-<div class="spark"><i class="e" style="height:100%" title="2026-06-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-06-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-06-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-07-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-19: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-27: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-21: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-22: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-23: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-05: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-08: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-16: 36/36 異常"></i><i class="" style="height:2%" title="2026-10-17: 0/36 異常"></i></div>
+<div class="spark"><i class="e" style="height:100%" title="2026-07-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-19: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-26: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-27: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-08-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-21: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-22: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-23: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-05: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-08: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-16: 36/36 異常"></i><i class="" style="height:2%" title="2026-10-17: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-19: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-20: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-21: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-22: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-23: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-26: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-27: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-28: 0/36 異常"></i></div>
 </div>
 
-<h2 id="s7"><span class="n">7</span>宏觀（最新 Sentinel，2026-10-16）</h2>
+<h2 id="s7"><span class="n">7</span>宏觀（最新 Sentinel，2026-10-27）</h2>
 <div class="card"><div class="grid">
-<div class="kv"><span>VIX</span><b>16.460</b></div><div class="kv"><span>DXY</span><b>102.070</b></div><div class="kv"><span>US 10Y</span><b>5.090</b></div><div class="kv"><span>銅金比</span><b>0.001570</b></div><div class="kv"><span>Fear&Greed</span><b>32</b></div><div class="kv"><span>平均 Sharpe</span><b>-0.0900</b></div>
-</div><p class="dim" style="font-size:12.5px">宏觀只有 28 日，唔夠做擇時驗證，只作背景。</p></div>
+<div class="kv"><span>VIX</span><b>18.390</b></div><div class="kv"><span>DXY</span><b>102.020</b></div><div class="kv"><span>US 10Y</span><b>4.990</b></div><div class="kv"><span>銅金比</span><b>0.001632</b></div><div class="kv"><span>Fear&Greed</span><b>27</b></div><div class="kv"><span>平均 Sharpe</span><b>-0.2400</b></div>
+</div><p class="dim" style="font-size:12.5px">宏觀只有 31 日，唔夠做擇時驗證，只作背景。</p></div>
 
 <footer>
 <b>方法</b>：數據來自 4 份每日報告（HK quant / US quant / Sentinel / Sentinel PMFX）嘅瘦身投影。所有回報都係訊號之後實際收市價、t+1 入場、扣 0.2% 成本；
