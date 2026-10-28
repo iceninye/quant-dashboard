@@ -1,7 +1,7 @@
 # 事故記錄 — 數據停擺 / 頁面 stale（診斷 2026-10-28）
 
-> **狀態**：根因已定位，修復**未執行**（等批准）
-> **影響**：公開頁面 `https://iceninye.github.io/quant-dashboard/` 數據停在 HK/Sentinel 2026-10-16、US/PMFX 2026-10-17，實際落後 10–11 個日曆日
+> **狀態**：✅ **已修復（2026-10-28 10:00 HKT）** — 詳見 §11
+> **影響**：公開頁面 `https://iceninye.github.io/quant-dashboard/` 曾停在 HK/Sentinel 2026-10-16、US/PMFX 2026-10-17，落後 10–11 個日曆日；現已同步到 HK 10-27 / US 10-28 / Sentinel 10-27 / PMFX 10-28
 > **調查方式**：全程 read-only（`sync.mjs --dry`、`git log/show`、`ls`、`grep`）；無 commit、無 push、無刪改任何上游檔案
 
 ---
@@ -253,3 +253,55 @@ for d in 19 20 21 22 23 26 27; do
     $([ -f "/home/wsluser/hermes reports/Sentinel PMFX/$d-10-2026/data/signals_$d-10-2026.csv" ] && echo Y || echo n)
 done
 ```
+
+---
+
+## 11. 修復執行記錄（2026-10-28 09:53–10:00 HKT）
+
+### 11.1 執行步驟
+
+| # | 動作 | 結果 |
+|---|---|---|
+| 1 | `git pull --ff-only` | `72d92db` → `08be86d`（帶入 PR #16：`build.mjs` +30、`check.mjs` +8、`docs/data/scan.json`）|
+| 2 | Plan B：由 mirror 補檔（`cp -p`，只新增、零覆蓋、零刪除） | **25 個檔**：HK `metrics_*`+`summary_*` 各 6（19,20,21,22,23,26-10）、PMFX `signals_*` 7（19,20,21,22,23,26,27-10）、US `metrics_*` 6（20,21,22,23,24,27-10）；`missing=0` |
+| 3 | `node scripts/sync.mjs --days=120` | `data/*/2026-10.csv` **+1757 行、0 刪除**；repo 1.54 MB → 1.72 MB（預算 20 MB）|
+| 4 | `node scripts/build.mjs` | `docs/data/dashboard.json` 737 KB、`docs/index.html` 48 KB |
+| 5 | `node scripts/check.mjs` | **84 通過 / 0 失敗** |
+| 6 | commit `f0be72f` + push | 只 add `data/` `docs/`，**確認無夾帶** untracked 診斷腳本 |
+| 7 | Plan C：新增 `~/.hermes/scripts/quant_dashboard_publish.sh` + Hermes cron `4dbb2def8d63`（`30 21 * * 1-6`）| 今晚 21:30 首跑 |
+| 8 | 驗證線上 | `HTTP 200`，頁面顯示 `數據日：HK 2026-10-27 · US 2026-10-28 · Sentinel 2026-10-27 · PMFX 2026-10-28` |
+
+### 11.2 US 只補 6 日（唔係 8 日）嘅原因
+
+US cron = `45 7 * * 2-6`（Tue–Sat）。`19-10` 同 `26-10` 都係**週一**，美國本來就冇 run，唔算缺口。
+
+### 11.3 為何另寫 `quant_dashboard_publish.sh` 而唔用 repo 內 `scripts/publish.sh`
+
+`publish.sh` 第 11 行係 `git add -A` —— 會連 repo 內任何 untracked 殘留檔（現時有 6 個：`scripts/diag2.mjs`、`diag3.mjs`、`diag_backfill.mjs`、`show_tables.mjs`、`verify_backfill.mjs`、`verify_backfill2.mjs`）一齊 commit 上公開 repo。
+
+新腳本改為：
+
+- 只 `git add data/ docs/`
+- 額外加防護：若 `git diff --cached` 出現 `scripts/diag*` / `verify_backfill*` / `show_tables*` → `git reset` 並 abort
+- 先 `git pull --ff-only`（避免遠端有 PR merge 後 push 被拒）
+- `sync → build → check` 任一步失敗即 `exit` 唔 push，保留現場
+- 完整輸出寫 `~/.hermes/logs/quant_dashboard_publish.log`（>5 MB rotate），**stdout 只留一行摘要** → 成功靜默、失敗由 cron 發 error alert
+- 排程 `30 21 * * 1-6`（在 HK 18:00 / PMFX 19:15 / US 07:45 / Sentinel 08:15 之後）
+
+### 11.4 修復後狀態
+
+| 項目 | 修復前 | 修復後 |
+|---|---|---|
+| 頁面生成時間 | 22/10 21:39 | 28/10 09:56 |
+| HK 數據日 | 2026-10-16 | **2026-10-27** |
+| US 數據日 | 2026-10-17 | **2026-10-28** |
+| Sentinel 數據日 | 2026-10-16 | **2026-10-27** |
+| PMFX 數據日 | 2026-10-17 | **2026-10-28** |
+| repo 資料體積 | 1.54 MB | 1.72 MB（預算 20 MB）|
+| check 契約 | — | 84 / 0 失敗 |
+| 自動 publisher | ❌ 無 | ✅ cron `4dbb2def8d63` |
+
+### 11.5 已知殘留（未修，需注意）
+
+- `trackingStats.clean = {signals: 164, decided: 0}` —— PMFX 歷史行 `error` 欄非空（2026-06-18 至 2026-10-16 上游 bug，2304/2628 行），被 gate 排除；乾淨訊號由 2026-10-17 才開始，未夠日數決定。**唔可以靠補檔解決**，屬歷史資料本質限制。
+- 上游 `output/data` retention 執行者仍未定位（§4.3、§9 TODO #1）。
