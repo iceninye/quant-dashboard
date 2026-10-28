@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-10-28T13:17:32.727Z",
+ "generatedAt": "2026-10-28T13:30:59.151Z",
  "dates": {
-  "hk": "2026-10-27",
+  "hk": "2026-10-28",
   "us": "2026-10-28",
   "sen": "2026-10-27"
  },
@@ -313,7 +313,7 @@
    "cons": -1.25,
    "notes": [
     "Sharpe 排 99%ile",
-    "月回報 -10.6%"
+    "月回報 -7.0%"
    ],
    "risk": null,
    "score": 16.432,
@@ -434,8 +434,8 @@
    "rrv": true,
    "cons": -1.25,
    "notes": [
-    "Sharpe 排 91%ile",
-    "月回報 -43.5%"
+    "Sharpe 排 92%ile",
+    "月回報 -36.6%"
    ],
    "risk": null,
    "score": 7.549,
@@ -468,7 +468,7 @@
    "cons": -2,
    "notes": [
     "Sharpe 排 98%ile",
-    "月回報 -15.8%",
+    "月回報 -13.6%",
     "Sentinel 可加倉 green"
    ],
    "risk": "green",
@@ -562,8 +562,8 @@
    "rrv": true,
    "cons": -1.25,
    "notes": [
-    "Sharpe 排 92%ile",
-    "月回報 -15.4%"
+    "Sharpe 排 93%ile",
+    "月回報 -10.8%"
    ],
    "risk": null,
    "score": 3.12,
@@ -596,7 +596,7 @@
    "cons": -1.25,
    "notes": [
     "Sharpe 排 100%ile",
-    "月回報 -6.2%"
+    "月回報 -4.4%"
    ],
    "risk": null,
    "score": 1.933,
@@ -1207,7 +1207,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 94
+   "daysObserved": 95
   },
   {
    "date": "2026-06-18",
@@ -1228,7 +1228,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 94
+   "daysObserved": 95
   },
   {
    "date": "2026-06-18",
@@ -1249,7 +1249,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 94
+   "daysObserved": 95
   },
   {
    "date": "2026-06-18",
@@ -1270,7 +1270,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 94
+   "daysObserved": 95
   },
   {
    "date": "2026-06-18",
@@ -1291,7 +1291,7 @@
    "r5": -0.10561003186858814,
    "r10": -0.09334230696258962,
    "r20": -0.005776132633565427,
-   "daysObserved": 94
+   "daysObserved": 95
   },
   {
    "date": "2026-06-18",
@@ -1711,7 +1711,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-19",
@@ -1732,7 +1732,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-19",
@@ -1753,7 +1753,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-19",
@@ -1774,7 +1774,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-19",
@@ -1795,7 +1795,7 @@
    "r5": -0.10561003186858814,
    "r10": -0.09334230696258962,
    "r20": -0.005776132633565427,
-   "daysObserved": 93
+   "daysObserved": 94
   },
   {
    "date": "2026-06-19",
@@ -2299,7 +2299,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 92
+   "daysObserved": 93
   },
   {
    "date": "2026-06-22",
@@ -2320,7 +2320,7 @@
    "r5": -0.05146457551280707,
    "r10": -0.020167925825174814,
    "r20": -0.031001381486278304,
-   "daysObserved": 92
+   "daysObserved": 93
   },
   {
    "date": "2026-06-22",
@@ -2341,7 +2341,7 @@
    "r5": -0.00677344670713282,
    "r10": -0.14961303880190346,
    "r20": -0.13699000508190062,
-   "daysObserved": 92
+   "daysObserved": 93
   },
   {
    "date": "2026-06-22",
@@ -2362,7 +2362,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 92
+   "daysObserved": 93
   },
   {
    "date": "2026-06-22",
@@ -2383,7 +2383,7 @@
    "r5": -0.09547368648016322,
    "r10": -0.07878915310249765,
    "r20": 0.004633513785831013,
-   "daysObserved": 92
+   "daysObserved": 93
   },
   {
    "date": "2026-06-22",
@@ -2929,7 +2929,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 91
+   "daysObserved": 92
   },
   {
    "date": "2026-06-23",
@@ -2950,7 +2950,7 @@
    "r5": -0.017390802334307218,
    "r10": -0.15870654165214695,
    "r20": -0.1462181739915008,
-   "daysObserved": 91
+   "daysObserved": 92
   },
   {
    "date": "2026-06-23",
@@ -2971,7 +2971,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 91
+   "daysObserved": 92
   },
   {
    "date": "2026-06-23",
@@ -3517,7 +3517,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-24",
@@ -3538,7 +3538,7 @@
    "r5": 0.06074635077325327,
    "r10": -0.04546468488152422,
    "r20": -0.21336716040763967,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-24",
@@ -3559,7 +3559,7 @@
    "r5": -0.1919092006127733,
    "r10": -0.15959627159592807,
    "r20": -0.22252144915504782,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-24",
@@ -3580,7 +3580,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-24",
@@ -3601,7 +3601,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 90
+   "daysObserved": 91
   },
   {
    "date": "2026-06-24",
@@ -4147,7 +4147,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 88
+   "daysObserved": 89
   },
   {
    "date": "2026-06-26",
@@ -4168,7 +4168,7 @@
    "r5": 0.04320287907043971,
    "r10": -0.061254859292674185,
    "r20": -0.2263856552678963,
-   "daysObserved": 88
+   "daysObserved": 89
   },
   {
    "date": "2026-06-26",
@@ -4189,7 +4189,7 @@
    "r5": -0.19784172400369568,
    "r10": -0.16576543167914057,
    "r20": -0.2282297904164322,
-   "daysObserved": 88
+   "daysObserved": 89
   },
   {
    "date": "2026-06-26",
@@ -4210,7 +4210,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 88
+   "daysObserved": 89
   },
   {
    "date": "2026-06-26",
@@ -4231,7 +4231,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 88
+   "daysObserved": 89
   },
   {
    "date": "2026-06-26",
@@ -4756,7 +4756,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 87
+   "daysObserved": 88
   },
   {
    "date": "2026-06-29",
@@ -4777,7 +4777,7 @@
    "r5": 0.05890037999407259,
    "r10": -0.04712616905380892,
    "r20": -0.21473700108159782,
-   "daysObserved": 87
+   "daysObserved": 88
   },
   {
    "date": "2026-06-29",
@@ -4798,7 +4798,7 @@
    "r5": -0.017395005403079433,
    "r10": -0.1062792821856063,
    "r20": -0.27822803191370904,
-   "daysObserved": 87
+   "daysObserved": 88
   },
   {
    "date": "2026-06-29",
@@ -4819,7 +4819,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 87
+   "daysObserved": 88
   },
   {
    "date": "2026-06-29",
@@ -5344,7 +5344,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 86
+   "daysObserved": 87
   },
   {
    "date": "2026-06-30",
@@ -5365,7 +5365,7 @@
    "r5": -0.09080744681370272,
    "r10": -0.08479694184545537,
    "r20": -0.19418813226755696,
-   "daysObserved": 86
+   "daysObserved": 87
   },
   {
    "date": "2026-06-30",
@@ -5386,7 +5386,7 @@
    "r5": -0.06955255086682464,
    "r10": -0.15372835497986778,
    "r20": -0.31656845222236213,
-   "daysObserved": 86
+   "daysObserved": 87
   },
   {
    "date": "2026-06-30",
@@ -5407,7 +5407,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 86
+   "daysObserved": 87
   },
   {
    "date": "2026-06-30",
@@ -5911,7 +5911,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 85
+   "daysObserved": 86
   },
   {
    "date": "2026-07-01",
@@ -5932,7 +5932,7 @@
    "r5": -0.09080744681370272,
    "r10": -0.08479694184545537,
    "r20": -0.19418813226755696,
-   "daysObserved": 85
+   "daysObserved": 86
   },
   {
    "date": "2026-07-01",
@@ -5953,7 +5953,7 @@
    "r5": -0.06955255086682464,
    "r10": -0.15372835497986778,
    "r20": -0.31656845222236213,
-   "daysObserved": 85
+   "daysObserved": 86
   },
   {
    "date": "2026-07-01",
@@ -5974,7 +5974,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 85
+   "daysObserved": 86
   },
   {
    "date": "2026-07-01",
@@ -6457,7 +6457,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 81
+   "daysObserved": 82
   },
   {
    "date": "2026-07-06",
@@ -6478,7 +6478,7 @@
    "r5": 0.10071535005548514,
    "r10": 0.04461111661837986,
    "r20": 0.22361033758438237,
-   "daysObserved": 81
+   "daysObserved": 82
   },
   {
    "date": "2026-07-06",
@@ -6499,7 +6499,7 @@
    "r5": -0.021556434505080102,
    "r10": -0.11788395326405254,
    "r20": -0.09623731983506996,
-   "daysObserved": 81
+   "daysObserved": 82
   },
   {
    "date": "2026-07-06",
@@ -6856,7 +6856,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 77
+   "daysObserved": 78
   },
   {
    "date": "2026-07-10",
@@ -6877,7 +6877,7 @@
    "r5": -0.030795578157311765,
    "r10": -0.1410514410434473,
    "r20": -0.03828208736562958,
-   "daysObserved": 77
+   "daysObserved": 78
   },
   {
    "date": "2026-07-10",
@@ -6898,7 +6898,7 @@
    "r5": -0.051791239135237976,
    "r10": -0.19711728491455446,
    "r20": -0.16181541144589456,
-   "daysObserved": 77
+   "daysObserved": 78
   },
   {
    "date": "2026-07-10",
@@ -6919,7 +6919,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 77
+   "daysObserved": 78
   },
   {
    "date": "2026-07-10",
@@ -7276,7 +7276,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 74
+   "daysObserved": 75
   },
   {
    "date": "2026-07-15",
@@ -7297,7 +7297,7 @@
    "r5": 0.0031743103808145124,
    "r10": 0.024248485884351176,
    "r20": 0.258618861938836,
-   "daysObserved": 74
+   "daysObserved": 75
   },
   {
    "date": "2026-07-15",
@@ -7633,7 +7633,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 73
+   "daysObserved": 74
   },
   {
    "date": "2026-07-16",
@@ -7654,7 +7654,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 73
+   "daysObserved": 74
   },
   {
    "date": "2026-07-16",
@@ -7675,7 +7675,7 @@
    "r5": 0.02340434709684394,
    "r10": 0.044902659329496844,
    "r20": 0.28398994991688054,
-   "daysObserved": 73
+   "daysObserved": 74
   },
   {
    "date": "2026-07-16",
@@ -7696,7 +7696,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 73
+   "daysObserved": 74
   },
   {
    "date": "2026-07-16",
@@ -8074,7 +8074,7 @@
    "r5": -0.025981388062829167,
    "r10": -0.027190828721983133,
    "r20": -0.018724744107906033,
-   "daysObserved": 62
+   "daysObserved": 63
   },
   {
    "date": "2026-07-31",
@@ -8095,7 +8095,7 @@
    "r5": -0.008111378451567734,
    "r10": 0.017498021612870285,
    "r20": 0.07298505508581958,
-   "daysObserved": 62
+   "daysObserved": 63
   },
   {
    "date": "2026-07-31",
@@ -8116,7 +8116,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 62
+   "daysObserved": 63
   },
   {
    "date": "2026-07-31",
@@ -8347,7 +8347,7 @@
    "r5": -0.03199591588614991,
    "r10": -0.03319790359880658,
    "r20": -0.024783989610210576,
-   "daysObserved": 61
+   "daysObserved": 62
   },
   {
    "date": "2026-08-03",
@@ -8368,7 +8368,7 @@
    "r5": -0.0013809667281280582,
    "r10": 0.02440185498807957,
    "r20": 0.08026463537319635,
-   "daysObserved": 61
+   "daysObserved": 62
   },
   {
    "date": "2026-08-03",
@@ -8389,7 +8389,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 61
+   "daysObserved": 62
   },
   {
    "date": "2026-08-03",
@@ -8410,7 +8410,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 61
+   "daysObserved": 62
   },
   {
    "date": "2026-08-03",
@@ -8683,7 +8683,7 @@
    "r5": -0.03202405486256064,
    "r10": -0.03322600770659722,
    "r20": -0.024812337798341827,
-   "daysObserved": 60
+   "daysObserved": 61
   },
   {
    "date": "2026-08-04",
@@ -8704,7 +8704,7 @@
    "r5": -0.010003041961714613,
    "r10": 0.015557615852768701,
    "r20": 0.0709390411174828,
-   "daysObserved": 60
+   "daysObserved": 61
   },
   {
    "date": "2026-08-04",
@@ -8725,7 +8725,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 60
+   "daysObserved": 61
   },
   {
    "date": "2026-08-04",
@@ -9082,7 +9082,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 57
+   "daysObserved": 58
   },
   {
    "date": "2026-08-07",
@@ -9397,7 +9397,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 56
+   "daysObserved": 57
   },
   {
    "date": "2026-08-10",
@@ -9775,7 +9775,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 55
+   "daysObserved": 56
   },
   {
    "date": "2026-08-11",
@@ -9796,7 +9796,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 55
+   "daysObserved": 56
   },
   {
    "date": "2026-08-11",
@@ -9817,7 +9817,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 55
+   "daysObserved": 56
   },
   {
    "date": "2026-08-11",
@@ -9838,7 +9838,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 55
+   "daysObserved": 56
   },
   {
    "date": "2026-08-11",
@@ -10090,7 +10090,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 54
+   "daysObserved": 55
   },
   {
    "date": "2026-08-12",
@@ -10111,7 +10111,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 54
+   "daysObserved": 55
   },
   {
    "date": "2026-08-12",
@@ -10132,7 +10132,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 54
+   "daysObserved": 55
   },
   {
    "date": "2026-08-12",
@@ -10153,7 +10153,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 54
+   "daysObserved": 55
   },
   {
    "date": "2026-08-12",
@@ -10510,7 +10510,7 @@
    "r5": 0.004540986069012448,
    "r10": 0.015116509408427218,
    "r20": -0.00790080609500501,
-   "daysObserved": 53
+   "daysObserved": 54
   },
   {
    "date": "2026-08-13",
@@ -10531,7 +10531,7 @@
    "r5": -0.006962357056380314,
    "r10": 0.025219350748786402,
    "r20": 0.06726319481682665,
-   "daysObserved": 53
+   "daysObserved": 54
   },
   {
    "date": "2026-08-13",
@@ -10552,7 +10552,7 @@
    "r5": 0.004729447034076183,
    "r10": 0.041682809673223846,
    "r20": 0.020709279526680655,
-   "daysObserved": 53
+   "daysObserved": 54
   },
   {
    "date": "2026-08-13",
@@ -11077,7 +11077,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 52
+   "daysObserved": 53
   },
   {
    "date": "2026-08-14",
@@ -11098,7 +11098,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 52
+   "daysObserved": 53
   },
   {
    "date": "2026-08-14",
@@ -11119,7 +11119,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 52
+   "daysObserved": 53
   },
   {
    "date": "2026-08-14",
@@ -11518,7 +11518,7 @@
    "r5": 0.002430600491012751,
    "r10": 0.012983950434366955,
    "r20": -0.00998510532469816,
-   "daysObserved": 51
+   "daysObserved": 52
   },
   {
    "date": "2026-08-17",
@@ -11539,7 +11539,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 51
+   "daysObserved": 52
   },
   {
    "date": "2026-08-17",
@@ -11560,7 +11560,7 @@
    "r5": -0.009781816594043289,
    "r10": 0.02230870368304043,
    "r20": 0.06423341565793998,
-   "daysObserved": 51
+   "daysObserved": 52
   },
   {
    "date": "2026-08-17",
@@ -11581,7 +11581,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 51
+   "daysObserved": 52
   },
   {
    "date": "2026-08-17",
@@ -11959,7 +11959,7 @@
    "r5": -0.004154275630808885,
    "r10": -0.006033457785929844,
    "r20": -0.05802416407760779,
-   "daysObserved": 50
+   "daysObserved": 51
   },
   {
    "date": "2026-08-18",
@@ -11980,7 +11980,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 50
+   "daysObserved": 51
   },
   {
    "date": "2026-08-18",
@@ -12001,7 +12001,7 @@
    "r5": -0.018828147899326395,
    "r10": 0.012969794109146187,
    "r20": 0.054512266733118285,
-   "daysObserved": 50
+   "daysObserved": 51
   },
   {
    "date": "2026-08-18",
@@ -12022,7 +12022,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 50
+   "daysObserved": 51
   },
   {
    "date": "2026-08-18",
@@ -12400,7 +12400,7 @@
    "r5": -0.004154275630808885,
    "r10": -0.006033457785929844,
    "r20": -0.05802416407760779,
-   "daysObserved": 49
+   "daysObserved": 50
   },
   {
    "date": "2026-08-19",
@@ -12421,7 +12421,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 49
+   "daysObserved": 50
   },
   {
    "date": "2026-08-19",
@@ -12442,7 +12442,7 @@
    "r5": -0.018828147899326395,
    "r10": 0.012969794109146187,
    "r20": 0.054512266733118285,
-   "daysObserved": 49
+   "daysObserved": 50
   },
   {
    "date": "2026-08-19",
@@ -12463,7 +12463,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 49
+   "daysObserved": 50
   },
   {
    "date": "2026-08-19",
@@ -12820,7 +12820,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 46
+   "daysObserved": 47
   },
   {
    "date": "2026-08-24",
@@ -12841,7 +12841,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 46
+   "daysObserved": 47
   },
   {
    "date": "2026-08-24",
@@ -12862,7 +12862,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 46
+   "daysObserved": 47
   },
   {
    "date": "2026-08-24",
@@ -13408,7 +13408,7 @@
    "r5": 0.024434951393605506,
    "r10": -0.008555377547486798,
    "r20": -0.012290131767233052,
-   "daysObserved": 45
+   "daysObserved": 46
   },
   {
    "date": "2026-08-25",
@@ -13429,7 +13429,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 45
+   "daysObserved": 46
   },
   {
    "date": "2026-08-25",
@@ -13450,7 +13450,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 45
+   "daysObserved": 46
   },
   {
    "date": "2026-08-25",
@@ -13471,7 +13471,7 @@
    "r5": -0.013994637640838695,
    "r10": 0.017959630729671563,
    "r20": 0.05970633618146708,
-   "daysObserved": 45
+   "daysObserved": 46
   },
   {
    "date": "2026-08-25",
@@ -13492,7 +13492,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 45
+   "daysObserved": 46
   },
   {
    "date": "2026-08-25",
@@ -13996,7 +13996,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 44
+   "daysObserved": 45
   },
   {
    "date": "2026-08-26",
@@ -14017,7 +14017,7 @@
    "r5": 0.00874023008054035,
    "r10": 0.04142979412070398,
    "r20": 0.08413712778607889,
-   "daysObserved": 44
+   "daysObserved": 45
   },
   {
    "date": "2026-08-26",
@@ -14500,7 +14500,7 @@
    "r5": -0.00923596799670567,
    "r10": -0.10599904453373567,
    "r20": -0.09720240121218744,
-   "daysObserved": 43
+   "daysObserved": 44
   },
   {
    "date": "2026-08-27",
@@ -15004,7 +15004,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 42
+   "daysObserved": 43
   },
   {
    "date": "2026-08-28",
@@ -15025,7 +15025,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 42
+   "daysObserved": 43
   },
   {
    "date": "2026-08-28",
@@ -15508,7 +15508,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 41
+   "daysObserved": 42
   },
   {
    "date": "2026-08-31",
@@ -15529,7 +15529,7 @@
    "r5": -0.01554031518157596,
    "r10": 0.005653154609444759,
    "r20": -0.016503654717531534,
-   "daysObserved": 41
+   "daysObserved": 42
   },
   {
    "date": "2026-08-31",
@@ -15970,7 +15970,7 @@
    "r5": 0.014727401386676208,
    "r10": 0.008895313042202022,
    "r20": 0.013755386662597223,
-   "daysObserved": 40
+   "daysObserved": 41
   },
   {
    "date": "2026-09-01",
@@ -16369,7 +16369,7 @@
    "r5": -0.0059573966880288485,
    "r10": -0.007833183134944119,
    "r20": -0.05972994149959805,
-   "daysObserved": 39
+   "daysObserved": 40
   },
   {
    "date": "2026-09-02",
@@ -16390,7 +16390,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 39
+   "daysObserved": 40
   },
   {
    "date": "2026-09-02",
@@ -16411,7 +16411,7 @@
    "r5": -0.01450426122733955,
    "r10": 0.006711467535354218,
    "r20": -0.015468612534734806,
-   "daysObserved": 39
+   "daysObserved": 40
   },
   {
    "date": "2026-09-02",
@@ -16726,7 +16726,7 @@
    "r5": -0.011909931450526684,
    "r10": -0.013774507850808249,
    "r20": -0.06536112159192965,
-   "daysObserved": 38
+   "daysObserved": 39
   },
   {
    "date": "2026-09-03",
@@ -16747,7 +16747,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 38
+   "daysObserved": 39
   },
   {
    "date": "2026-09-03",
@@ -16768,7 +16768,7 @@
    "r5": 0.05227056597789338,
    "r10": 0.0901485503842847,
    "r20": 0.13644386465876313,
-   "daysObserved": 38
+   "daysObserved": 39
   },
   {
    "date": "2026-09-03",
@@ -16789,7 +16789,7 @@
    "r5": 0.017651153749902594,
    "r10": 0.011802294359367837,
    "r20": 0.01667634385148018,
-   "daysObserved": 38
+   "daysObserved": 39
   },
   {
    "date": "2026-09-03",
@@ -17188,7 +17188,7 @@
    "r5": -0.011909931450526684,
    "r10": -0.013774507850808249,
    "r20": -0.06536112159192965,
-   "daysObserved": 37
+   "daysObserved": 38
   },
   {
    "date": "2026-09-04",
@@ -17209,7 +17209,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 37
+   "daysObserved": 38
   },
   {
    "date": "2026-09-04",
@@ -17230,7 +17230,7 @@
    "r5": 0.05227056597789338,
    "r10": 0.0901485503842847,
    "r20": 0.13644386465876313,
-   "daysObserved": 37
+   "daysObserved": 38
   },
   {
    "date": "2026-09-04",
@@ -17251,7 +17251,7 @@
    "r5": 0.017651153749902594,
    "r10": 0.011802294359367837,
    "r20": 0.01667634385148018,
-   "daysObserved": 37
+   "daysObserved": 38
   },
   {
    "date": "2026-09-04",
@@ -17713,7 +17713,7 @@
    "r5": -0.0358363817167653,
    "r10": -0.03765247874361338,
    "r20": -0.0770012476586574,
-   "daysObserved": 36
+   "daysObserved": 37
   },
   {
    "date": "2026-09-07",
@@ -17734,7 +17734,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 36
+   "daysObserved": 37
   },
   {
    "date": "2026-09-07",
@@ -17755,7 +17755,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 36
+   "daysObserved": 37
   },
   {
    "date": "2026-09-07",
@@ -17776,7 +17776,7 @@
    "r5": -0.017778587859494245,
    "r10": 0.003366794041961823,
    "r20": -0.01873974158228779,
-   "daysObserved": 36
+   "daysObserved": 37
   },
   {
    "date": "2026-09-07",
@@ -18217,7 +18217,7 @@
    "r5": -0.013799571745977637,
    "r10": -0.03825997838592869,
    "r20": -0.11408723896977697,
-   "daysObserved": 34
+   "daysObserved": 35
   },
   {
    "date": "2026-09-09",
@@ -18238,7 +18238,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 34
+   "daysObserved": 35
   },
   {
    "date": "2026-09-09",
@@ -18259,7 +18259,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 34
+   "daysObserved": 35
   },
   {
    "date": "2026-09-09",
@@ -18280,7 +18280,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 34
+   "daysObserved": 35
   },
   {
    "date": "2026-09-09",
@@ -18301,7 +18301,7 @@
    "r5": -0.03057109671683432,
    "r10": -0.021380847430540306,
    "r20": null,
-   "daysObserved": 34
+   "daysObserved": 35
   },
   {
    "date": "2026-09-09",
@@ -18763,7 +18763,7 @@
    "r5": -0.019578487245769757,
    "r10": -0.02142862192138984,
    "r20": -0.07261568128021044,
-   "daysObserved": 33
+   "daysObserved": 34
   },
   {
    "date": "2026-09-10",
@@ -18784,7 +18784,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 33
+   "daysObserved": 34
   },
   {
    "date": "2026-09-10",
@@ -18805,7 +18805,7 @@
    "r5": -0.026418694046568096,
    "r10": -0.017189160757556183,
    "r20": null,
-   "daysObserved": 33
+   "daysObserved": 34
   },
   {
    "date": "2026-09-10",
@@ -19204,7 +19204,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 32
+   "daysObserved": 33
   },
   {
    "date": "2026-09-11",
@@ -19225,7 +19225,7 @@
    "r5": 0.012610743909105463,
    "r10": 0.006790797003317152,
    "r20": 0.01164075275814079,
-   "daysObserved": 32
+   "daysObserved": 33
   },
   {
    "date": "2026-09-11",
@@ -19645,7 +19645,7 @@
    "r5": -0.02102916537135511,
    "r10": -0.022876568073104037,
    "r20": -0.07398804282148924,
-   "daysObserved": 31
+   "daysObserved": 32
   },
   {
    "date": "2026-09-14",
@@ -19666,7 +19666,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 31
+   "daysObserved": 32
   },
   {
    "date": "2026-09-14",
@@ -19687,7 +19687,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 31
+   "daysObserved": 32
   },
   {
    "date": "2026-09-14",
@@ -19708,7 +19708,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 31
+   "daysObserved": 32
   },
   {
    "date": "2026-09-14",
@@ -19729,7 +19729,7 @@
    "r5": -0.014126478032563995,
    "r10": -0.019793056552453635,
    "r20": -0.01507090778587889,
-   "daysObserved": 31
+   "daysObserved": 32
   },
   {
    "date": "2026-09-14",
@@ -20149,7 +20149,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 30
+   "daysObserved": 31
   },
   {
    "date": "2026-09-15",
@@ -20170,7 +20170,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 30
+   "daysObserved": 31
   },
   {
    "date": "2026-09-15",
@@ -20191,7 +20191,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 30
+   "daysObserved": 31
   },
   {
    "date": "2026-09-15",
@@ -20212,7 +20212,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 30
+   "daysObserved": 31
   },
   {
    "date": "2026-09-15",
@@ -20548,7 +20548,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 29
+   "daysObserved": 30
   },
   {
    "date": "2026-09-16",
@@ -20569,7 +20569,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 29
+   "daysObserved": 30
   },
   {
    "date": "2026-09-16",
@@ -20590,7 +20590,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 29
+   "daysObserved": 30
   },
   {
    "date": "2026-09-16",
@@ -20611,7 +20611,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 29
+   "daysObserved": 30
   },
   {
    "date": "2026-09-16",
@@ -20884,7 +20884,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 28
+   "daysObserved": 29
   },
   {
    "date": "2026-09-17",
@@ -20905,7 +20905,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 28
+   "daysObserved": 29
   },
   {
    "date": "2026-09-17",
@@ -20926,7 +20926,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 28
+   "daysObserved": 29
   },
   {
    "date": "2026-09-17",
@@ -20947,7 +20947,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 28
+   "daysObserved": 29
   },
   {
    "date": "2026-09-17",
@@ -20968,7 +20968,7 @@
    "r5": -0.030435814124438937,
    "r10": -0.021244284990753093,
    "r20": null,
-   "daysObserved": 28
+   "daysObserved": 29
   },
   {
    "date": "2026-09-17",
@@ -21325,7 +21325,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 27
+   "daysObserved": 28
   },
   {
    "date": "2026-09-18",
@@ -21346,7 +21346,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 27
+   "daysObserved": 28
   },
   {
    "date": "2026-09-18",
@@ -21367,7 +21367,7 @@
    "r5": 0.017504615975440313,
    "r10": -0.05605581277532357,
    "r20": -0.033031593696835164,
-   "daysObserved": 27
+   "daysObserved": 28
   },
   {
    "date": "2026-09-18",
@@ -21808,7 +21808,7 @@
    "r5": -0.0883655644358248,
    "r10": null,
    "r20": null,
-   "daysObserved": 26
+   "daysObserved": 27
   },
   {
    "date": "2026-09-21",
@@ -21829,7 +21829,7 @@
    "r5": -0.056486323617427996,
    "r10": null,
    "r20": null,
-   "daysObserved": 26
+   "daysObserved": 27
   },
   {
    "date": "2026-09-21",
@@ -22249,7 +22249,7 @@
    "r5": -0.08205673159644963,
    "r10": null,
    "r20": null,
-   "daysObserved": 25
+   "daysObserved": 26
   },
   {
    "date": "2026-09-22",
@@ -22270,7 +22270,7 @@
    "r5": -0.05648772709311233,
    "r10": null,
    "r20": null,
-   "daysObserved": 25
+   "daysObserved": 26
   },
   {
    "date": "2026-09-22",
@@ -22291,7 +22291,7 @@
    "r5": 0.01318652988726636,
    "r10": -0.013043169928002751,
    "r20": -0.011100229200945754,
-   "daysObserved": 25
+   "daysObserved": 26
   },
   {
    "date": "2026-09-22",
@@ -22627,7 +22627,7 @@
    "r5": -0.08479839870299669,
    "r10": null,
    "r20": null,
-   "daysObserved": 24
+   "daysObserved": 25
   },
   {
    "date": "2026-09-23",
@@ -22648,7 +22648,7 @@
    "r5": -0.05459167520251005,
    "r10": null,
    "r20": null,
-   "daysObserved": 24
+   "daysObserved": 25
   },
   {
    "date": "2026-09-23",
@@ -23089,7 +23089,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 23
+   "daysObserved": 24
   },
   {
    "date": "2026-09-24",
@@ -23110,7 +23110,7 @@
    "r5": -0.056588493850686525,
    "r10": null,
    "r20": null,
-   "daysObserved": 23
+   "daysObserved": 24
   },
   {
    "date": "2026-09-24",
@@ -23131,7 +23131,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 23
+   "daysObserved": 24
   },
   {
    "date": "2026-09-24",
@@ -23635,7 +23635,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 22
+   "daysObserved": 23
   },
   {
    "date": "2026-09-25",
@@ -23656,7 +23656,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 22
+   "daysObserved": 23
   },
   {
    "date": "2026-09-25",
@@ -23677,7 +23677,7 @@
    "r5": -0.08648479867515282,
    "r10": null,
    "r20": null,
-   "daysObserved": 22
+   "daysObserved": 23
   },
   {
    "date": "2026-09-25",
@@ -23698,7 +23698,7 @@
    "r5": -0.06417162771488963,
    "r10": null,
    "r20": null,
-   "daysObserved": 22
+   "daysObserved": 23
   },
   {
    "date": "2026-09-25",
@@ -24139,7 +24139,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 21
+   "daysObserved": 22
   },
   {
    "date": "2026-09-28",
@@ -24160,7 +24160,7 @@
    "r5": -0.08636828107684609,
    "r10": null,
    "r20": null,
-   "daysObserved": 21
+   "daysObserved": 22
   },
   {
    "date": "2026-09-28",
@@ -24181,7 +24181,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 21
+   "daysObserved": 22
   },
   {
    "date": "2026-09-28",
@@ -24202,7 +24202,7 @@
    "r5": -0.03828905175284923,
    "r10": -0.029171818546807365,
    "r20": null,
-   "daysObserved": 21
+   "daysObserved": 22
   },
   {
    "date": "2026-09-28",
@@ -24727,7 +24727,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 20
+   "daysObserved": 21
   },
   {
    "date": "2026-09-29",
@@ -24748,7 +24748,7 @@
    "r5": -0.088191245312364,
    "r10": null,
    "r20": null,
-   "daysObserved": 20
+   "daysObserved": 21
   },
   {
    "date": "2026-09-29",
@@ -24769,7 +24769,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 20
+   "daysObserved": 21
   },
   {
    "date": "2026-09-29",
@@ -24790,7 +24790,7 @@
    "r5": -0.029574506769563136,
    "r10": -0.02037482919673092,
    "r20": null,
-   "daysObserved": 20
+   "daysObserved": 21
   },
   {
    "date": "2026-09-29",
@@ -25309,13 +25309,13 @@
    "clean": false,
    "filled": false,
    "fillDay": null,
-   "outcome": "pending",
+   "outcome": "unfilled",
    "hitDay": null,
    "r1": null,
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 19
+   "daysObserved": 20
   },
   {
    "date": "2026-09-30",
@@ -25336,7 +25336,7 @@
    "r5": -0.039120829292719816,
    "r10": -0.14281550921504232,
    "r20": null,
-   "daysObserved": 19
+   "daysObserved": 20
   },
   {
    "date": "2026-09-30",
@@ -25355,9 +25355,9 @@
    "hitDay": 16,
    "r1": -0.0112318208325249,
    "r5": -0.03395133042460057,
-   "r10": null,
+   "r10": -0.06062205907616773,
    "r20": null,
-   "daysObserved": 19
+   "daysObserved": 20
   },
   {
    "date": "2026-09-30",
@@ -25378,7 +25378,7 @@
    "r5": -0.034403724170554956,
    "r10": -0.02524973363835209,
    "r20": null,
-   "daysObserved": 19
+   "daysObserved": 20
   },
   {
    "date": "2026-09-30",
@@ -25903,7 +25903,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 18
+   "daysObserved": 19
   },
   {
    "date": "2026-10-01",
@@ -25924,7 +25924,7 @@
    "r5": -0.039120829292719816,
    "r10": -0.14281550921504232,
    "r20": null,
-   "daysObserved": 18
+   "daysObserved": 19
   },
   {
    "date": "2026-10-01",
@@ -25943,9 +25943,9 @@
    "hitDay": 15,
    "r1": -0.0112318208325249,
    "r5": -0.03395133042460057,
-   "r10": null,
+   "r10": -0.06062205907616773,
    "r20": null,
-   "daysObserved": 18
+   "daysObserved": 19
   },
   {
    "date": "2026-10-01",
@@ -25966,7 +25966,7 @@
    "r5": -0.034403724170554956,
    "r10": -0.02524973363835209,
    "r20": null,
-   "daysObserved": 18
+   "daysObserved": 19
   },
   {
    "date": "2026-10-01",
@@ -26470,7 +26470,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 17
+   "daysObserved": 18
   },
   {
    "date": "2026-10-02",
@@ -26489,9 +26489,9 @@
    "hitDay": 14,
    "r1": -0.035829821120662804,
    "r5": -0.020733412075673197,
-   "r10": null,
+   "r10": -0.08191359610010487,
    "r20": null,
-   "daysObserved": 17
+   "daysObserved": 18
   },
   {
    "date": "2026-10-02",
@@ -26512,7 +26512,7 @@
    "r5": -0.05604121172194291,
    "r10": null,
    "r20": null,
-   "daysObserved": 17
+   "daysObserved": 18
   },
   {
    "date": "2026-10-02",
@@ -27037,7 +27037,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 16
+   "daysObserved": 17
   },
   {
    "date": "2026-10-05",
@@ -27058,7 +27058,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 16
+   "daysObserved": 17
   },
   {
    "date": "2026-10-05",
@@ -27077,9 +27077,9 @@
    "hitDay": 13,
    "r1": -0.0490531047877764,
    "r5": -0.034163309550085445,
-   "r10": null,
+   "r10": -0.09450616393441208,
    "r20": null,
-   "daysObserved": 16
+   "daysObserved": 17
   },
   {
    "date": "2026-10-05",
@@ -27100,7 +27100,7 @@
    "r5": -0.06607352167431377,
    "r10": null,
    "r20": null,
-   "daysObserved": 16
+   "daysObserved": 17
   },
   {
    "date": "2026-10-05",
@@ -27625,7 +27625,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 15
+   "daysObserved": 16
   },
   {
    "date": "2026-10-06",
@@ -27646,7 +27646,7 @@
    "r5": -0.09994685780361769,
    "r10": -0.14299088741049906,
    "r20": null,
-   "daysObserved": 15
+   "daysObserved": 16
   },
   {
    "date": "2026-10-06",
@@ -27665,9 +27665,9 @@
    "hitDay": 12,
    "r1": -0.022339605575637057,
    "r5": -0.04480440026333429,
-   "r10": null,
+   "r10": -0.07117611576628327,
    "r20": null,
-   "daysObserved": 15
+   "daysObserved": 16
   },
   {
    "date": "2026-10-06",
@@ -28192,7 +28192,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 14
+   "daysObserved": 15
   },
   {
    "date": "2026-10-07",
@@ -28213,7 +28213,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 14
+   "daysObserved": 15
   },
   {
    "date": "2026-10-07",
@@ -28234,7 +28234,7 @@
    "r5": -0.044684727466496085,
    "r10": -0.1477802183547196,
    "r20": null,
-   "daysObserved": 14
+   "daysObserved": 15
   },
   {
    "date": "2026-10-07",
@@ -28253,9 +28253,9 @@
    "hitDay": 11,
    "r1": -0.021434413973800616,
    "r5": -0.043919965796933774,
-   "r10": null,
+   "r10": -0.07031604837191624,
    "r20": null,
-   "daysObserved": 14
+   "daysObserved": 15
   },
   {
    "date": "2026-10-07",
@@ -28276,7 +28276,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 14
+   "daysObserved": 15
   },
   {
    "date": "2026-10-07",
@@ -28780,7 +28780,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 13
+   "daysObserved": 14
   },
   {
    "date": "2026-10-08",
@@ -28801,7 +28801,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 13
+   "daysObserved": 14
   },
   {
    "date": "2026-10-08",
@@ -29305,7 +29305,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 12
+   "daysObserved": 13
   },
   {
    "date": "2026-10-09",
@@ -29326,7 +29326,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 12
+   "daysObserved": 13
   },
   {
    "date": "2026-10-09",
@@ -29345,9 +29345,9 @@
    "hitDay": 9,
    "r1": -0.03386426498145768,
    "r5": -0.01873714412179299,
-   "r10": null,
+   "r10": -0.08004179181622369,
    "r20": null,
-   "daysObserved": 12
+   "daysObserved": 13
   },
   {
    "date": "2026-10-09",
@@ -29368,7 +29368,7 @@
    "r5": -0.05655619434347678,
    "r10": null,
    "r20": null,
-   "daysObserved": 12
+   "daysObserved": 13
   },
   {
    "date": "2026-10-09",
@@ -29830,7 +29830,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 11
+   "daysObserved": 12
   },
   {
    "date": "2026-10-12",
@@ -29851,7 +29851,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 11
+   "daysObserved": 12
   },
   {
    "date": "2026-10-12",
@@ -30397,7 +30397,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 10
+   "daysObserved": 11
   },
   {
    "date": "2026-10-13",
@@ -30418,7 +30418,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 10
+   "daysObserved": 11
   },
   {
    "date": "2026-10-13",
@@ -30437,9 +30437,9 @@
    "hitDay": null,
    "r1": -0.01736316460912688,
    "r5": -0.006628768980485111,
-   "r10": null,
+   "r10": -0.04605327656204243,
    "r20": null,
-   "daysObserved": 10
+   "daysObserved": 11
   },
   {
    "date": "2026-10-13",
@@ -31006,7 +31006,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 9
+   "daysObserved": 10
   },
   {
    "date": "2026-10-14",
@@ -31027,7 +31027,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 9
+   "daysObserved": 10
   },
   {
    "date": "2026-10-14",
@@ -31048,7 +31048,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 9
+   "daysObserved": 10
   },
   {
    "date": "2026-10-14",
@@ -31573,7 +31573,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 8
+   "daysObserved": 9
   },
   {
    "date": "2026-10-15",
@@ -31594,7 +31594,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 8
+   "daysObserved": 9
   },
   {
    "date": "2026-10-15",
@@ -32098,7 +32098,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 7
+   "daysObserved": 8
   },
   {
    "date": "2026-10-16",
@@ -32119,7 +32119,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 7
+   "daysObserved": 8
   },
   {
    "date": "2026-10-16",
@@ -32602,7 +32602,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 7
+   "daysObserved": 8
   },
   {
    "date": "2026-10-17",
@@ -32623,7 +32623,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 7
+   "daysObserved": 8
   },
   {
    "date": "2026-10-17",
@@ -33043,7 +33043,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 6
+   "daysObserved": 7
   },
   {
    "date": "2026-10-19",
@@ -33064,7 +33064,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 6
+   "daysObserved": 7
   },
   {
    "date": "2026-10-19",
@@ -33505,7 +33505,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 5
+   "daysObserved": 6
   },
   {
    "date": "2026-10-20",
@@ -33526,7 +33526,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 5
+   "daysObserved": 6
   },
   {
    "date": "2026-10-20",
@@ -33547,7 +33547,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 5
+   "daysObserved": 6
   },
   {
    "date": "2026-10-20",
@@ -33967,7 +33967,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 4
+   "daysObserved": 5
   },
   {
    "date": "2026-10-21",
@@ -33988,7 +33988,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 4
+   "daysObserved": 5
   },
   {
    "date": "2026-10-21",
@@ -34009,7 +34009,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 4
+   "daysObserved": 5
   },
   {
    "date": "2026-10-21",
@@ -34387,7 +34387,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 3
+   "daysObserved": 4
   },
   {
    "date": "2026-10-22",
@@ -34408,7 +34408,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 3
+   "daysObserved": 4
   },
   {
    "date": "2026-10-22",
@@ -34828,7 +34828,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 2
+   "daysObserved": 3
   },
   {
    "date": "2026-10-23",
@@ -34849,7 +34849,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 2
+   "daysObserved": 3
   },
   {
    "date": "2026-10-23",
@@ -34870,7 +34870,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 2
+   "daysObserved": 3
   },
   {
    "date": "2026-10-23",
@@ -35311,7 +35311,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 1
+   "daysObserved": 2
   },
   {
    "date": "2026-10-26",
@@ -35332,7 +35332,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 1
+   "daysObserved": 2
   },
   {
    "date": "2026-10-26",
@@ -35353,7 +35353,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 1
+   "daysObserved": 2
   },
   {
    "date": "2026-10-26",
@@ -35752,7 +35752,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 0
+   "daysObserved": 1
   },
   {
    "date": "2026-10-27",
@@ -35773,7 +35773,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 0
+   "daysObserved": 1
   },
   {
    "date": "2026-10-27",
@@ -35794,7 +35794,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 0
+   "daysObserved": 1
   },
   {
    "date": "2026-10-27",
@@ -35815,7 +35815,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 0
+   "daysObserved": 1
   },
   {
    "date": "2026-10-27",
@@ -35836,7 +35836,7 @@
    "r5": null,
    "r10": null,
    "r20": null,
-   "daysObserved": 0
+   "daysObserved": 1
   },
   {
    "date": "2026-10-27",
@@ -37800,15 +37800,15 @@
    "byH": [
     {
      "H": 5,
-     "days": 64,
+     "days": 65,
      "windows": 13,
-     "top": 0.0015,
-     "ew": -0.006,
+     "top": 0.0014,
+     "ew": -0.0061,
      "excess": 0.0075,
-     "spread": 0.0208,
+     "spread": 0.0211,
      "beatRate": 72,
      "isExcess": 0.0091,
-     "oosExcess": 0.0055,
+     "oosExcess": 0.0056,
      "t": 1.74,
      "p": 0.0541,
      "adjP": 0.5413,
@@ -37817,15 +37817,15 @@
     },
     {
      "H": 20,
-     "days": 49,
+     "days": 50,
      "windows": 3,
-     "top": 0.0182,
-     "ew": -0.0114,
-     "excess": 0.0296,
-     "spread": 0.0667,
+     "top": 0.0176,
+     "ew": -0.0123,
+     "excess": 0.0298,
+     "spread": 0.0673,
      "beatRate": 84,
      "isExcess": 0.0288,
-     "oosExcess": 0.0316,
+     "oosExcess": 0.0321,
      "t": 1.44,
      "p": 0.1438,
      "adjP": null,
@@ -37843,15 +37843,15 @@
    "byH": [
     {
      "H": 5,
-     "days": 64,
+     "days": 65,
      "windows": 13,
      "top": -0.0007,
-     "ew": -0.006,
-     "excess": 0.0053,
-     "spread": 0.0191,
+     "ew": -0.0061,
+     "excess": 0.0055,
+     "spread": 0.0194,
      "beatRate": 69,
      "isExcess": 0.0051,
-     "oosExcess": 0.0055,
+     "oosExcess": 0.0059,
      "t": 1.19,
      "p": 0.1294,
      "adjP": 1,
@@ -37860,15 +37860,15 @@
     },
     {
      "H": 20,
-     "days": 49,
+     "days": 50,
      "windows": 3,
-     "top": 0.0144,
-     "ew": -0.0114,
-     "excess": 0.0259,
-     "spread": 0.0778,
+     "top": 0.0139,
+     "ew": -0.0123,
+     "excess": 0.0262,
+     "spread": 0.0789,
      "beatRate": 88,
      "isExcess": 0.0257,
-     "oosExcess": 0.0263,
+     "oosExcess": 0.0272,
      "t": 1.01,
      "p": 0.2087,
      "adjP": null,
@@ -38015,13 +38015,13 @@
    "byH": [
     {
      "H": 5,
-     "days": 64,
+     "days": 65,
      "windows": 13,
-     "top": -0.0092,
-     "ew": -0.006,
+     "top": -0.0095,
+     "ew": -0.0061,
      "excess": -0.0033,
-     "spread": 0.0025,
-     "beatRate": 38,
+     "spread": 0.0026,
+     "beatRate": 37,
      "isExcess": 0.0022,
      "oosExcess": -0.0098,
      "t": -1.11,
@@ -38032,15 +38032,15 @@
     },
     {
      "H": 20,
-     "days": 49,
+     "days": 50,
      "windows": 3,
-     "top": -0.0149,
-     "ew": -0.0114,
-     "excess": -0.0035,
-     "spread": 0.0117,
-     "beatRate": 49,
+     "top": -0.0166,
+     "ew": -0.0123,
+     "excess": -0.0044,
+     "spread": 0.0106,
+     "beatRate": 48,
      "isExcess": 0.0082,
-     "oosExcess": -0.0325,
+     "oosExcess": -0.0336,
      "t": -0.14,
      "p": 0.5487,
      "adjP": null,
@@ -38058,12 +38058,12 @@
    "byH": [
     {
      "H": 5,
-     "days": 64,
+     "days": 65,
      "windows": 13,
-     "top": -0.0105,
-     "ew": -0.006,
-     "excess": -0.0046,
-     "spread": 0.0046,
+     "top": -0.0107,
+     "ew": -0.0061,
+     "excess": -0.0045,
+     "spread": 0.0045,
      "beatRate": 31,
      "isExcess": -0.0073,
      "oosExcess": -0.0012,
@@ -38075,15 +38075,15 @@
     },
     {
      "H": 20,
-     "days": 49,
+     "days": 50,
      "windows": 3,
-     "top": -0.0152,
-     "ew": -0.0114,
-     "excess": -0.0037,
-     "spread": 0.0178,
-     "beatRate": 49,
+     "top": -0.0158,
+     "ew": -0.0123,
+     "excess": -0.0035,
+     "spread": 0.0187,
+     "beatRate": 50,
      "isExcess": -0.0047,
-     "oosExcess": -0.0012,
+     "oosExcess": -0.0008,
      "t": -0.58,
      "p": 0.6894,
      "adjP": null,
@@ -38101,15 +38101,15 @@
    "byH": [
     {
      "H": 5,
-     "days": 64,
+     "days": 65,
      "windows": 13,
-     "top": -0.0119,
-     "ew": -0.006,
+     "top": -0.012,
+     "ew": -0.0061,
      "excess": -0.0059,
-     "spread": -0.0037,
-     "beatRate": 33,
+     "spread": -0.0036,
+     "beatRate": 32,
      "isExcess": -0.0045,
-     "oosExcess": -0.0077,
+     "oosExcess": -0.0075,
      "t": -0.99,
      "p": 0.8287,
      "adjP": 1,
@@ -38118,15 +38118,15 @@
     },
     {
      "H": 20,
-     "days": 49,
+     "days": 50,
      "windows": 3,
-     "top": -0.0169,
-     "ew": -0.0114,
-     "excess": -0.0054,
-     "spread": 0.0111,
-     "beatRate": 37,
+     "top": -0.019,
+     "ew": -0.0123,
+     "excess": -0.0067,
+     "spread": 0.0099,
+     "beatRate": 36,
      "isExcess": -0.0011,
-     "oosExcess": -0.0163,
+     "oosExcess": -0.0199,
      "t": -3,
      "p": 0.9523,
      "adjP": null,
@@ -38146,13 +38146,13 @@
      "H": 5,
      "days": 29,
      "windows": 6,
-     "top": -0.0105,
-     "ew": -0.0032,
-     "excess": -0.0073,
-     "spread": -0.0048,
-     "beatRate": 34,
+     "top": -0.0131,
+     "ew": -0.0033,
+     "excess": -0.0098,
+     "spread": -0.0075,
+     "beatRate": 31,
      "isExcess": -0.0013,
-     "oosExcess": -0.0136,
+     "oosExcess": -0.0188,
      "t": 2.2,
      "p": 0.0396,
      "adjP": null,
@@ -38163,13 +38163,13 @@
      "H": 20,
      "days": 23,
      "windows": 2,
-     "top": -0.0036,
-     "ew": 0.011,
-     "excess": -0.0146,
-     "spread": -0.0164,
-     "beatRate": 30,
+     "top": -0.0114,
+     "ew": 0.0098,
+     "excess": -0.0212,
+     "spread": -0.0234,
+     "beatRate": 26,
      "isExcess": 0.0046,
-     "oosExcess": -0.0506,
+     "oosExcess": -0.0695,
      "t": null,
      "p": null,
      "adjP": null,
@@ -38272,19 +38272,19 @@
    "label": "回撤最淺（低 MDD）",
    "market": "hk",
    "marketLabel": "港股",
-   "date": "2026-10-27",
+   "date": "2026-10-28",
    "grade": "watch",
    "best": {
     "H": 5,
-    "days": 64,
+    "days": 65,
     "windows": 13,
-    "top": 0.0015,
-    "ew": -0.006,
+    "top": 0.0014,
+    "ew": -0.0061,
     "excess": 0.0075,
-    "spread": 0.0208,
+    "spread": 0.0211,
     "beatRate": 72,
     "isExcess": 0.0091,
-    "oosExcess": 0.0055,
+    "oosExcess": 0.0056,
     "t": 1.74,
     "p": 0.0541,
     "adjP": 0.5413,
@@ -38295,228 +38295,228 @@
     {
      "ticker": "0002.HK",
      "name": "",
-     "close": 77.6,
+     "close": 75.8,
      "value": -0.058953,
-     "sharpe": 0.684,
-     "vol": 0.115163,
+     "sharpe": 0.5723,
+     "vol": 0.11629,
      "mdd": -0.058953,
-     "month": 0.003881,
+     "month": -0.020672,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "2388.HK",
      "name": "",
-     "close": 48.14,
+     "close": 48.98,
      "value": -0.111193,
-     "sharpe": 1.5062,
-     "vol": 0.237061,
+     "sharpe": 1.5399,
+     "vol": 0.237091,
      "mdd": -0.111193,
-     "month": -0.061598,
+     "month": -0.044293,
      "sentinel": null,
      "pmfx": "沽"
     },
     {
      "ticker": "0941.HK",
      "name": "",
-     "close": 78.1,
+     "close": 78.05,
      "value": -0.127743,
-     "sharpe": 0.5213,
-     "vol": 0.128831,
+     "sharpe": 0.5169,
+     "vol": 0.128702,
      "mdd": -0.127743,
-     "month": -0.008883,
+     "month": -0.010773,
      "sentinel": "觀望",
      "pmfx": null
     },
     {
      "ticker": "1398.HK",
      "name": "",
-     "close": 7.6,
+     "close": 7.605,
      "value": -0.12892,
-     "sharpe": 1.3677,
-     "vol": 0.211309,
+     "sharpe": 1.3671,
+     "vol": 0.211094,
      "mdd": -0.12892,
-     "month": 0.032152,
+     "month": 0.016651,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "3988.HK",
      "name": "",
-     "close": 6.06,
+     "close": 6.04,
      "value": -0.132353,
-     "sharpe": 1.3357,
-     "vol": 0.206473,
+     "sharpe": 1.3252,
+     "vol": 0.206289,
      "mdd": -0.132353,
-     "month": 0.01,
+     "month": 0,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0939.HK",
      "name": "",
-     "close": 10,
+     "close": 9.92,
      "value": -0.141509,
-     "sharpe": 1.3322,
-     "vol": 0.219276,
+     "sharpe": 1.3108,
+     "vol": 0.219155,
      "mdd": -0.141509,
-     "month": 0.035197,
+     "month": 0.024793,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0003.HK",
      "name": "",
-     "close": 7.285,
+     "close": 7.155,
      "value": -0.142826,
-     "sharpe": 0.6523,
-     "vol": 0.156363,
+     "sharpe": 0.5899,
+     "vol": 0.156761,
      "mdd": -0.142826,
-     "month": 0.028229,
+     "month": -0.003482,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0006.HK",
      "name": "",
-     "close": 63.35,
+     "close": 62.3,
      "value": -0.149034,
-     "sharpe": 0.7033,
-     "vol": 0.1679,
+     "sharpe": 0.6492,
+     "vol": 0.168182,
      "mdd": -0.149034,
-     "month": 0.059365,
+     "month": 0.038333,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0270.HK",
      "name": "",
-     "close": 8.67,
+     "close": 7.915,
      "value": -0.153502,
-     "sharpe": 1.2055,
-     "vol": 0.24945,
+     "sharpe": 0.993,
+     "vol": 0.257114,
      "mdd": -0.153502,
-     "month": 0,
+     "month": -0.090752,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0066.HK",
      "name": "",
-     "close": 33.24,
+     "close": 33,
      "value": -0.169844,
-     "sharpe": 0.4798,
-     "vol": 0.185856,
+     "sharpe": 0.4583,
+     "vol": 0.18575,
      "mdd": -0.169844,
-     "month": 0.018382,
+     "month": 0.012891,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "1088.HK",
      "name": "",
-     "close": 41.7,
+     "close": 41.22,
      "value": -0.188034,
-     "sharpe": 0.6316,
-     "vol": 0.269628,
+     "sharpe": 0.6082,
+     "vol": 0.269499,
      "mdd": -0.188034,
-     "month": -0.041447,
+     "month": -0.052056,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "1113.HK",
      "name": "",
-     "close": 46.22,
+     "close": 46.12,
      "value": -0.193324,
-     "sharpe": 0.9301,
-     "vol": 0.220785,
+     "sharpe": 0.9233,
+     "vol": 0.220572,
      "mdd": -0.193324,
-     "month": -0.006449,
+     "month": -0.001299,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "1038.HK",
      "name": "",
-     "close": 70.15,
+     "close": 69.15,
      "value": -0.197403,
-     "sharpe": 0.7264,
-     "vol": 0.197368,
+     "sharpe": 0.6867,
+     "vol": 0.19746,
      "mdd": -0.197403,
-     "month": 0.075096,
+     "month": 0.052511,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "1658.HK",
      "name": "",
-     "close": 5.515,
+     "close": 5.505,
      "value": -0.201095,
-     "sharpe": 0.5527,
-     "vol": 0.213738,
+     "sharpe": 0.5469,
+     "vol": 0.213528,
      "mdd": -0.201095,
-     "month": 0.024141,
+     "month": 0.015683,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0267.HK",
      "name": "",
-     "close": 12.13,
+     "close": 12.18,
      "value": -0.201451,
-     "sharpe": 0.6451,
-     "vol": 0.280946,
+     "sharpe": 0.6514,
+     "vol": 0.280669,
      "mdd": -0.201451,
-     "month": -0.07263,
+     "month": -0.069519,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0836.HK",
      "name": "",
-     "close": 18.72,
+     "close": 19.03,
      "value": -0.203169,
-     "sharpe": 0.0798,
-     "vol": 0.227708,
+     "sharpe": 0.1161,
+     "vol": 0.227775,
      "mdd": -0.203169,
-     "month": -0.004255,
+     "month": -0.001574,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0005.HK",
      "name": "",
-     "close": 134.3,
+     "close": 135.6,
      "value": -0.203333,
-     "sharpe": 1.4378,
-     "vol": 0.264459,
+     "sharpe": 1.4541,
+     "vol": 0.264251,
      "mdd": -0.203333,
-     "month": -0.157994,
+     "month": -0.135755,
      "sentinel": "可加倉",
      "pmfx": "沽"
     },
     {
      "ticker": "3968.HK",
      "name": "",
-     "close": 52.6,
+     "close": 52.15,
      "value": -0.203759,
-     "sharpe": 0.7147,
-     "vol": 0.245373,
+     "sharpe": 0.6951,
+     "vol": 0.245217,
      "mdd": -0.203759,
-     "month": 0.026341,
+     "month": 0.018555,
      "sentinel": null,
      "pmfx": null
     },
     {
      "ticker": "0823.HK",
      "name": "",
-     "close": 39.3,
+     "close": 39.08,
      "value": -0.206015,
-     "sharpe": 0.3792,
-     "vol": 0.204008,
+     "sharpe": 0.3638,
+     "vol": 0.203847,
      "mdd": -0.206015,
-     "month": 0.04244,
+     "month": 0.041578,
      "sentinel": null,
      "pmfx": null
     }
@@ -38619,10 +38619,10 @@
   "coverage": [
    {
     "fam": "hk",
-    "rows": 6860,
-    "days": 70,
+    "rows": 6958,
+    "days": 71,
     "first": "2026-06-18",
-    "last": "2026-10-27",
+    "last": "2026-10-28",
     "gaps": [
      {
       "from": "2026-07-16",
@@ -38757,7 +38757,7 @@
    {
     "level": "info",
     "fam": "pmfx",
-    "msg": "31/615 行 close 同 quant 相差 > 1%（2026-06-26、2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17、2026-10-22），係上一行數據；前向追蹤已改用 quant 收市價"
+    "msg": "35/620 行 close 同 quant 相差 > 1%（2026-06-26、2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17、2026-10-22、2026-10-28），係上一行數據；前向追蹤已改用 quant 收市價"
    },
    {
     "level": "limit",
