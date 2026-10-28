@@ -45,9 +45,21 @@ export function loadKnownGaps() {
   const f = path.join(ROOT, 'data', 'known_gaps.csv');
   return fs.existsSync(f) ? parseCsv(fs.readFileSync(f, 'utf8')) : [];
 }
+// 已確認上游抓錯嘅收市價更正（data/backfill/corrections.csv：date,ticker,close,source,reason）。原始 CSV 唔改，讀入時按 date|ticker 覆蓋 close。
+export function loadCorrections() {
+  const f = path.join(ROOT, 'data', 'backfill', 'corrections.csv');
+  return fs.existsSync(f) ? parseCsv(fs.readFileSync(f, 'utf8')) : [];
+}
+export function applyCorrections(rows, corr) {
+  if (!corr.length) return rows;
+  const m = new Map(corr.map((c) => [c.date + '|' + c.ticker, c.close]));
+  return rows.map((r) => (m.has(r.date + '|' + r.ticker) ? { ...r, close: m.get(r.date + '|' + r.ticker), close_raw: r.close } : r));
+}
 export function loadAll() {
   const fam = {};
   for (const f of ['hk', 'us', 'sentinel', 'pmfx', 'macro']) fam[f] = loadFamily(f);
+  fam.corrections = loadCorrections();
+  for (const f of ['hk', 'us']) fam[f] = applyCorrections(fam[f], fam.corrections);
   fam.backfill = loadBackfill();   // 只有 date/ticker/close，唔畀訊號用
   return fam;
 }
@@ -235,6 +247,7 @@ export function dataAudit(fam, opts = {}) {
   const splits = [];
   priceSeries([...(fam.hk || []), ...(fam.us || [])], splits);
   for (const e of splits) issues.push({ level: 'info', fam: e.ticker.endsWith('.HK') ? 'hk' : 'us', msg: `${e.ticker} ${e.from} → ${e.to} 疑似 ${e.k}:1 拆股（單日跌幅 > 30% 而且前後價比 ≈ ${e.k}），前向回報已按拆股調整` });
+  if ((fam.corrections || []).length) issues.push({ level: 'info', fam: 'hk', msg: `${fam.corrections.length} 行收市價已由 data/backfill/corrections.csv 更正（${[...new Set(fam.corrections.map((c) => c.date))].sort().join('、')} 上游抓咗上一交易日收市；原始 CSV 不動）` });
   const fams = ['hk', 'us', 'sentinel', 'pmfx', 'macro'];
   const cov = fams.map((f) => {
     const ds = [...new Set(fam[f].map((r) => r.date))].sort();

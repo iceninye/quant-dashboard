@@ -258,6 +258,14 @@ console.log('缺口：未復權補價 / 已知限制 / 原檔搜尋');
   const p1 = BF.planBackfill(rawV, repo1, []);
   ok(p1.lag === 1 && !p1.rejected && p1.add.length === 40 && p1.add.every((x) => x.date === sh(dts[hole]) && x.scale === '1.000000'), '自動偵測 lag=1：補返報告日 D 嘅 D−1 收市，scale 固定 1');
   ok(BF.planBackfill(rawV, repo1, [], 'x', { lag: 0 }).rejected, '指定錯 lag → 比例核對照樣拒絕');
+  // 更正檔：整日抓舊價 → 更正；零星單點 → 唔郁
+  const MC = await import('./make_corrections.mjs');
+  const wideC = rawV, repoC = [];
+  wideC.forEach((w, di) => { for (let i = 0; i < 40; i++) { let v = w['T' + i]; if (di === 10) v = wideC[9]['T' + i]; if (di === 20 && i === 0) v = wideC[19]['T0']; repoC.push({ date: w.date, ticker: 'T' + i, close: v }); } });
+  const pc = MC.planCorrections(wideC, repoC, 'x', { lag: 0 });
+  ok(pc.days.length === 1 && pc.days[0].date === wideC[10].date && pc.rows.length === 40 && pc.rows.every((r) => r.close === wideC[10][r.ticker]), '整日抓舊價 → 40 行更正為當日真實收市；單隻抓舊價（<50%）唔當整日錯');
+  const ap = E.applyCorrections([{ date: 'd', ticker: 'A', close: '1' }, { date: 'd', ticker: 'B', close: '2' }], [{ date: 'd', ticker: 'A', close: '9' }]);
+  ok(ap[0].close === '9' && ap[0].close_raw === '1' && ap[1].close === '2', 'applyCorrections 只覆蓋命中嘅 date|ticker，保留原值');
 }
 {
   // 2) 審計分級：已知限制 / PMFX error 時期缺口 / 未解決
