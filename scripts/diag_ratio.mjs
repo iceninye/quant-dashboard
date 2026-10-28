@@ -6,7 +6,11 @@ import { parseCsv, num } from './lib/csv.mjs';
 import { loadAll } from './engine.mjs';
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
 const wide = parseCsv(fs.readFileSync(arg('--prices'), 'utf8'));
-const rows = loadAll()[arg('--market', 'us')];
+const fam = loadAll();
+const hk = Object.keys(wide[0]).slice(1).filter((k) => k.endsWith('.HK')).length;
+const market = arg('--market', hk > (Object.keys(wide[0]).length - 1) / 2 ? 'hk' : 'us');          // 自動：多數欄位係 .HK → hk
+console.log('市場：' + market);
+const rows = fam[market];
 const dcol = Object.keys(wide[0])[0];
 const dates = wide.map((r) => String(r[dcol]).slice(0, 10));
 const repo = new Map();
