@@ -25,6 +25,9 @@ const V2pair = (() => {
   return { n: d.length, diff: d.length ? d.reduce((a, b) => a + b, 0) / d.length : null };
 })();
 const pmOpen = PN.settled >= PN.needed;
+const EV = D.evidence;
+const evHero = `<p style="font-size:17px;margin:0 0 8px"><b class="${EV.verified.length ? 'good' : 'bad'}">${EV.verified.length} 個已驗證機會</b>${EV.verified.length ? '：' + EV.verified.map((v) => esc(v.label)).join('、') : ''}；${EV.inForward.length} 個前向測試進行中${EV.inForward.length ? '（' + EV.inForward.map((f) => `<code>${esc(f.rule)}</code> 第 ${f.period} 期，已結算 ${f.settled}/${f.need}`).join('、') + '）' : ''}。</p>
+<p class="dim" style="font-size:13px;margin:0 0 8px">已驗證 = 歷史檢驗通過 <b>且</b> 前向確認（因子：事前凍結紀錄結算 ≥ ${EV.rule.fwdSettled} 期、t ≥ ${EV.rule.fwdT}、鏈完整；PMFX：修正後結算 ≥ ${EV.rule.pmfxSettled} 個、平均 R > 0）。任何一樣未有 = 唔係機會。</p>`;
 const pass = D.factors.filter((f) => f.grade === 'pass' && f.market !== 'sentinel');
 const watch = D.factors.filter((f) => f.grade === 'watch' && f.market !== 'sentinel');
 const bestW = watch.length ? watch[0].byH.filter((h) => h.grade === 'watch').sort((a, b) => b.t - a.t)[0] : null;
@@ -56,11 +59,14 @@ const scanHero = !SC ? '' : (() => { const hk = SC.samples.filter((s) => s.marke
   const lng = hk.find((s) => s.variant === 'union');
   return `<li>長樣本掃描（§2b）：${p ? `港股 ${esc(p.label)} 有 <b class="gpass">${p.counts.pass} 個 PASS</b>（${esc(p.top[0].signal)}）` : '港股冇 PASS'}${lng ? `，但 6 年樣本最好只係 <b class="${gcls(lng.top[0]?.grade)}">${esc(lng.top[0]?.grade || '—')}</b>` : ''} → 防守型大藍籌係最好選擇，但<b>未證實</b>；美股冇因子可信。</li>`; })();
 const okOpp = D.opportunities.filter((o) => o.tier !== 'EXCLUDED');
+const TIER = { VERIFIED: '已驗證', CAND: '候選（未驗證）', EXCLUDED: '剔除' };
 const oppRow = (o) => `<tr><td class="tk">${esc(o.ticker)}<div class="dim" style="font-size:11.5px">${esc(o.name)}</div></td>
 <td class="${o.action === '買' ? 'good' : o.action === '沽' ? 'bad' : 'dim'}">${esc(o.action)}</td>
-<td>${fmt(o.close)}</td><td>${fmt(o.entry)}</td><td>${o.close && o.entry ? fmt((o.entry / o.close - 1) * 100, 1) + '%' : '—'}</td>
-<td>${fmt(o.upPct)}</td><td>${fmt(o.stopPct)}</td><td>${fmt(o.rr)}</td>
-<td class="${o.cons > 0 ? 'good' : o.cons < 0 ? 'bad' : 'dim'}">${fmt(o.cons)}</td><td class="t${o.tier}">${o.tier}</td></tr>`;
+<td>${fmt(o.close)}</td><td>${fmt(o.entry)}</td><td>${fmt(o.entryAtr, 1)}</td><td>${fmt(o.stopAtr)}</td><td>${fmt(o.geoRr)}</td>
+<td>${o.pWin === null ? '—' : pct(o.pWin, 1)}<div class="dim" style="font-size:11px">打和 ${o.p0 === null ? '—' : pct(o.p0, 1)} · ${o.histK ?? 0}/${o.histN ?? 0}</div></td>
+<td class="${(o.evR || 0) > 0 ? 'good' : 'bad'}">${fmt(o.evR)}R</td><td>${fmt(o.rank, 3)}</td>
+<td class="dim">${fmt(o.cons)}</td><td class="t${o.tier}">${TIER[o.tier] || esc(o.tier)}</td></tr>`;
+const oppHead = '<thead><tr><th>標的</th><th>方向</th><th>收市</th><th>限價 entry</th><th>入場/ATR</th><th>止損/ATR</th><th>RR</th><th>勝率下界</th><th>EV</th><th>rank</th><th>共識</th><th>狀態</th></tr></thead>';
 
 const html = `<!DOCTYPE html>
 <html lang="zh-Hant"><head>
@@ -91,7 +97,7 @@ th,td{padding:6px 7px;border-bottom:1px solid var(--line);text-align:right;white
 th:first-child,td:first-child{text-align:left}th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase}
 td.tk{font-family:var(--mono)}tr:hover td{background:#151d29}
 .tA{color:var(--ok);font-weight:700}.tB{color:var(--warn);font-weight:700}.tC{color:var(--acc)}
-.tX{color:var(--bad);font-weight:700}
+.tX{color:var(--bad);font-weight:700}.tVERIFIED{color:var(--ok);font-weight:700}.tCAND{color:var(--warn)}.tEXCLUDED{color:var(--dim)}
 .bad{color:var(--bad)}.good{color:var(--ok)}.dim{color:var(--dim)}
 .pill{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11.5px;border:1px solid var(--line);font-family:var(--mono)}
 p.note{background:#1a1206;border:1px solid #4a3a10;color:#ffd88a;border-radius:8px;padding:10px 12px;font-size:13.5px}
@@ -115,20 +121,21 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a>${SC ? '<a href="#s2b">2b 長樣本</a>' : ''}<a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
 <div class="hero"><h2>今日結論</h2>
-${pass.length ? `<b class="good">已通過驗證：${pass.map((f) => esc(f.marketLabel + ' ' + f.label)).join('、')}</b>，名單見 §1。`
+${evHero}
+${pass.length ? `<b class="gwatch">因子歷史檢驗通過（前向未確認，未算機會）：${pass.map((f) => esc(f.marketLabel + ' ' + f.label)).join('、')}</b>，名單見 §1。`
   : watch.length ? `<b>今日冇訊號通過驗證。</b>證據最強係 <b class="gwatch">${esc(watch[0].marketLabel + ' ' + watch[0].label)}</b>：
 持有 ${bestW.H} 日，頭 20% 平均跑贏等權 <b>${pct(bestW.excess)}</b>（已扣成本；絕對回報 ${pct(bestW.top)} 對等權 ${pct(bestW.ew)}，即係「跌少啲」多過「賺錢」），前半段 ${pct(bestW.isExcess)}、後半段 ${pct(bestW.oosExcess)} 都係正，
 但 t = ${fmt(bestW.t)}（單尾 p ${fmt(bestW.p, 3)}；同時測 ${bestW.m} 個檢定，Holm 校正後 p ${fmt(bestW.adjP, 2)}，要 < 0.05 先算通過）→ <b>只列觀察名單，唔係買入訊號</b>。`
   : '<b class="bad">今日冇任何訊號通過或接近驗證門檻。</b>'}
 <ul>
-<li>PMFX：限價成交嘅 ${pmFilled} 個歷史訊號，5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個 → <b>唔好跟</b>（§4–5）。</li>
+<li>PMFX：限價成交嘅 ${pmFilled} 個歷史訊號，5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個；今日 ${D.quality.total} 張卡過幾何約束 ${D.quality.geoOk} 張、模型 EV > 0 ${D.quality.clean} 張 → <b>唔好跟</b>（§4–5）。</li>
 ${sen ? `<li>Sentinel「可加倉」對比「減持」：${sen.byH.map((h) => `${h.H} 日 ${pct(h.excess)}`).join('、')}（相對 29 隻等權）→ ${(sen.byH[0].excess || 0) < 0 ? '<b class="bad">跑輸，唔應該當加分</b>' : '有正面作用'}。</li>` : ''}
 ${scanHero}
 <li>樣本只有 ${D.factors[0] ? D.factors[0].byH[0].days : '—'} 個有效交易日、一個市況，${D.dataAudit.issues.filter((i) => i.level === 'bad' || i.level === 'warn').length} 項未解決數據問題（另有 ${D.dataAudit.issues.filter((i) => i.level === 'limit').length} 項已知限制）見 §6。所有結論信心偏低。</li>
 </ul></div>
 
-<h2 id="s1"><span class="n">1</span>${pass.length ? '已驗證機會名單' : '觀察名單'}</h2>
-${D.picks.length ? D.picks.map((p) => `<div class="card"><div><b class="g${p.grade}">${p.grade === 'pass' ? '通過' : '觀察'}</b> · ${esc(p.marketLabel)} ${esc(p.label)} 頭 20% · ${p.date} 收市 ·
+<h2 id="s1"><span class="n">1</span>${EV.verified.length ? '已驗證機會名單' : '候選／觀察名單（未驗證）'}</h2>
+${D.picks.length ? D.picks.map((p) => `<div class="card"><div><b class="g${p.grade}">${p.grade === 'pass' ? '歷史通過（前向未確認）' : '觀察'}</b> · ${esc(p.marketLabel)} ${esc(p.label)} 頭 20% · ${p.date} 收市 ·
 <span class="dim">${p.best.H} 日超額 ${pct(p.best.excess)}，贏等權比率 ${p.best.beatRate}%</span></div>
 <div class="scroll"><table><thead><tr><th>標的</th><th>收市</th><th>MDD</th><th>波動</th><th>Sharpe</th><th>月回報</th><th>Sentinel</th><th>PMFX</th></tr></thead><tbody>
 ${p.names.map((x) => `<tr><td class="tk">${esc(x.ticker)}</td><td>${fmt(x.close)}</td><td>${pct(x.mdd, 1)}</td><td>${pct(x.vol, 1)}</td>
@@ -177,15 +184,17 @@ ${V2.chainBad.length || V2.future.length ? `<p class="warn">⚠ v2 紀錄鏈驗�
 注意：呢度用 repo 嘅 <code>mdd</code> 欄（約 2 年回撤），同 <code>docs/WFO.md</code> 用嘅 trailing W（63/126/252 日）係兩個唔同嘅訊號定義。</p></div>
 
 <h2 id="s4"><span class="n">4</span>PMFX 今日訊號（未驗證）</h2>
-<p class="warn">PMFX 嘅歷史訊號成交後平均蝕錢（§4），跨報告「共識」加分亦未驗證。下表只顯示過咗 quality gate 嘅 ${okOpp.length}/${D.quality.total} 個，<b>唔構成機會</b>。</p>
-<details${pmOpen ? " open" : ""}><summary>${okOpp.length} 個過 gate 嘅 PMFX 訊號（預設收埋，修正後結算樣本 ${PN.settled}/${PN.needed}${pmOpen ? `，平均 5 日 ${pct(PN.avgR5)}` : '，未夠重新評估'}）</summary>
-<div class="scroll"><table><thead><tr><th>標的</th><th>方向</th><th>收市</th><th>限價 entry</th><th>距收市</th><th>目標%</th><th>止損%</th><th>RR</th><th>共識</th><th>Grade</th></tr></thead><tbody>
-${okOpp.map(oppRow).join('')}
-</tbody></table></div>
-<details><summary>未過 gate 嘅 ${D.opportunities.length - okOpp.length} 個（排除原因）</summary><div class="scroll"><table><tbody>
-${D.opportunities.filter((o) => o.tier === 'EXCLUDED').map((o) => `<tr><td class="tk">${esc(o.ticker)}</td><td>${esc(o.action)}</td><td class="bad" style="text-align:left">${esc(o.why.join(' / '))}</td></tr>`).join('')}
+<p class="warn">PMFX 自報勝率係 0.50 加分砌出嚟、同 RR 脫鈎，舊排序同股價水平相關，已停用。今日 ${D.quality.total} 張卡：過格式 ${D.quality.formatOk}、過幾何約束 ${D.quality.geoOk}、模型 EV > 0 ${D.quality.clean}。<b>冇一張係已驗證機會。</b></p>
+<div class="card scroll"><table>${oppHead}<tbody>
+${okOpp.length ? okOpp.map(oppRow).join('') : `<tr><td colspan="12" class="dim" style="text-align:left">今日冇卡過到幾何約束同模型 EV（呢個係預期結果，唔係 bug）。</td></tr>`}
+</tbody></table>
+<p class="note">幾何約束：入場離市價 ≤ ${D.cfg.maxEntryAtr}×ATR、止損 ≥ ${D.cfg.minStopAtr}×ATR、RR ${D.cfg.rrMin}–${D.cfg.rrMax}（全部由價格重算，唔用 PMFX 自報 rr）。
+勝率 = 歷史前向追蹤同類卡（方向 × RR × 止損% × 入場/ATR 分層）嘅 target 比例，timeout 當輸，再向打和勝率 1/(1+RR) 收縮 ${D.cfg.priorN} 個虛擬樣本，取 Wilson 單尾 90% 下界；
+EV = 勝率 × (RR + 1) − 1（R 單位），rank = (EV − 成本R) × 成交率。冇歷史樣本嘅類別勝率下界一定低過打和，即係 fail closed。</p>
+<details><summary>剔除嘅 ${D.opportunities.length - okOpp.length} 個（排除原因）</summary><div class="scroll"><table>${oppHead}<tbody>
+${D.opportunities.filter((o) => o.tier === 'EXCLUDED').map((o) => oppRow(o) + `<tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">${esc(o.why.join(' / '))}</td></tr>`).join('')}
 </tbody></table></div></details>
-</details>
+<div class="dim" style="font-size:12.5px">修正後（${PN.since} 起）乾淨訊號結算 ${PN.settled}/${PN.needed}${PN.avgR !== null ? `，平均 ${fmt(PN.avgR)}R` : ''}${PN.confirming ? '（前向確認）' : '（未夠，未確認）'}。</div></div>
 
 <h2 id="s5"><span class="n">5</span>PMFX 前向追蹤 — 訊號之後實際發生咩事</h2>
 <div class="card"><div class="grid">
@@ -194,13 +203,15 @@ ${D.opportunities.filter((o) => o.tier === 'EXCLUDED').map((o) => `<tr><td class
 <div class="kv"><span>20 日內冇成交</span><b class="dim">${D.tracking.filter((t) => t.outcome === 'unfilled').length}</b></div>
 <div class="kv"><span>到目標 / 止損</span><b><span class="good">${D.trackingStats.all.wins}</span> / <span class="bad">${D.trackingStats.all.losses}</span></b></div>
 <div class="kv"><span>平均 5 日（扣成本）</span><b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b></div>
+<div class="kv"><span>每筆實現 R 中位（已結算）</span><b class="${(D.trackingStats.all.medR || 0) > 0 ? 'good' : 'bad'}">${fmt(D.trackingStats.all.medR)}R</b></div>
 </div>
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>組別 / 累加 gate</th><th>訊號</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
 ${[...D.audit.ladder.map((g) => [g.gate, g]), ['每日 net_ev 頭 1 名', D.audit.rankEdge.top1], ['每日 net_ev 尾 1 名', D.audit.rankEdge.bottom1],
   ['全部做多', D.audit.bySide.buy], ['全部做空', D.audit.bySide.sell]].map(([l, g]) => `<tr><td>${esc(l)}</td><td>${g.n}</td><td>${g.decided}</td>
 <td class="${(g.winRate || 0) >= 50 ? 'good' : 'bad'}">${g.winRate === null ? '—' : g.winRate + '%'}</td><td>${pct(g.avgR5)}</td><td>${pct(g.avgR20)}</td></tr>`).join('')}
 </tbody></table></div>
-<p class="note">回報由限價 entry <b>成交之後</b>先計（收市價觸及 entry 先算成交，${D.cfg.fillDays} 個交易日內冇觸及 = 冇成交）。加 gate 之後勝率或回報下跌 = gate 冇用。
+<p class="note">回報由限價 entry <b>成交之後</b>先計（收市價觸及 entry 先算成交，${D.cfg.fillDays} 個交易日內冇觸及 = 冇成交）。
+出場用 stop-first：每日（包括成交當日）先查止損再查目標，止損用嗰日實際收市出場（跳空會蝕多過 1R）。repo 只有日收市，盤中觸及嘅止損漏計，所以結果仍然偏樂觀。加 gate 之後勝率或回報下跌 = gate 冇用。
 2026-10-17 之前嘅 PMFX 行上游有 bug，新版仲未有結算樣本。</p>
 <details><summary>最近 40 條訊號</summary><div class="scroll"><table><thead><tr><th>日期</th><th>標的</th><th>方向</th><th>結果</th><th>成交日</th><th>5日</th><th>20日</th></tr></thead><tbody>
 ${D.tracking.slice(-40).reverse().map((t) => `<tr><td>${t.date}</td><td class="tk">${esc(t.ticker)}</td>

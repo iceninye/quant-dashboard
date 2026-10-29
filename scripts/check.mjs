@@ -47,6 +47,64 @@ console.log('前向追蹤：限價要成交先計回報');
   const hit = E.forwardTrack({ pmfx: days.map((d, i) => mk(d, px[i])) })[0];
   ok(hit.filled && hit.fillDay === 1, '第 1 日收市 ≥ entry → 成交');
   ok(Math.abs(hit.r5 - ((110 - 101) / 110 - E.CFG.costPct / 100)) < 1e-9, 'r5 由 entry 計、扣成本');
+  // stop-first：成交後跳空穿止損 → 用嗰日收市出場，蝕多過 1R
+  const gap = E.forwardTrack({ pmfx: days.map((d, i) => mk(d, [100, 111, 120].concat(Array(22).fill(95))[i])) })[0];
+  ok(gap.outcome === 'stop' && gap.exitPx === 120 && gap.R < -1.9, `跳空穿止損：stop、收市 120 出場、R ${gap.R?.toFixed(2)}`);
+  // 成交當日收市已經穿止損 → 同日止損，唔會等到之後先算
+  const same = E.forwardTrack({ pmfx: days.map((d, i) => mk(d, [100, 116].concat(Array(23).fill(80))[i])) })[0];
+  ok(same.filled && same.outcome === 'stop' && same.hitDay === same.fillDay, '成交當日已穿止損 → 同日 stop（之後再到目標都唔算）');
+  const win = E.forwardTrack({ pmfx: days.map((d, i) => mk(d, [100, 110, 100, 89].concat(Array(21).fill(89))[i])) })[0];
+  ok(win.outcome === 'target' && win.exitPx === 90 && Math.abs(win.R - (4 - 0.002 * 110 / 5)) < 1e-9, '到目標用目標價出場、R 扣成本');
+}
+
+console.log('交易幾何（P0-4）');
+{
+  const g = { action: '買', close: '100', entry: '99.5', target: '103.5', stop: '97.5', atr: '1' };   // 離市 0.5 ATR、止損 2 ATR、RR 2
+  const G = E.geometry(g);
+  ok(G.ok && Math.abs(G.rr - 2) < 1e-9 && Math.abs(G.entryAtr - 0.5) < 1e-9 && Math.abs(G.stopAtr - 2) < 1e-9, '正常幾何過關，RR 由價格重算');
+  ok(!E.geometry({ ...g, entry: '97', target: '101', stop: '95' }).ok, '入場離市價 3×ATR 被拒');
+  ok(!E.geometry({ ...g, stop: '99' }).ok, '止損 0.5×ATR 被拒');
+  ok(!E.geometry({ ...g, target: '110' }).ok, 'RR > 3 被拒');
+  ok(!E.geometry({ ...g, target: '102' }).ok, 'RR < 1.5 被拒');
+  ok(!E.geometry({ ...g, atr: '' }).ok, '冇 ATR → fail closed');
+  ok(!E.geometry({ ...g, action: '沽' }).ok, '目標／止損喺錯邊被拒');
+}
+
+console.log('勝率模型（P0-2）');
+{
+  ok(E.wilsonLower(0, 0) === 0 && Math.abs(E.wilsonLower(50, 100, 1.2816) - 0.4363) < 0.001, 'Wilson 下界');
+  const empty = E.winModel([]);
+  const rrs = [1.5, 2, 2.5, 3, 4, 6];
+  const pr = rrs.map((rr) => empty.predict(1, { rr, stopPct: 2, entryAtr: 0.5, costR: 0.05 }));
+  ok(pr.every((m) => m.pWin < m.p0 && m.evR < 0), '冇歷史樣本 → 勝率下界 < 打和 → evR < 0（fail closed）');
+  ok(pr.every((m, i) => !i || m.pWin < pr[i - 1].pWin), '勝率隨 RR 遞減（同 RR 唔再脫鈎）');
+  const geo = { rr: 2, stopPct: 2.5, entryAtr: 0.5, stopAtr: 1.5 };
+  const hist = Array.from({ length: 200 }, (_, i) => ({ side: 1, geo, filled: true, outcome: i < 120 ? 'target' : 'stop' }));
+  const m = E.winModel(hist).predict(1, { ...geo, costR: 0.05 });
+  ok(m.n === 200 && m.k === 120 && m.pWin > 0.5 && m.pWin < 0.6 && m.evR > 0, `同類 120/200 到目標 → 勝率下界 ${(100 * m.pWin).toFixed(1)}%、evR > 0`);
+  ok(E.winModel(hist).predict(-1, { ...geo, costR: 0.05 }).n === 0, '分層：做空唔借做多嘅樣本');
+  ok(E.winModel(hist.map((h) => ({ ...h, outcome: 'timeout' }))).predict(1, { ...geo, costR: 0.05 }).evR < 0, 'timeout 當輸');
+}
+
+console.log('評分 / tier（P0-1、P0-3）');
+{
+  const ctx = { ctx: { hk: new Map(), us: new Map(), sen: new Map() } };
+  ok(E.score({ action: '買', ticker: 'Z' }, ctx).cons === 0 && E.score({ action: '沽', ticker: 'Z' }, ctx).cons === 0, '冇跨報告資料時買／沽共識都係 0（方向唔係 baseline）');
+  const row = { action: '買', close: '100', entry: '99.5', target: '103.5', stop: '97.5', atr: '1', err: '0', rrv: '1', net_rrv: '1', stop_pct: '2', rr: '2', net_ev: '5' };
+  const geo = E.geometry(row);
+  const good = E.winModel(Array.from({ length: 200 }, (_, i) => ({ side: 1, geo, filled: true, outcome: i < 120 ? 'target' : 'stop' })));
+  ok(E.tierOf(row, E.winModel([]), true).tier === 'EXCLUDED', '冇歷史樣本 → EXCLUDED，就算前向已確認');
+  ok(E.tierOf(row, good, false).tier === 'CAND', '模型 EV > 0 但前向未確認 → 候選（未驗證）');
+  ok(E.tierOf(row, good, true).tier === 'VERIFIED', '模型 EV > 0 且前向確認 → VERIFIED');
+  ok(E.tierOf({ ...row, entry: '96', target: '104', stop: '94' }, good, true).tier === 'EXCLUDED', '幾何唔過 → EXCLUDED');
+  const fwd = { rule: { version: 'v' }, periods: [{}], settled: 8, t: 2.5, chainBad: [], mismatches: [], future: [] };
+  const fpass = [{ grade: 'pass', market: 'hk', key: 'mdd', marketLabel: '港股', label: 'x' }];
+  ok(E.evidenceGate({ factors: fpass, forward: null, pmfxNew: null, opportunities: [] }).verified.length === 0, '因子 PASS 但前向未載入 → 0 個已驗證');
+  ok(E.evidenceGate({ factors: fpass, forward: { ...fwd, settled: 7 }, opportunities: [] }).verified.length === 0, '前向結算唔夠 → 0 個已驗證');
+  ok(E.evidenceGate({ factors: fpass, forward: { ...fwd, chainBad: ['d'] }, opportunities: [] }).verified.length === 0, '前向鏈斷 → 0 個已驗證');
+  ok(E.evidenceGate({ factors: fpass, forward: fwd, opportunities: [] }).verified.length === 1, '因子 PASS + 前向確認 → 1 個已驗證');
+  ok(E.evidenceGate({ factors: [{ ...fpass[0], key: 'lowvol' }], forward: fwd, opportunities: [] }).verified.length === 0, '冇對應前向紀錄嘅因子唔借用 v1');
+  ok(E.evidenceGate({ factors: [], forward: fwd, pmfxNew: { confirming: false }, opportunities: [{ tier: 'VERIFIED', ticker: 'X' }] }).verified.length === 0, 'PMFX 前向未確認 → 卡唔計');
 }
 
 console.log('已 sync 數據');
@@ -213,7 +271,16 @@ ok(res.forward && res.forward.rule.version && res.pmfxNew.needed === 20, 'forwar
 ok(res.factors.flatMap((f) => f.byH).every((h) => h.windows >= 8 || h.grade === 'fail'), '窗口少於 8 個一律唔評級');
 ok(res.factors.flatMap((f) => f.byH).every((h) => h.grade !== 'pass' || h.adjP < 0.05), '通過級一定 Holm 校正後 p < 0.05');
 ok(res.audit.ladder.length >= 5, 'gate 階梯');
-ok(res.quality.clean === 0 || res.opportunities.some((o) => o.tier !== 'EXCLUDED'), '通過 gate 數一致');
+ok(res.quality.clean === res.opportunities.filter((o) => o.tier !== 'EXCLUDED').length, '通過 gate 數一致');
+ok(res.opportunities.every((o) => o.tier !== 'VERIFIED' || res.pmfxNew.confirming), 'PMFX 未前向確認就冇 VERIFIED 卡');
+ok(res.opportunities.filter((o) => o.tier !== 'EXCLUDED').every((o) => o.evR - o.costR > 0 && o.entryAtr <= E.CFG.maxEntryAtr), '非剔除卡全部過幾何 + 模型 EV');
+{
+  const c = res.opportunities.filter((o) => o.pWin !== null && o.geoRr !== null);
+  const m = (v) => v.reduce((s, x) => s + x, 0) / v.length, a = c.map((o) => o.pWin), b = c.map((o) => o.geoRr), ma = m(a), mb = m(b);
+  const r = a.reduce((s, x, i) => s + (x - ma) * (b[i] - mb), 0) / Math.sqrt(a.reduce((s, x) => s + (x - ma) ** 2, 0) * b.reduce((s, x) => s + (x - mb) ** 2, 0));
+  ok(c.length < 3 || r < 0, `今日卡 corr(勝率下界, RR) = ${r.toFixed(3)} < 0`);
+}
+ok(res.evidence && Array.isArray(res.evidence.verified) && res.evidence.inForward.length >= 1, `證據閘門：已驗證 ${res.evidence.verified.length}，前向 ${res.evidence.inForward.map((f) => f.rule + ' 第 ' + f.period + ' 期').join('、')}`);
 
 console.log('\nHTML 輸出');
 const idx = path.join(ROOT, 'docs', 'index.html');
