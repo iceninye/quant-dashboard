@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv, num } from './lib/csv.mjs';
 import { priceSeries, validateFactors, picksFor } from './factors.mjs';
+import { shortTermScan } from './shortterm.mjs';
 import { forwardLog, readLog, appendLog, evaluateLogged, readAnchors, checkAnchor } from './forward.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -507,7 +508,7 @@ export function run() {
     trackingStats: { clean: stat(byTier('clean')), all: stat(tracking) },
     audit: audit(fam, tracking),
     series: buildSeries(fam),
-    factors, picks, forward: fl.summary, forwardNew: fl.newRows, forwardV2, pmfxNew,
+    factors, picks, shortTerm: shortTermScan(fam, CFG.costPct), forward: fl.summary, forwardNew: fl.newRows, forwardV2, pmfxNew,
     dataAudit: dataAudit(fam, { tracking }),
   };
 }
