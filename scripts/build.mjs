@@ -55,6 +55,31 @@ ${list.map((x) => `<tr><td class="tk">${esc(x.ticker)}</td><td>${x.count}/${x.of
 </tbody></table></div></div>` : `<p class="dim">${scanMk[m] || esc(m)}：冇足夠一致嘅因子（最多只得單一樣本 WATCH），唔列名單。</p>`).join('')}
 <p class="note">方法：17 個價格因子 × 5 / 21 / 63 日持有，t+1 入場、按換手扣成本，同全 universe 等權比；全部檢定一齊 Holm 校正，另計 Deflated Sharpe、前後半段、逐年同牛熊分拆。「跟最好因子」= 每期只用已完結數據揀當時最好嘅因子，係計埋揀因子運氣嘅誠實數字。
 <b>限制：</b>universe 係今日 most-active 名單（metrics 名單最早只到 2026-05，冇股票跌出過），倖存者偏差減唔到，絕對回報偏高；數字嚟自本機輸出，冇喺 cloud 獨立重跑。更新：本機跑 <code>analysis/run_local_validation.sh</code> → <code>python3 analysis/make_scan_json.py</code> → <code>publish.sh</code>。</p>`;
+// 短線（1–5 日）：shortterm.mjs 產出
+const ST = D.shortTerm;
+const stAvoid = (ST?.avoid || []).map((x) => `${esc(x.marketLabel)}「${esc(x.label)}」持 ${x.H} 日（每期 ${pct(x.excess)}，t ${fmt(x.t)}）`);
+const stHero = !ST ? '' : `<li>短線 1–5 日（§1b）：${ST.counts.tests} 個檢定，<b class="${ST.counts.pass ? 'gpass' : 'bad'}">${ST.counts.pass} 個通過</b>、${ST.counts.watch} 個觀察${ST.counts.pass ? '' : ' → <b>今日冇短線機會</b>'}。${stAvoid.length ? `顯著蝕錢：${stAvoid.slice(0, 2).join('、')}，<b class="bad">唔好追</b>。` : ''}</li>`;
+const stHtml = !ST ? '' : `<h2 id="s1b"><span class="n">1b</span>短線機會（持有 1–5 日）</h2>
+<div class="card"><p style="font-size:16px;margin:0 0 6px">${ST.counts.pass
+  ? `<b class="gpass">${ST.counts.pass} 個短線訊號歷史檢驗通過</b>（前向未確認，未入 §1 已驗證名單）`
+  : `<b class="bad">今日冇短線訊號通過驗證。</b>${ST.counts.watch ? `最接近係 ${ST.counts.watch} 個觀察級，名單只供參考，<b>唔係買入訊號</b>。` : ''}`}</p>
+${stAvoid.length ? `<p class="bad" style="margin:0 0 6px">避開：${stAvoid.join('；')} — 扣成本後顯著跑輸等權（Bonferroni 校正單尾 p < 0.05）。</p>` : ''}
+<p class="dim" style="margin:0">數據日：港股 ${ST.dates.hk || '—'} · 美股 ${ST.dates.us || '—'}（收市後更新，唔係盤中即時價）</p></div>
+${ST.today.map((p) => `<div class="card"><div><b class="g${p.grade}">${p.grade === 'pass' ? '歷史通過（前向未確認）' : '觀察'}</b> · ${esc(p.marketLabel)} ${esc(p.label)} 頭 20% · ${p.date} 收市 ·
+<span class="dim">持 ${p.H} 日每期超額 ${pct(p.excess)}，t ${fmt(p.t)}，Holm p ${fmt(p.adjP, 2)}</span></div>
+<div class="scroll"><table><thead><tr><th>標的</th><th>收市</th><th>1 日</th><th>5 日</th><th>波動</th><th>MDD</th></tr></thead><tbody>
+${p.names.map((x) => `<tr><td class="tk">${esc(x.ticker)}</td><td>${fmt(x.close)}</td><td class="${(x.r1 || 0) >= 0 ? 'good' : 'bad'}">${pct(x.r1, 1)}</td>
+<td class="${(x.r5 || 0) >= 0 ? 'good' : 'bad'}">${pct(x.r5, 1)}</td><td>${pct(x.vol, 1)}</td><td>${pct(x.mdd, 1)}</td></tr>`).join('')}
+</tbody></table></div></div>`).join('')}
+<details class="card"><summary>全部 ${ST.counts.tests} 個短線檢定</summary><div class="scroll"><table><thead><tr><th>訊號</th><th>市場</th><th>持有</th><th>頭 20%</th><th>等權</th><th>超額</th><th>前半</th><th>後半</th><th>贏等權</th><th>窗口</th><th>t</th><th>Holm p</th><th>結果</th></tr></thead><tbody>
+${ST.tests.map((h) => `<tr><td>${esc(h.label)}</td><td class="dim">${esc(h.marketLabel)}</td><td>${h.H} 日</td>
+<td>${pct(h.top)}</td><td class="dim">${pct(h.ew)}</td><td class="${h.excess > 0 ? 'good' : 'bad'}">${pct(h.excess)}</td>
+<td>${pct(h.isExcess)}</td><td>${pct(h.oosExcess)}</td><td>${h.beatRate}%</td><td>${h.windows}</td><td>${fmt(h.t)}</td><td class="dim">${h.adjP === null ? '—' : fmt(h.adjP, 2)}</td>
+<td class="g${h.grade}">${{ pass: '通過', watch: '觀察', fail: '未通過' }[h.grade]}</td></tr>`).join('')}
+</tbody></table></div>
+<p class="note">方法：t 日收市計訊號，t+1 收市入場，持有 ${ST.cfg.horizons.join(' / ')} 個交易日，每個窗口扣 ${ST.cfg.costPct}% 來回成本（當全換手計，偏保守）；每日揀頭 20% 同當日等權比。前後半切 IS / OOS，非重疊窗口計 t；${ST.m} 個短線檢定一齊做 Holm。
+<b>通過</b> = 前後半都正 + t ≥ ${ST.cfg.tPass} + Holm 單尾 p < ${ST.cfg.alpha} + 窗口 ≥ ${ST.cfg.minWindows}。
+<b>限制：</b>只有日收市價，冇 OHLC／盤中數據，日內策略測唔到；樣本只有 repo 幾個月、universe 係每日報告名單（有倖存者偏差）。長樣本 5 日結果見 §2b。</p></details>`;
 const scanHero = !SC ? '' : (() => { const hk = SC.samples.filter((s) => s.market === 'hk'); const p = hk.find((s) => s.counts?.pass);
   const lng = hk.find((s) => s.variant === 'union');
   return `<li>長樣本掃描（§2b）：${p ? `港股 ${esc(p.label)} 有 <b class="gpass">${p.counts.pass} 個 PASS</b>（${esc(p.top[0].signal)}）` : '港股冇 PASS'}${lng ? `，但 6 年樣本最好只係 <b class="${gcls(lng.top[0]?.grade)}">${esc(lng.top[0]?.grade || '—')}</b>` : ''} → 防守型大藍籌係最好選擇，但<b>未證實</b>；美股冇因子可信。</li>`; })();
@@ -118,7 +143,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
 <div class="sub">生成 ${new Date(D.generatedAt).toLocaleString('zh-HK', { timeZone: 'Asia/Hong_Kong' })} HKT ·
 數據日：HK ${D.dates.hk || '—'} · US ${D.dates.us || '—'} · Sentinel ${D.dates.sen || '—'} · PMFX ${D.pmfxDate}</div>
-<nav><a href="#s1">1 名單</a><a href="#s2">2 因子驗證</a>${SC ? '<a href="#s2b">2b 長樣本</a>' : ''}<a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
+<nav><a href="#s1">1 名單</a>${ST ? '<a href="#s1b">1b 短線</a>' : ''}<a href="#s2">2 因子驗證</a>${SC ? '<a href="#s2b">2b 長樣本</a>' : ''}<a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
 <div class="hero"><h2>今日結論</h2>
 ${evHero}
@@ -130,6 +155,7 @@ ${pass.length ? `<b class="gwatch">因子歷史檢驗通過（前向未確認，
 <ul>
 <li>PMFX：限價成交嘅 ${pmFilled} 個歷史訊號，5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個；今日 ${D.quality.total} 張卡過幾何約束 ${D.quality.geoOk} 張、模型 EV > 0 ${D.quality.clean} 張 → <b>唔好跟</b>（§4–5）。</li>
 ${sen ? `<li>Sentinel「可加倉」對比「減持」：${sen.byH.map((h) => `${h.H} 日 ${pct(h.excess)}`).join('、')}（相對 29 隻等權）→ ${(sen.byH[0].excess || 0) < 0 ? '<b class="bad">跑輸，唔應該當加分</b>' : '有正面作用'}。</li>` : ''}
+${stHero}
 ${scanHero}
 <li>樣本只有 ${D.factors[0] ? D.factors[0].byH[0].days : '—'} 個有效交易日、一個市況，${D.dataAudit.issues.filter((i) => i.level === 'bad' || i.level === 'warn').length} 項未解決數據問題（另有 ${D.dataAudit.issues.filter((i) => i.level === 'limit').length} 項已知限制）見 §6。所有結論信心偏低。</li>
 </ul></div>
@@ -142,6 +168,8 @@ ${p.names.map((x) => `<tr><td class="tk">${esc(x.ticker)}</td><td>${fmt(x.close)
 <td>${fmt(x.sharpe)}</td><td class="${(x.month || 0) >= 0 ? 'good' : 'bad'}">${pct(x.month, 1)}</td>
 <td class="dim">${esc(x.sentinel || '—')}</td><td class="dim">${esc(x.pmfx || '—')}</td></tr>`).join('')}
 </tbody></table></div></div>`).join('') : '<p class="dim">冇因子達到觀察級（前後半段都正、t ≥ 1.5）。</p>'}
+
+${stHtml}
 
 <h2 id="s2"><span class="n">2</span>因子驗證 — 邊個訊號有前向回報</h2>
 <div class="card scroll"><table><thead><tr><th>因子</th><th>市場</th><th>持有</th><th>頭 20%</th><th>等權</th><th>超額</th><th>前半</th><th>後半</th><th>贏等權</th><th>t</th><th>校正 p</th><th>結果</th></tr></thead><tbody>

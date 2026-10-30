@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { parseCsv, toCsv } from './lib/csv.mjs';
 import * as E from './engine.mjs';
 import * as S from './lib/sources.mjs';
+import { shortTermScan } from './shortterm.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRCROOT = path.join(os.homedir(), 'hermes-projects');
@@ -368,6 +369,34 @@ console.log('缺口：未復權補價 / 已知限制 / 原檔搜尋');
   ok(!got.some((x) => x.date === '2026-07-22'), '0 byte 空檔唔當原檔');
   ok(got.every((x) => x.target.startsWith(SRCROOT)) && got.find((x) => x.fam === 'pmfx').target.endsWith(path.join('21-07-2026', 'data', 'signals_21-07-2026.csv')), '還原目標路徑同 sync.mjs 讀取位置一致');
   fs.rmSync(tmp, { recursive: true, force: true });
+}
+
+console.log('短線檢驗（1–5 日）');
+{
+  // 合成市場：40 隻股、120 日。rng 固定 seed
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const gauss = () => Math.sqrt(-2 * Math.log(rnd() + 1e-12)) * Math.cos(2 * Math.PI * rnd());
+  const dates = []; for (let d = Date.parse('2026-01-05'); dates.length < 120; d += 86400000) { const w = new Date(d).getUTCDay(); if (w && w < 6) dates.push(new Date(d).toISOString().slice(0, 10)); }
+  const mk = (revStrength) => {
+    const rows = [];
+    for (let k = 0; k < 40; k++) {
+      // t+1 收市入場 → d 日訊號預測嘅係 d+2 日回報，所以用 lag-2 反轉
+      let px = 100, p1 = 0, p2 = 0;
+      dates.forEach((d) => { const r = -revStrength * p2 + 0.015 * gauss(); px *= 1 + r; p2 = p1; p1 = r;
+        rows.push({ date: d, ticker: 'T' + k, close: px.toFixed(4), vol: '0.3', mdd: '-0.1' }); });
+    }
+    return rows;
+  };
+  const strong = shortTermScan({ hk: mk(0.6), us: [] }, 0.2);
+  const rev = strong.tests.find((x) => x.market === 'hk' && x.key === 'rev1' && x.H === 1);
+  ok(rev.grade === 'pass' && rev.excess > 0 && rev.adjP < 0.05, `強反轉市場：1 日反轉通過（t ${rev.t}、Holm p ${rev.adjP}）`);
+  ok(strong.today.some((x) => x.key === 'rev1') && strong.today.find((x) => x.key === 'rev1').names.length === 8, '通過訊號有今日頭 20% 名單（40 隻 → 8 隻）');
+  ok(strong.avoid.some((x) => x.key === 'mom1'), '反向（1 日動量）顯著跑輸 → 列入避開');
+  const noise = shortTermScan({ hk: mk(0), us: [] }, 0.2);
+  ok(noise.counts.pass === 0, `純噪音市場：冇訊號通過（${noise.counts.tests} 個檢定）`);
+  ok(noise.today.every((x) => x.grade !== 'fail'), '今日名單唔會列未通過訊號');
+  const r1 = strong.tests.find((x) => x.key === 'rev1' && x.H === 1);
+  ok(r1.windows === r1.days, '1 日持有：每日都係非重疊窗口');
 }
 
 console.log(`\n${pass} 通過 / ${fail} 失敗`);
