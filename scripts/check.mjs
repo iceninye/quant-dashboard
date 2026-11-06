@@ -87,6 +87,19 @@ console.log('勝率模型（P0-2）');
   ok(E.winModel(hist.map((h) => ({ ...h, outcome: 'timeout' }))).predict(1, { ...geo, costR: 0.05 }).evR < 0, 'timeout 當輸');
 }
 
+console.log('獨立交易（重發訊號唔重複計）');
+{
+  const geo = { rr: 2, stopPct: 2.5, entryAtr: 0.5, stopAtr: 1.5 };
+  const mk = (date, fillDate, exitDate, outcome, extra = {}) => ({ date, ticker: 'A', side: 1, geo, filled: true, outcome, fillDate, exitDate, ...extra });
+  // 同一筆持倉被連續 3 日重發 → 只算 1；出場後再成交 → 新一筆
+  const rows = [mk('d1', 'd2', 'd5', 'target'), mk('d2', 'd3', 'd5', 'target'), mk('d3', 'd3', 'd5', 'target'), mk('d6', 'd7', 'd9', 'stop')];
+  ok(E.episodes(rows).length === 2, '重疊持倉合併：4 行 → 2 筆交易');
+  ok(E.episodes([...rows, mk('d2', 'd3', 'd5', 'stop', { side: -1 })]).length === 3, '唔同方向唔合併');
+  ok(E.episodes([...rows, mk('d2', 'd3', 'd5', 'stop', { ticker: 'B' })]).length === 3, '唔同 ticker 唔合併');
+  const m = E.winModel(rows).predict(1, { ...geo, costR: 0.05 });
+  ok(m.n === 2 && m.k === 1, `winModel 用獨立交易：n ${m.n}、k ${m.k}（逐行計會係 4／3）`);
+}
+
 console.log('評分 / tier（P0-1、P0-3）');
 {
   const ctx = { ctx: { hk: new Map(), us: new Map(), sen: new Map() } };
@@ -274,6 +287,8 @@ ok(res.factors.flatMap((f) => f.byH).every((h) => h.grade !== 'pass' || h.adjP <
 ok(res.audit.ladder.length >= 5, 'gate 階梯');
 ok(res.quality.clean === res.opportunities.filter((o) => o.tier !== 'EXCLUDED').length, '通過 gate 數一致');
 ok(res.opportunities.every((o) => o.tier !== 'VERIFIED' || res.pmfxNew.confirming), 'PMFX 未前向確認就冇 VERIFIED 卡');
+ok(res.pmfxNew.settled === E.episodes(res.tracking.filter((x) => x.date >= res.pmfxNew.since && x.clean && E.SETTLED.includes(x.outcome))).length
+  && res.pmfxNew.settled <= res.pmfxNew.settledRows, `PMFX 前向結算按獨立交易計（${res.pmfxNew.settled} 筆 / ${res.pmfxNew.settledRows} 行）`);
 ok(res.opportunities.filter((o) => o.tier !== 'EXCLUDED').every((o) => o.evR - o.costR > 0 && o.entryAtr <= E.CFG.maxEntryAtr), '非剔除卡全部過幾何 + 模型 EV');
 {
   const c = res.opportunities.filter((o) => o.pWin !== null && o.geoRr !== null);

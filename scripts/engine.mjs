@@ -172,13 +172,30 @@ export function wilsonLower(k, nn, z = CFG.pWinZ) {
 }
 const cut = (v, edges) => (v === null || v === undefined ? 'na' : String(edges.filter((e) => v >= e).length));
 export const bucketOf = (side, g) => [side, cut(g.rr, [1.5, 3, 6]), cut(g.stopPct, [2, 4, 8]), cut(g.entryAtr, [0.5, 1, 2])].join('|');
+// PMFX 每日重發同一筆交易（同 ticker、同方向、價位微調），逐行計會將一筆交易數幾次：
+// 歷史 608 行已結算其實只係 219 個獨立出場。episodes() 每個 ticker＋方向只保留持倉唔重疊嘅第一行：
+// 成交日 ≤ 上一筆保留交易嘅出場日 = 同一筆持倉，唔再計。冇 fillDate／exitDate 嘅行（合成測試）原樣保留。
+export const SETTLED = ['target', 'stop', 'timeout'];
+export function episodes(rows) {
+  const last = new Map(), out = [];
+  const sorted = [...rows].sort((a, b) => (a.fillDate || '').localeCompare(b.fillDate || '') || (a.date || '').localeCompare(b.date || ''));
+  for (const t of sorted) {
+    if (!t.fillDate || !t.exitDate) { out.push(t); continue; }
+    const k = t.ticker + '|' + t.side;
+    if (last.has(k) && t.fillDate <= last.get(k)) continue;
+    last.set(k, t.exitDate);
+    out.push(t);
+  }
+  return out;
+}
 export function winModel(tracking) {
   const cells = new Map(), fills = new Map();
   for (const t of tracking) {
-    if (!t.geo) continue;
+    if (!t.geo || t.outcome === 'pending') continue;
     const fk = t.side + '|' + cut(t.geo.entryAtr, [0.5, 1, 2]);
-    if (t.outcome !== 'pending') { const f = fills.get(fk) || { k: 0, n: 0 }; f.n++; if (t.filled) f.k++; fills.set(fk, f); }
-    if (!t.filled || !['target', 'stop', 'timeout'].includes(t.outcome)) continue;
+    const f = fills.get(fk) || { k: 0, n: 0 }; f.n++; if (t.filled) f.k++; fills.set(fk, f);
+  }
+  for (const t of episodes(tracking.filter((x) => x.geo && x.filled && SETTLED.includes(x.outcome)))) {
     const key = bucketOf(t.side, t.geo), c = cells.get(key) || { k: 0, n: 0 };
     c.n++; if (t.outcome === 'target') c.k++;
     cells.set(key, c);
@@ -278,23 +295,23 @@ export function forwardTrack(fam) {
         if (fill < 0 || after.length < k) return null;
         return side * (after[k - 1][1] - entry) / entry - cost;
       };
-      let outcome = 'pending', hitDay = null, exitPx = null;
+      let outcome = 'pending', hitDay = null, exitPx = null, exitDate = null;
       if (fill < 0) outcome = series.length >= CFG.fillDays ? 'unfilled' : 'pending';
       else {
         const path = series.slice(fill, fill + 21);          // 成交當日 + 之後 20 日
         for (let k = 0; k < path.length; k++) {
           const [, c] = path[k];
-          if (stp !== null && (side === 1 ? c <= stp : c >= stp)) { outcome = 'stop'; exitPx = c; hitDay = fill + k + 1; break; }
-          if (k > 0 && tgt !== null && (side === 1 ? c >= tgt : c <= tgt)) { outcome = 'target'; exitPx = tgt; hitDay = fill + k + 1; break; }
+          if (stp !== null && (side === 1 ? c <= stp : c >= stp)) { outcome = 'stop'; exitPx = c; hitDay = fill + k + 1; exitDate = path[k][0]; break; }
+          if (k > 0 && tgt !== null && (side === 1 ? c >= tgt : c <= tgt)) { outcome = 'target'; exitPx = tgt; hitDay = fill + k + 1; exitDate = path[k][0]; break; }
         }
-        if (outcome === 'pending' && after.length >= 20) { outcome = 'timeout'; exitPx = after[19][1]; }
+        if (outcome === 'pending' && after.length >= 20) { outcome = 'timeout'; exitPx = after[19][1]; exitDate = after[19][0]; }
       }
       const risk = stp === null ? null : Math.abs(entry - stp);
       out.push({
         date: d, ticker: r.ticker, name: r.name, side, action: r.action,
         entry, rr: n(r.rr), net_ev: ev, stopPct: n(r.stop_pct),
         geo: g.rr === null ? null : { rr: g.rr, stopPct: g.stopPct, entryAtr: g.entryAtr, stopAtr: g.stopAtr },
-        clean: q.ok, filled: fill >= 0, fillDay: fill < 0 ? null : fill + 1, outcome, hitDay,
+        clean: q.ok, filled: fill >= 0, fillDay: fill < 0 ? null : fill + 1, fillDate: fill < 0 ? null : series[fill][0], exitDate, outcome, hitDay,
         exitPx, R: exitPx === null || !risk ? null : side * (exitPx - entry) / risk - cost * entry / risk,
         r1: ret(1), r5: ret(5), r10: ret(10), r20: ret(20),
         daysObserved: series.length,
@@ -432,10 +449,11 @@ export function run() {
   const tracking = forwardTrack(fam);
   const model = winModel(tracking);
   // PMFX 修正後（2026-10-17 起）嘅乾淨訊號結算樣本；結算夠 needed 個先重新評估
-  const newT = tracking.filter((x) => x.date >= PMFX_FIXED_FROM && x.clean && ['target', 'stop', 'timeout'].includes(x.outcome));
+  const newRaw = tracking.filter((x) => x.date >= PMFX_FIXED_FROM && x.clean && SETTLED.includes(x.outcome));
+  const newT = episodes(newRaw);                    // 獨立交易先算一個樣本（重發訊號唔重複計）
   const r5s = newT.filter((x) => x.r5 !== null).map((x) => x.r5);
   const Rs = newT.filter((x) => x.R !== null).map((x) => x.R);
-  const pmfxNew = { since: PMFX_FIXED_FROM, settled: newT.length, needed: CFG.confirm.pmfxSettled,
+  const pmfxNew = { since: PMFX_FIXED_FROM, settled: newT.length, settledRows: newRaw.length, needed: CFG.confirm.pmfxSettled,
     avgR5: r5s.length ? Math.round(1e4 * r5s.reduce((a, b) => a + b, 0) / r5s.length) / 1e4 : null,
     avgR: Rs.length ? Math.round(1e3 * Rs.reduce((a, b) => a + b, 0) / Rs.length) / 1e3 : null };
   pmfxNew.confirming = pmfxNew.settled >= pmfxNew.needed && pmfxNew.avgR !== null && pmfxNew.avgR > 0;
@@ -462,7 +480,7 @@ export function run() {
   });
   const byTier = (t) => tracking.filter((x) => x.clean === (t === 'clean'));
   const stat = (arr) => {
-    const done = arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop');
+    const done = episodes(arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop'));   // 獨立交易
     const wins = done.filter((x) => x.outcome === 'target').length;
     const withR5 = arr.filter((x) => x.r5 !== null);
     return {
@@ -551,7 +569,7 @@ export function audit(fam, track = forwardTrack(fam)) {
     ['+ 止損 ≤ 5%', (r) => Math.abs(n(r.stop_pct) ?? 1e9) <= 5],
   ];
   const statOf = (arr) => {
-    const done = arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop');
+    const done = episodes(arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop'));   // 獨立交易
     const w = done.filter((x) => x.outcome === 'target').length;
     const r5 = arr.filter((x) => x.r5 !== null);
     const r20 = arr.filter((x) => x.r20 !== null);
