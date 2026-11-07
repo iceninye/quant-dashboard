@@ -222,7 +222,7 @@ EV = 勝率 × (RR + 1) − 1（R 單位），rank = (EV − 成本R) × 成交�
 <details><summary>剔除嘅 ${D.opportunities.length - okOpp.length} 個（排除原因）</summary><div class="scroll"><table>${oppHead}<tbody>
 ${D.opportunities.filter((o) => o.tier === 'EXCLUDED').map((o) => oppRow(o) + `<tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">${esc(o.why.join(' / '))}</td></tr>`).join('')}
 </tbody></table></div></details>
-<div class="dim" style="font-size:12.5px">修正後（${PN.since} 起）乾淨訊號結算 ${PN.settled}/${PN.needed}${PN.avgR !== null ? `，平均 ${fmt(PN.avgR)}R` : ''}${PN.confirming ? '（前向確認）' : '（未夠，未確認）'}。</div></div>
+<div class="dim" style="font-size:12.5px">修正後（${PN.since} 起）乾淨訊號結算 ${PN.settled}/${PN.needed} 筆獨立交易${PN.settledRows > PN.settled ? `（原始 ${PN.settledRows} 行，重發訊號合併）` : ''}${PN.avgR !== null ? `，平均 ${fmt(PN.avgR)}R` : ''}${PN.confirming ? '（前向確認）' : '（未夠，未確認）'}。</div></div>
 
 <h2 id="s5"><span class="n">5</span>PMFX 前向追蹤 — 訊號之後實際發生咩事</h2>
 <div class="card"><div class="grid">
