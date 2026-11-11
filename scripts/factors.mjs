@@ -6,6 +6,7 @@
 //   3. 每日揀因子頭 20%，同當日全體等權比（超額回報）
 //   4. 樣本按日期前後切半：前半 in-sample、後半 out-of-sample
 //   5. 通過 = IS 超額 > 0、OOS 超額 > 0、非重疊窗口 t ≥ 2，而且 Holm 校正後單尾 p < 0.05（四樣都要）
+//      t 用全部日、H 個起點平均（overlapT），唔再只睇 phase 0
 //      Holm 校正針對「同時測咗 m 個因子 × 市場 × 持有期」嘅多重比較（m = 有 t 值嘅檢定數）
 //      觀察 = IS、OOS 都 > 0，但 t 只係 1.5–2，或者 t ≥ 2 但 Holm 校正後唔夠（只入觀察名單）
 import { num } from './lib/csv.mjs';
@@ -65,6 +66,22 @@ const tstat = (a) => {
   const m = mean(a), sd = Math.sqrt(a.reduce((s, x) => s + (x - m) ** 2, 0) / (a.length - 1));
   return sd > 0 ? m / sd * Math.sqrt(a.length) : null;
 };
+// 重疊持有期嘅 t：分子用全部日嘅平均超額，分母用非重疊窗口嘅標準誤，H 個起點（phase）平均。
+// 舊做法只取 phase 0（i % H === 0），t 隨起點亂跳：港股低 MDD 5 日 0.78–2.04、美股低 MDD 20 日 0.62–3.8，
+// 「觀察／未通過」等於擲毫。Newey-West 喺呢個樣本（~70 日、H=20）會將 t 吹大到 4 以上，所以唔用。
+// 每個 phase 嘅方差都係非重疊樣本計，冇估自相關 → 唔會因為小樣本低估方差；任何 phase 少過 2 個窗口 → null。
+export function overlapT(a, H) {
+  if (a.length < 3) return null;
+  if (H <= 1) return tstat(a);
+  let se2 = 0;
+  for (let p = 0; p < H; p++) {
+    const b = a.filter((_, i) => i % H === p);
+    if (b.length < 2) return null;
+    const mb = mean(b);
+    se2 += b.reduce((s, x) => s + (x - mb) ** 2, 0) / (b.length - 1) / b.length / H;
+  }
+  return se2 > 0 ? mean(a) / Math.sqrt(se2) : null;
+}
 
 // ---- Student-t 單尾 p（正則化不完全 Beta，Lentz 連分數）----
 function lgamma(x) {
@@ -146,8 +163,8 @@ function testFactor(rows, series, valueOf, H, minNames, discrete) {
   if (!daily.length) return null;
   const half = dates[Math.floor(dates.length / 2)];
   const is = daily.filter((x) => x.d < half), oos = daily.filter((x) => x.d >= half);
-  const nonOverlap = daily.filter((_, i) => i % H === 0).map((x) => x.excess);
-  const t = tstat(nonOverlap);
+  const nonOverlap = daily.filter((_, i) => i % H === 0).map((x) => x.excess);   // 窗口數 = 自由度基礎
+  const t = overlapT(daily.map((x) => x.excess), H);
   const isEx = mean(is.map((x) => x.excess)), oosEx = mean(oos.map((x) => x.excess));
   return {
     H, days: daily.length, windows: nonOverlap.length,
