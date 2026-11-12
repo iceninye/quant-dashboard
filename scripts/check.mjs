@@ -7,6 +7,7 @@ import { parseCsv, toCsv } from './lib/csv.mjs';
 import * as E from './engine.mjs';
 import * as S from './lib/sources.mjs';
 import { shortTermScan } from './shortterm.mjs';
+import * as F from './factors.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRCROOT = path.join(os.homedir(), 'hermes-projects');
@@ -98,6 +99,14 @@ console.log('獨立交易（重發訊號唔重複計）');
   ok(E.episodes([...rows, mk('d2', 'd3', 'd5', 'stop', { ticker: 'B' })]).length === 3, '唔同 ticker 唔合併');
   const m = E.winModel(rows).predict(1, { ...geo, costR: 0.05 });
   ok(m.n === 2 && m.k === 1, `winModel 用獨立交易：n ${m.n}、k ${m.k}（逐行計會係 4／3）`);
+  // 持倉中（已成交未出場）：之後同向成交都係同一筆
+  const open = [mk('2026-11-01', '2026-11-02', null, 'pending'), mk('2026-11-02', '2026-11-03', null, 'pending'), mk('2026-11-04', '2026-11-08', null, 'pending')];
+  ok(E.episodes(open).length === 1, '未出場持倉：之後同向成交唔另計（3 行 → 1 筆）');
+  // 成交率：連續重發只計一次；已成交未結算都計
+  const fr = (date, filled, outcome, reissue) => ({ date, ticker: 'F', side: 1, geo, filled, outcome, reissue, fillDate: filled ? date : null, exitDate: null });
+  const fm = E.winModel([fr('d1', false, 'unfilled', false), fr('d2', false, 'unfilled', true), fr('d3', false, 'unfilled', true),
+    fr('d9', true, 'pending', false), fr('d10', false, 'pending', false)]).fills.get('1|' + '1');
+  ok(fm && fm.n === 2 && fm.k === 1, `成交率：重發合併、持倉中計入、未有結果唔計（n ${fm?.n}、k ${fm?.k}；舊做法 n 3、k 0）`);
 }
 
 console.log('評分 / tier（P0-1、P0-3）');
@@ -410,6 +419,14 @@ console.log('短線檢驗（1–5 日）');
   const noise = shortTermScan({ hk: mk(0), us: [] }, 0.2);
   ok(noise.counts.pass === 0, `純噪音市場：冇訊號通過（${noise.counts.tests} 個檢定）`);
   ok(noise.today.every((x) => x.grade !== 'fail'), '今日名單唔會列未通過訊號');
+  // overlapT：唔再取決於起點（phase）
+  const ex = Array.from({ length: 60 }, (_, i) => (i % 5 === 0 ? 0.03 : -0.004) + 0.001 * Math.sin(i));
+  const shift = ex.slice(1).concat(ex.slice(0, 1));
+  const tOld = (a, H) => { const b = a.filter((_, i) => i % H === 0), m = b.reduce((s, x) => s + x, 0) / b.length;
+    return m / Math.sqrt(b.reduce((s, x) => s + (x - m) ** 2, 0) / (b.length - 1) / b.length); };
+  ok(Math.abs(F.overlapT(ex, 5) - F.overlapT(shift, 5)) < 0.3 && Math.abs(tOld(ex, 5) - tOld(shift, 5)) > 3,
+    `overlapT 對起點穩定（${F.overlapT(ex, 5).toFixed(2)} vs ${F.overlapT(shift, 5).toFixed(2)}；舊 phase 0 t ${tOld(ex, 5).toFixed(1)} vs ${tOld(shift, 5).toFixed(1)}）`);
+  ok(F.overlapT([0.01, 0.02, -0.01, 0.03], 1) !== null && F.overlapT([0.01, 0.02, 0.03], 3) === null, 'overlapT：H=1 等同普通 t；每個 phase 少過 2 個 → null');
   const r1 = strong.tests.find((x) => x.key === 'rev1' && x.H === 1);
   ok(r1.windows === r1.days, '1 日持有：每日都係非重疊窗口');
 }

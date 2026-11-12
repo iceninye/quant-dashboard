@@ -32,7 +32,7 @@ const pass = D.factors.filter((f) => f.grade === 'pass' && f.market !== 'sentine
 const watch = D.factors.filter((f) => f.grade === 'watch' && f.market !== 'sentinel');
 const bestW = watch.length ? watch[0].byH.filter((h) => h.grade === 'watch').sort((a, b) => b.t - a.t)[0] : null;
 const sen = D.factors.find((f) => f.market === 'sentinel');
-const pmFilled = D.tracking.filter((t) => t.filled).length;
+const pmFilled = D.trackingStats.all.filled ?? D.tracking.filter((t) => t.filled).length;   // 獨立持倉（重發訊號合併）
 // 本機長樣本多因子掃描（analysis/make_scan_json.py 產出；冇檔就唔顯示）
 const SJ = path.join(DOCS, 'data', 'scan.json');
 const SC = fs.existsSync(SJ) ? JSON.parse(fs.readFileSync(SJ, 'utf8')) : null;
@@ -77,7 +77,7 @@ ${ST.tests.map((h) => `<tr><td>${esc(h.label)}</td><td class="dim">${esc(h.marke
 <td>${pct(h.isExcess)}</td><td>${pct(h.oosExcess)}</td><td>${h.beatRate}%</td><td>${h.windows}</td><td>${fmt(h.t)}</td><td class="dim">${h.adjP === null ? '—' : fmt(h.adjP, 2)}</td>
 <td class="g${h.grade}">${{ pass: '通過', watch: '觀察', fail: '未通過' }[h.grade]}</td></tr>`).join('')}
 </tbody></table></div>
-<p class="note">方法：t 日收市計訊號，t+1 收市入場，持有 ${ST.cfg.horizons.join(' / ')} 個交易日，每個窗口扣 ${ST.cfg.costPct}% 來回成本（當全換手計，偏保守）；每日揀頭 20% 同當日等權比。前後半切 IS / OOS，非重疊窗口計 t；${ST.m} 個短線檢定一齊做 Holm。
+<p class="note">方法：t 日收市計訊號，t+1 收市入場，持有 ${ST.cfg.horizons.join(' / ')} 個交易日，每個窗口扣 ${ST.cfg.costPct}% 來回成本（當全換手計，偏保守）；每日揀頭 20% 同當日等權比。前後半切 IS / OOS；t 用全部日平均、非重疊窗口方差按 H 個起點平均（唔再只睇一個起點）；${ST.m} 個短線檢定一齊做 Holm。
 <b>通過</b> = 前後半都正 + t ≥ ${ST.cfg.tPass} + Holm 單尾 p < ${ST.cfg.alpha} + 窗口 ≥ ${ST.cfg.minWindows}。
 <b>限制：</b>只有日收市價，冇 OHLC／盤中數據，日內策略測唔到；樣本只有 repo 幾個月、universe 係每日報告名單（有倖存者偏差）。長樣本 5 日結果見 §2b。</p></details>`;
 const scanHero = !SC ? '' : (() => { const hk = SC.samples.filter((s) => s.market === 'hk'); const p = hk.find((s) => s.counts?.pass);
@@ -153,7 +153,7 @@ ${pass.length ? `<b class="gwatch">因子歷史檢驗通過（前向未確認，
 但 t = ${fmt(bestW.t)}（單尾 p ${fmt(bestW.p, 3)}；同時測 ${bestW.m} 個檢定，Holm 校正後 p ${fmt(bestW.adjP, 2)}，要 < 0.05 先算通過）→ <b>只列觀察名單，唔係買入訊號</b>。`
   : '<b class="bad">今日冇任何訊號通過或接近驗證門檻。</b>'}
 <ul>
-<li>PMFX：限價成交嘅 ${pmFilled} 個歷史訊號，5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個；今日 ${D.quality.total} 張卡過幾何約束 ${D.quality.geoOk} 張、模型 EV > 0 ${D.quality.clean} 張 → <b>唔好跟</b>（§4–5）。</li>
+<li>PMFX：限價成交嘅 ${pmFilled} 筆獨立持倉（重發訊號合併），5 日平均 <b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b>，到目標 ${D.trackingStats.all.wins} 個、止損 ${D.trackingStats.all.losses} 個；今日 ${D.quality.total} 張卡過幾何約束 ${D.quality.geoOk} 張、模型 EV > 0 ${D.quality.clean} 張 → <b>唔好跟</b>（§4–5）。</li>
 ${sen ? `<li>Sentinel「可加倉」對比「減持」：${sen.byH.map((h) => `${h.H} 日 ${pct(h.excess)}`).join('、')}（相對 29 隻等權）→ ${(sen.byH[0].excess || 0) < 0 ? '<b class="bad">跑輸，唔應該當加分</b>' : '有正面作用'}。</li>` : ''}
 ${stHero}
 ${scanHero}
@@ -179,7 +179,7 @@ ${D.factors.map((f) => f.byH.map((h, i) => `<tr><td>${i ? '' : esc(f.label)}</td
 <td class="g${h.grade}">${{ pass: '通過', watch: '觀察', fail: '未通過' }[h.grade]}</td></tr>`).join('')).join('')}
 </tbody></table>
 <p class="note">方法：訊號日之後第一個收市價入場，持有 5 / 20 個交易日，扣 ${D.cfg.costPct}% 來回成本；每日揀頭 20%（Sentinel 用「可加倉」對「減持」），同當日全體等權比。
-樣本按日期切半做前半 / 後半。<b>通過</b> = 前後半都正 + 非重疊窗口 t ≥ ${FT} + <b>Holm 校正</b>（同時測 ${D.factors[0]?.byH[0].m ?? '—'} 個檢定，校正後單尾 p < 0.05）；<b>觀察</b> = 前後半都正但 t 只有 1.5–${FT}，或 t ≥ ${FT} 但校正後唔夠。持有期跨越數據缺口嘅窗口唔計。
+樣本按日期切半做前半 / 後半。<b>通過</b> = 前後半都正 + t ≥ ${FT}（全部日平均超額 ÷ 非重疊窗口標準誤，H 個起點平均，結果唔受揀邊日開始影響） + <b>Holm 校正</b>（同時測 ${D.factors[0]?.byH[0].m ?? '—'} 個檢定，校正後單尾 p < 0.05）；<b>觀察</b> = 前後半都正但 t 只有 1.5–${FT}，或 t ≥ ${FT} 但校正後唔夠。持有期跨越數據缺口嘅窗口唔計。
 非重疊窗口少於 ${D.cfg.minWindows ?? 8} 個（現時 20 日通常只有 1–3 個）一律唔評級，t 只作參考；校正 p 一欄「—」= 窗口太少，唔算入檢定數。</p></div>
 
 ${scanHtml}
@@ -226,20 +226,21 @@ ${D.opportunities.filter((o) => o.tier === 'EXCLUDED').map((o) => oppRow(o) + `<
 
 <h2 id="s5"><span class="n">5</span>PMFX 前向追蹤 — 訊號之後實際發生咩事</h2>
 <div class="card"><div class="grid">
-<div class="kv"><span>追蹤訊號</span><b>${D.tracking.length}</b></div>
-<div class="kv"><span>限價有成交</span><b>${pmFilled}</b></div>
-<div class="kv"><span>20 日內冇成交</span><b class="dim">${D.tracking.filter((t) => t.outcome === 'unfilled').length}</b></div>
+<div class="kv"><span>追蹤訊號（獨立）</span><b>${D.trackingStats.all.signalRuns ?? D.tracking.length}</b><span class="dim">原始 ${D.tracking.length} 行</span></div>
+<div class="kv"><span>限價有成交（獨立持倉）</span><b>${pmFilled}</b><span class="dim">原始 ${D.trackingStats.all.filledRows ?? '—'} 行</span></div>
+<div class="kv"><span>20 日內冇成交</span><b class="dim">${D.tracking.filter((t) => t.outcome === 'unfilled' && !t.reissue).length}</b></div>
 <div class="kv"><span>到目標 / 止損</span><b><span class="good">${D.trackingStats.all.wins}</span> / <span class="bad">${D.trackingStats.all.losses}</span></b></div>
 <div class="kv"><span>平均 5 日（扣成本）</span><b class="${(D.trackingStats.all.avgR5 || 0) > 0 ? 'good' : 'bad'}">${pct(D.trackingStats.all.avgR5)}</b></div>
 <div class="kv"><span>每筆實現 R 中位（已結算）</span><b class="${(D.trackingStats.all.medR || 0) > 0 ? 'good' : 'bad'}">${fmt(D.trackingStats.all.medR)}R</b></div>
 </div>
-<div class="scroll"><table style="margin-top:10px"><thead><tr><th>組別 / 累加 gate</th><th>訊號</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
+<div class="scroll"><table style="margin-top:10px"><thead><tr><th>組別 / 累加 gate</th><th>訊號行</th><th>獨立持倉</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
 ${[...D.audit.ladder.map((g) => [g.gate, g]), ['每日 net_ev 頭 1 名', D.audit.rankEdge.top1], ['每日 net_ev 尾 1 名', D.audit.rankEdge.bottom1],
-  ['全部做多', D.audit.bySide.buy], ['全部做空', D.audit.bySide.sell]].map(([l, g]) => `<tr><td>${esc(l)}</td><td>${g.n}</td><td>${g.decided}</td>
+  ['全部做多', D.audit.bySide.buy], ['全部做空', D.audit.bySide.sell]].map(([l, g]) => `<tr><td>${esc(l)}</td><td class="dim">${g.n}</td><td>${g.pos ?? '—'}</td><td>${g.decided}</td>
 <td class="${(g.winRate || 0) >= 50 ? 'good' : 'bad'}">${g.winRate === null ? '—' : g.winRate + '%'}</td><td>${pct(g.avgR5)}</td><td>${pct(g.avgR20)}</td></tr>`).join('')}
 </tbody></table></div>
 <p class="note">回報由限價 entry <b>成交之後</b>先計（收市價觸及 entry 先算成交，${D.cfg.fillDays} 個交易日內冇觸及 = 冇成交）。
 出場用 stop-first：每日（包括成交當日）先查止損再查目標，止損用嗰日實際收市出場（跳空會蝕多過 1R）。repo 只有日收市，盤中觸及嘅止損漏計，所以結果仍然偏樂觀。加 gate 之後勝率或回報下跌 = gate 冇用。
+PMFX 每日重發同一筆交易：「獨立持倉」= 同 ticker＋方向持倉重疊嘅行合併做一筆，平均回報同勝率都按獨立持倉計（逐行計會將一筆交易數幾次）。獨立持倉少過 20 筆嘅組別，平均數由一兩筆大波動主導，唔好當 edge。
 2026-10-17 之前嘅 PMFX 行上游有 bug，新版仲未有結算樣本。</p>
 <details><summary>最近 40 條訊號</summary><div class="scroll"><table><thead><tr><th>日期</th><th>標的</th><th>方向</th><th>結果</th><th>成交日</th><th>5日</th><th>20日</th></tr></thead><tbody>
 ${D.tracking.slice(-40).reverse().map((t) => `<tr><td>${t.date}</td><td class="tk">${esc(t.ticker)}</td>

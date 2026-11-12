@@ -174,24 +174,27 @@ const cut = (v, edges) => (v === null || v === undefined ? 'na' : String(edges.f
 export const bucketOf = (side, g) => [side, cut(g.rr, [1.5, 3, 6]), cut(g.stopPct, [2, 4, 8]), cut(g.entryAtr, [0.5, 1, 2])].join('|');
 // PMFX 每日重發同一筆交易（同 ticker、同方向、價位微調），逐行計會將一筆交易數幾次：
 // 歷史 608 行已結算其實只係 219 個獨立出場。episodes() 每個 ticker＋方向只保留持倉唔重疊嘅第一行：
-// 成交日 ≤ 上一筆保留交易嘅出場日 = 同一筆持倉，唔再計。冇 fillDate／exitDate 嘅行（合成測試）原樣保留。
+// 成交日 ≤ 上一筆保留交易嘅出場日 = 同一筆持倉，唔再計。已成交但未出場（持倉中）= 出場日當無限遠，之後同向成交都算同一筆。
+// 冇 fillDate 嘅行（未成交／合成測試）原樣保留。
 export const SETTLED = ['target', 'stop', 'timeout'];
 export function episodes(rows) {
   const last = new Map(), out = [];
   const sorted = [...rows].sort((a, b) => (a.fillDate || '').localeCompare(b.fillDate || '') || (a.date || '').localeCompare(b.date || ''));
   for (const t of sorted) {
-    if (!t.fillDate || !t.exitDate) { out.push(t); continue; }
+    if (!t.fillDate) { out.push(t); continue; }
     const k = t.ticker + '|' + t.side;
     if (last.has(k) && t.fillDate <= last.get(k)) continue;
-    last.set(k, t.exitDate);
+    last.set(k, t.exitDate || '9999-12-31');
     out.push(t);
   }
   return out;
 }
 export function winModel(tracking) {
   const cells = new Map(), fills = new Map();
+  // 成交率：每個「連續重發」訊號只計一次（reissue = 上一個 PMFX 日已經有同 ticker＋方向），
+  // 已成交但未結算都計（舊做法剔走 → 成交率偏低）；未成交而且未夠 fillDays = 未有結果，唔計。
   for (const t of tracking) {
-    if (!t.geo || t.outcome === 'pending') continue;
+    if (!t.geo || t.reissue || (t.outcome === 'pending' && !t.filled)) continue;
     const fk = t.side + '|' + cut(t.geo.entryAtr, [0.5, 1, 2]);
     const f = fills.get(fk) || { k: 0, n: 0 }; f.n++; if (t.filled) f.k++; fills.set(fk, f);
   }
@@ -273,6 +276,7 @@ export function forwardTrack(fam) {
   for (const [t, ser] of priceMap(fam)) px.set(t, ser.dates.map((d, i) => [d, ser.px[i]]));
   const cost = CFG.costPct / 100;
   const out = [];
+  const tracked = new Set();               // date|ticker|side：用嚟標記連續重發
   for (let i = 0; i < dates.length; i++) {
     const d = dates[i];
     const sigs = pm[d];
@@ -307,10 +311,12 @@ export function forwardTrack(fam) {
         if (outcome === 'pending' && after.length >= 20) { outcome = 'timeout'; exitPx = after[19][1]; exitDate = after[19][0]; }
       }
       const risk = stp === null ? null : Math.abs(entry - stp);
+      tracked.add(d + '|' + r.ticker + '|' + side);
       out.push({
         date: d, ticker: r.ticker, name: r.name, side, action: r.action,
         entry, rr: n(r.rr), net_ev: ev, stopPct: n(r.stop_pct),
         geo: g.rr === null ? null : { rr: g.rr, stopPct: g.stopPct, entryAtr: g.entryAtr, stopAtr: g.stopAtr },
+        reissue: i > 0 && tracked.has(dates[i - 1] + '|' + r.ticker + '|' + side),
         clean: q.ok, filled: fill >= 0, fillDay: fill < 0 ? null : fill + 1, fillDate: fill < 0 ? null : series[fill][0], exitDate, outcome, hitDay,
         exitPx, R: exitPx === null || !risk ? null : side * (exitPx - entry) / risk - cost * entry / risk,
         r1: ret(1), r5: ret(5), r10: ret(10), r20: ret(20),
@@ -396,7 +402,7 @@ export function dataAudit(fam, opts = {}) {
     const sens = (() => {
       const rows = new Map(fam.pmfx.map((r) => [r.date + '|' + r.ticker, r]));
       const sub = (opts.tracking || forwardTrack(fam)).filter((x) => { const r = rows.get(x.date + '|' + x.ticker); return !x.clean && r && r.err === '1' && quality({ ...r, err: '0' }).ok; });
-      const filled = sub.filter((x) => x.filled), r5 = filled.filter((x) => x.r5 !== null).map((x) => x.r5);
+      const filled = episodes(sub.filter((x) => x.filled)), r5 = filled.filter((x) => x.r5 !== null).map((x) => x.r5);
       return r5.length ? { n: sub.length, filled: filled.length, avg: r5.reduce((a, b) => a + b, 0) / r5.length, pos: r5.filter((v) => v > 0).length, r5n: r5.length } : null;
     })();
     issues.push(nowErr
@@ -482,14 +488,15 @@ export function run() {
   const stat = (arr) => {
     const done = episodes(arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop'));   // 獨立交易
     const wins = done.filter((x) => x.outcome === 'target').length;
-    const withR5 = arr.filter((x) => x.r5 !== null);
+    const filled = episodes(arr.filter((x) => x.filled));                                         // 獨立持倉
+    const withR5 = filled.filter((x) => x.r5 !== null);
     return {
-      signals: arr.length,
+      signals: arr.length, signalRuns: arr.filter((x) => !x.reissue).length, filled: filled.length, filledRows: arr.filter((x) => x.filled).length,
       decided: done.length,
       wins, losses: done.length - wins,
       winRate: done.length ? Math.round(1000 * wins / done.length) / 10 : null,
       avgR5: withR5.length ? Math.round(1e4 * withR5.reduce((s, x) => s + x.r5, 0) / withR5.length) / 1e4 : null,
-      medR: (() => { const R = arr.filter((x) => x.R !== null && x.R !== undefined).map((x) => x.R).sort((a, b) => a - b);
+      medR: (() => { const R = done.filter((x) => x.R !== null && x.R !== undefined).map((x) => x.R).sort((a, b) => a - b);
         return R.length ? Math.round(100 * (R.length % 2 ? R[(R.length - 1) / 2] : (R[R.length / 2 - 1] + R[R.length / 2]) / 2)) / 100 : null; })(),
     };
   };
@@ -571,10 +578,11 @@ export function audit(fam, track = forwardTrack(fam)) {
   const statOf = (arr) => {
     const done = episodes(arr.filter((x) => x.outcome === 'target' || x.outcome === 'stop'));   // 獨立交易
     const w = done.filter((x) => x.outcome === 'target').length;
-    const r5 = arr.filter((x) => x.r5 !== null);
-    const r20 = arr.filter((x) => x.r20 !== null);
+    const pos = episodes(arr.filter((x) => x.filled));                 // 獨立持倉，重發訊號唔重複計
+    const r5 = pos.filter((x) => x.r5 !== null);
+    const r20 = pos.filter((x) => x.r20 !== null);
     return {
-      n: arr.length, decided: done.length, winRate: done.length ? Math.round(1000 * w / done.length) / 10 : null,
+      n: arr.length, pos: pos.length, r5n: r5.length, decided: done.length, winRate: done.length ? Math.round(1000 * w / done.length) / 10 : null,
       avgR5: r5.length ? Math.round(1e5 * r5.reduce((s, x) => s + x.r5, 0) / r5.length) / 1e5 : null,
       avgR20: r20.length ? Math.round(1e5 * r20.reduce((s, x) => s + x.r20, 0) / r20.length) / 1e5 : null,
     };

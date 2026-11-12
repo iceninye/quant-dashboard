@@ -17,7 +17,7 @@
 
 ## 核心方法
 
-1. **因子驗證**（`scripts/factors.mjs`）：用 HK / US quant 同 Sentinel 歷史數據，測 6 個訊號（低 MDD、低波動、Sharpe、月動量、週反轉、Sentinel 建議）。t+1 入場、持有 5 / 20 日、扣成本，頭 20% 對當日等權；前半 / 後半樣本都正 + 非重疊 t ≥ 2 先算「通過」，t 1.5–2 算「觀察」。
+1. **因子驗證**（`scripts/factors.mjs`）：用 HK / US quant 同 Sentinel 歷史數據，測 6 個訊號（低 MDD、低波動、Sharpe、月動量、週反轉、Sentinel 建議）。t+1 入場、持有 5 / 20 日、扣成本，頭 20% 對當日等權；前半 / 後半樣本都正 + t ≥ 2（全部日平均、非重疊窗口方差按 H 個起點平均）先算「通過」，t 1.5–2 算「觀察」。
 2. **PMFX 前向追蹤**（`scripts/engine.mjs`）：限價 entry 要被收市價觸及先算成交，回報由成交後計、扣成本。價格優先用 HK / US quant 收市（PMFX 約 4% 行 close 慢咗一行）。
 3. **Quality gate**：`rr_valid` + `net_rr_valid` + 止損距離 0.3%–12% + `net_ev > 0` + `error` 欄為空。
 4. **數據核對**（`dataAudit`）：每次 build 重算缺口、重複行、全空欄位、PMFX 同 quant 收市價差異、PMFX error 行，結果放 dashboard §5。
