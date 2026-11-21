@@ -46,8 +46,8 @@ code{font-family:var(--mono);background:#0d141d;padding:1px 5px;border-radius:4p
 div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(--dim);margin:6px 0 4px}nav a{color:var(--acc);margin-right:12px;text-decoration:none}
 </style></head><body>
 <h1>Quant Dashboard <span class="dim" style="font-size:13px;font-weight:400">— 4 份報告交叉驗證</span></h1>
-<div class="sub">生成 20/11/2026 下午9:30:25 HKT ·
-數據日：HK 2026-11-20 · US 2026-11-20 · Sentinel 2026-11-20 · PMFX 2026-11-20</div>
+<div class="sub">生成 21/11/2026 下午9:30:24 HKT ·
+數據日：HK 2026-11-20 · US 2026-11-21 · Sentinel 2026-11-20 · PMFX 2026-11-20</div>
 <nav><a href="#s1">1 名單</a><a href="#s1b">1b 短線</a><a href="#s2">2 因子驗證</a><a href="#s2b">2b 長樣本</a><a href="#s3">3 前向紀錄</a><a href="#s4">4 PMFX 訊號</a><a href="#s5">5 PMFX 追蹤</a><a href="#s6">6 數據核對</a><a href="#s7">7 宏觀</a></nav>
 
 <div class="hero"><h2>今日結論</h2>
@@ -55,10 +55,10 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <p class="dim" style="font-size:13px;margin:0 0 8px">已驗證 = 歷史檢驗通過 <b>且</b> 前向確認（因子：事前凍結紀錄結算 ≥ 8 期、t ≥ 2、鏈完整；PMFX：修正後結算 ≥ 20 個、平均 R > 0）。任何一樣未有 = 唔係機會。</p>
 <b>今日冇訊號通過驗證。</b>證據最強係 <b class="gwatch">港股 回撤最淺（低 MDD）</b>：
 持有 5 日，頭 20% 平均跑贏等權 <b>0.80%</b>（已扣成本；絕對回報 0.33% 對等權 -0.47%，即係「跌少啲」多過「賺錢」），前半段 0.70%、後半段 0.91% 都係正，
-但 t = 1.73（單尾 p 0.051；同時測 10 個檢定，Holm 校正後 p 0.51，要 < 0.05 先算通過）→ <b>只列觀察名單，唔係買入訊號</b>。
+但 t = 1.73（單尾 p 0.051；同時測 11 個檢定，Holm 校正後 p 0.56，要 < 0.05 先算通過）→ <b>只列觀察名單，唔係買入訊號</b>。
 <ul>
-<li>PMFX：限價成交嘅 122 筆獨立持倉（重發訊號合併），5 日平均 <b class="bad">-0.06%</b>，到目標 7 個、止損 74 個；今日 36 張卡過幾何約束 0 張、模型 EV > 0 0 張 → <b>唔好跟</b>（§4–5）。</li>
-<li>Sentinel「可加倉」對比「減持」：5 日 -0.81%、20 日 -2.34%（相對 29 隻等權）→ <b class="bad">跑輸，唔應該當加分</b>。</li>
+<li>PMFX：限價成交嘅 122 筆獨立持倉（重發訊號合併），5 日平均 <b class="bad">-0.06%</b>，到目標 9 個、止損 74 個；今日 36 張卡過幾何約束 0 張、模型 EV > 0 0 張 → <b>唔好跟</b>（§4–5）。</li>
+<li>Sentinel「可加倉」對比「減持」：5 日 -0.69%、20 日 -2.34%（相對 29 隻等權）→ <b class="bad">跑輸，唔應該當加分</b>。</li>
 <li>短線 1–5 日（§1b）：48 個檢定，<b class="bad">0 個通過</b>、1 個觀察 → <b>今日冇短線機會</b>。顯著蝕錢：港股「1 日反轉（昨日最跌）」持 1 日（每期 -0.30%，t -3.87）、港股「5 日反轉（一週最跌）」持 1 日（每期 -0.37%，t -3.79），<b class="bad">唔好追</b>。</li>
 <li>長樣本掃描（§2b）：港股 今日名單 2 年 有 <b class="gpass">2 個 PASS</b>（lowvol_252），但 6 年樣本最好只係 <b class="gwatch">WATCH</b> → 防守型大藍籌係最好選擇，但<b>未證實</b>；美股冇因子可信。</li>
 <li>樣本只有 81 個有效交易日、一個市況，0 項未解決數據問題（另有 6 項已知限制）見 §6。所有結論信心偏低。</li>
@@ -112,7 +112,7 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <h2 id="s1b"><span class="n">1b</span>短線機會（持有 1–5 日）</h2>
 <div class="card"><p style="font-size:16px;margin:0 0 6px"><b class="bad">今日冇短線訊號通過驗證。</b>最接近係 1 個觀察級，名單只供參考，<b>唔係買入訊號</b>。</p>
 <p class="bad" style="margin:0 0 6px">避開：港股「1 日反轉（昨日最跌）」持 1 日（每期 -0.30%，t -3.87）；港股「5 日反轉（一週最跌）」持 1 日（每期 -0.37%，t -3.79）；港股「1 日動量（昨日最升）」持 1 日（每期 -0.29%，t -3.63） — 扣成本後顯著跑輸等權（Bonferroni 校正單尾 p < 0.05）。</p>
-<p class="dim" style="margin:0">數據日：港股 2026-11-20 · 美股 2026-11-20（收市後更新，唔係盤中即時價）</p></div>
+<p class="dim" style="margin:0">數據日：港股 2026-11-20 · 美股 2026-11-21（收市後更新，唔係盤中即時價）</p></div>
 <div class="card"><div><b class="gwatch">觀察</b> · 港股 回撤最淺（低 MDD） 頭 20% · 2026-11-20 收市 ·
 <span class="dim">持 5 日每期超額 0.80%，t 1.73，Holm p 1.00</span></div>
 <div class="scroll"><table><thead><tr><th>標的</th><th>收市</th><th>1 日</th><th>5 日</th><th>波動</th><th>MDD</th></tr></thead><tbody>
@@ -154,71 +154,71 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <td>-0.04%</td><td class="dim">-0.25%</td><td class="good">0.21%</td>
 <td>0.14%</td><td>0.28%</td><td>55%</td><td>42</td><td>1.19</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>5 日</td>
-<td>0.43%</td><td class="dim">0.03%</td><td class="good">0.40%</td>
-<td>-0.04%</td><td>0.83%</td><td>57%</td><td>16</td><td>1.02</td><td class="dim">1.00</td>
+<td>0.38%</td><td class="dim">-0.07%</td><td class="good">0.45%</td>
+<td>-0.06%</td><td>0.95%</td><td>58%</td><td>16</td><td>1.11</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>5 日</td>
-<td>0.51%</td><td class="dim">0.03%</td><td class="good">0.48%</td>
-<td>-0.15%</td><td>1.09%</td><td>54%</td><td>16</td><td>0.94</td><td class="dim">1.00</td>
+<td>0.47%</td><td class="dim">-0.07%</td><td class="good">0.53%</td>
+<td>-0.19%</td><td>1.26%</td><td>55%</td><td>16</td><td>1.04</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">港股</td><td>2 日</td>
 <td>-0.09%</td><td class="dim">-0.25%</td><td class="good">0.16%</td>
 <td>-0.02%</td><td>0.33%</td><td>54%</td><td>42</td><td>0.91</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>3 日</td>
+<td>0.15%</td><td class="dim">-0.07%</td><td class="good">0.22%</td>
+<td>-0.26%</td><td>0.70%</td><td>51%</td><td>28</td><td>0.68</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>3 日</td>
+<td>0.08%</td><td class="dim">-0.07%</td><td class="good">0.16%</td>
+<td>-0.19%</td><td>0.51%</td><td>59%</td><td>28</td><td>0.60</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">港股</td><td>1 日</td>
 <td>-0.14%</td><td class="dim">-0.20%</td><td class="good">0.05%</td>
 <td>0.05%</td><td>0.05%</td><td>48%</td><td>85</td><td>0.57</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>3 日</td>
-<td>0.17%</td><td class="dim">-0.01%</td><td class="good">0.18%</td>
-<td>-0.23%</td><td>0.58%</td><td>51%</td><td>27</td><td>0.56</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>3 日</td>
-<td>0.12%</td><td class="dim">-0.01%</td><td class="good">0.13%</td>
-<td>-0.18%</td><td>0.43%</td><td>58%</td><td>27</td><td>0.49</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>2 日</td>
-<td>0.02%</td><td class="dim">-0.03%</td><td class="good">0.05%</td>
-<td>-0.14%</td><td>0.23%</td><td>51%</td><td>41</td><td>0.27</td><td class="dim">1.00</td>
+<td>0.00%</td><td class="dim">-0.08%</td><td class="good">0.08%</td>
+<td>-0.14%</td><td>0.30%</td><td>52%</td><td>42</td><td>0.44</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>2 日</td>
-<td>0.03%</td><td class="dim">-0.03%</td><td class="good">0.06%</td>
-<td>-0.23%</td><td>0.35%</td><td>44%</td><td>41</td><td>0.26</td><td class="dim">1.00</td>
+<td>0.02%</td><td class="dim">-0.08%</td><td class="good">0.10%</td>
+<td>-0.23%</td><td>0.42%</td><td>45%</td><td>42</td><td>0.43</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">港股</td><td>1 日</td>
 <td>-0.18%</td><td class="dim">-0.20%</td><td class="good">0.02%</td>
 <td>-0.05%</td><td>0.08%</td><td>47%</td><td>85</td><td>0.18</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>3 日</td>
-<td>-0.08%</td><td class="dim">0.02%</td><td class="bad">-0.10%</td>
-<td>0.49%</td><td>-0.69%</td><td>49%</td><td>26</td><td>-0.21</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>1 日</td>
-<td>-0.05%</td><td class="dim">0.00%</td><td class="bad">-0.05%</td>
-<td>-0.18%</td><td>0.07%</td><td>40%</td><td>83</td><td>-0.42</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>2 日</td>
-<td>-0.17%</td><td class="dim">0.00%</td><td class="bad">-0.17%</td>
-<td>0.27%</td><td>-0.60%</td><td>47%</td><td>39</td><td>-0.52</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.33%</td><td class="dim">0.04%</td><td class="bad">-0.38%</td>
-<td>-0.41%</td><td>-0.34%</td><td>46%</td><td>15</td><td>-0.60</td><td class="dim">1.00</td>
+<td>-0.05%</td><td class="dim">-0.04%</td><td class="bad">-0.02%</td>
+<td>-0.18%</td><td>0.15%</td><td>40%</td><td>84</td><td>-0.14</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>3 日</td>
+<td>-0.17%</td><td class="dim">-0.05%</td><td class="bad">-0.12%</td>
+<td>0.49%</td><td>-0.72%</td><td>48%</td><td>26</td><td>-0.26</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>1 日</td>
-<td>-0.06%</td><td class="dim">0.00%</td><td class="bad">-0.06%</td>
-<td>-0.14%</td><td>0.02%</td><td>42%</td><td>83</td><td>-0.61</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">美股</td><td>3 日</td>
-<td>-0.30%</td><td class="dim">0.00%</td><td class="bad">-0.31%</td>
-<td>0.06%</td><td>-0.67%</td><td>45%</td><td>27</td><td>-0.63</td><td class="dim">1.00</td>
+<td>-0.07%</td><td class="dim">-0.04%</td><td class="bad">-0.03%</td>
+<td>-0.14%</td><td>0.08%</td><td>43%</td><td>84</td><td>-0.28</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>2 日</td>
+<td>-0.26%</td><td class="dim">-0.06%</td><td class="bad">-0.20%</td>
+<td>0.25%</td><td>-0.64%</td><td>46%</td><td>39</td><td>-0.62</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.40%</td><td class="dim">0.04%</td><td class="bad">-0.45%</td>
-<td>0.44%</td><td>-1.33%</td><td>41%</td><td>16</td><td>-0.66</td><td class="dim">1.00</td>
+<td>-0.51%</td><td class="dim">-0.06%</td><td class="bad">-0.46%</td>
+<td>0.44%</td><td>-1.33%</td><td>41%</td><td>16</td><td>-0.69</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>5 日</td>
+<td>-0.50%</td><td class="dim">-0.06%</td><td class="bad">-0.44%</td>
+<td>-0.41%</td><td>-0.46%</td><td>45%</td><td>15</td><td>-0.70</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">美股</td><td>3 日</td>
+<td>-0.43%</td><td class="dim">-0.06%</td><td class="bad">-0.37%</td>
+<td>0.06%</td><td>-0.80%</td><td>44%</td><td>27</td><td>-0.76</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">港股</td><td>5 日</td>
 <td>-0.74%</td><td class="dim">-0.41%</td><td class="bad">-0.33%</td>
 <td>-0.29%</td><td>-0.36%</td><td>36%</td><td>16</td><td>-0.85</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.48%</td><td class="dim">0.04%</td><td class="bad">-0.52%</td>
-<td>0.19%</td><td>-1.23%</td><td>38%</td><td>15</td><td>-0.86</td><td class="dim">1.00</td>
+<td>-0.58%</td><td class="dim">-0.06%</td><td class="bad">-0.51%</td>
+<td>0.19%</td><td>-1.20%</td><td>39%</td><td>15</td><td>-0.86</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">美股</td><td>2 日</td>
-<td>-0.32%</td><td class="dim">-0.03%</td><td class="bad">-0.29%</td>
-<td>-0.16%</td><td>-0.41%</td><td>42%</td><td>41</td><td>-0.98</td><td class="dim">1.00</td>
+<td>-0.35%</td><td class="dim">-0.08%</td><td class="bad">-0.27%</td>
+<td>-0.16%</td><td>-0.38%</td><td>43%</td><td>41</td><td>-0.93</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.79%</td><td class="dim">0.04%</td><td class="bad">-0.84%</td>
-<td>-0.94%</td><td>-0.74%</td><td>44%</td><td>16</td><td>-0.98</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>1 日</td>
-<td>-0.18%</td><td class="dim">0.01%</td><td class="bad">-0.19%</td>
-<td>0.08%</td><td>-0.45%</td><td>47%</td><td>78</td><td>-1.08</td><td class="dim">1.00</td>
+<td>-0.90%</td><td class="dim">-0.06%</td><td class="bad">-0.84%</td>
+<td>-0.94%</td><td>-0.76%</td><td>43%</td><td>16</td><td>-1.01</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>3 日</td>
-<td>-0.46%</td><td class="dim">0.02%</td><td class="bad">-0.48%</td>
-<td>-0.67%</td><td>-0.30%</td><td>43%</td><td>26</td><td>-1.30</td><td class="dim">1.00</td>
+<td>-0.52%</td><td class="dim">-0.05%</td><td class="bad">-0.47%</td>
+<td>-0.67%</td><td>-0.27%</td><td>44%</td><td>26</td><td>-1.27</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">美股</td><td>1 日</td>
+<td>-0.27%</td><td class="dim">-0.03%</td><td class="bad">-0.24%</td>
+<td>0.08%</td><td>-0.55%</td><td>47%</td><td>79</td><td>-1.34</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">港股</td><td>3 日</td>
 <td>-0.62%</td><td class="dim">-0.30%</td><td class="bad">-0.33%</td>
 <td>-0.20%</td><td>-0.46%</td><td>39%</td><td>28</td><td>-1.43</td><td class="dim">1.00</td>
@@ -228,45 +228,45 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">港股</td><td>5 日</td>
 <td>-0.81%</td><td class="dim">-0.30%</td><td class="bad">-0.51%</td>
 <td>-0.46%</td><td>-0.56%</td><td>38%</td><td>16</td><td>-1.47</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">美股</td><td>2 日</td>
-<td>-0.57%</td><td class="dim">-0.03%</td><td class="bad">-0.55%</td>
-<td>-0.49%</td><td>-0.60%</td><td>35%</td><td>41</td><td>-1.57</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">美股</td><td>1 日</td>
+<td>-0.28%</td><td class="dim">-0.04%</td><td class="bad">-0.24%</td>
+<td>-0.05%</td><td>-0.43%</td><td>41%</td><td>83</td><td>-1.58</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">美股</td><td>3 日</td>
-<td>-0.77%</td><td class="dim">0.00%</td><td class="bad">-0.77%</td>
-<td>-0.79%</td><td>-0.75%</td><td>38%</td><td>27</td><td>-1.71</td><td class="dim">1.00</td>
+<td>-0.80%</td><td class="dim">-0.06%</td><td class="bad">-0.74%</td>
+<td>-0.79%</td><td>-0.68%</td><td>38%</td><td>27</td><td>-1.63</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">美股</td><td>2 日</td>
+<td>-0.65%</td><td class="dim">-0.08%</td><td class="bad">-0.57%</td>
+<td>-0.44%</td><td>-0.69%</td><td>34%</td><td>41</td><td>-1.65</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>2 日</td>
+<td>-0.45%</td><td class="dim">-0.06%</td><td class="bad">-0.38%</td>
+<td>-0.58%</td><td>-0.19%</td><td>40%</td><td>39</td><td>-1.66</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">港股</td><td>2 日</td>
 <td>-0.49%</td><td class="dim">-0.22%</td><td class="bad">-0.27%</td>
 <td>-0.18%</td><td>-0.36%</td><td>40%</td><td>42</td><td>-1.72</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">港股</td><td>3 日</td>
 <td>-0.66%</td><td class="dim">-0.20%</td><td class="bad">-0.47%</td>
 <td>0.07%</td><td>-1.00%</td><td>41%</td><td>26</td><td>-1.72</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">美股</td><td>1 日</td>
-<td>-0.26%</td><td class="dim">0.00%</td><td class="bad">-0.26%</td>
-<td>-0.05%</td><td>-0.48%</td><td>40%</td><td>82</td><td>-1.73</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>2 日</td>
-<td>-0.43%</td><td class="dim">0.00%</td><td class="bad">-0.42%</td>
-<td>-0.59%</td><td>-0.25%</td><td>39%</td><td>39</td><td>-1.84</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">港股</td><td>5 日</td>
 <td>-1.22%</td><td class="dim">-0.41%</td><td class="bad">-0.81%</td>
 <td>-0.64%</td><td>-0.98%</td><td>26%</td><td>16</td><td>-1.91</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">港股</td><td>3 日</td>
 <td>-0.60%</td><td class="dim">-0.20%</td><td class="bad">-0.41%</td>
 <td>-0.48%</td><td>-0.34%</td><td>31%</td><td>26</td><td>-1.95</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">美股</td><td>1 日</td>
-<td>-0.31%</td><td class="dim">0.00%</td><td class="bad">-0.31%</td>
-<td>-0.35%</td><td>-0.28%</td><td>46%</td><td>82</td><td>-1.99</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">港股</td><td>3 日</td>
 <td>-0.81%</td><td class="dim">-0.30%</td><td class="bad">-0.52%</td>
 <td>-0.42%</td><td>-0.61%</td><td>34%</td><td>28</td><td>-2.10</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>1 日動量（昨日最升）</td><td class="dim">美股</td><td>1 日</td>
+<td>-0.37%</td><td class="dim">-0.04%</td><td class="bad">-0.33%</td>
+<td>-0.35%</td><td>-0.31%</td><td>46%</td><td>83</td><td>-2.10</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">港股</td><td>2 日</td>
 <td>-0.48%</td><td class="dim">-0.16%</td><td class="bad">-0.32%</td>
 <td>-0.41%</td><td>-0.23%</td><td>28%</td><td>40</td><td>-2.25</td><td class="dim">1.00</td>
+<td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>1 日</td>
+<td>-0.36%</td><td class="dim">-0.03%</td><td class="bad">-0.34%</td>
+<td>-0.44%</td><td>-0.24%</td><td>39%</td><td>79</td><td>-2.44</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>5 日反轉（一週最跌）</td><td class="dim">港股</td><td>2 日</td>
 <td>-0.62%</td><td class="dim">-0.16%</td><td class="bad">-0.46%</td>
 <td>-0.03%</td><td>-0.88%</td><td>30%</td><td>40</td><td>-2.53</td><td class="dim">1.00</td>
-<td class="gfail">未通過</td></tr><tr><td>5 日動量（一週最升）</td><td class="dim">美股</td><td>1 日</td>
-<td>-0.35%</td><td class="dim">0.01%</td><td class="bad">-0.36%</td>
-<td>-0.44%</td><td>-0.28%</td><td>38%</td><td>78</td><td>-2.64</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td>1 日反轉（昨日最跌）</td><td class="dim">港股</td><td>2 日</td>
 <td>-0.67%</td><td class="dim">-0.22%</td><td class="bad">-0.45%</td>
 <td>-0.34%</td><td>-0.55%</td><td>33%</td><td>42</td><td>-2.75</td><td class="dim">1.00</td>
@@ -292,28 +292,28 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <div class="card scroll"><table><thead><tr><th>因子</th><th>市場</th><th>持有</th><th>頭 20%</th><th>等權</th><th>超額</th><th>前半</th><th>後半</th><th>贏等權</th><th>t</th><th>校正 p</th><th>結果</th></tr></thead><tbody>
 <tr><td>回撤最淺（低 MDD）</td><td class="dim">港股</td><td>5 日</td>
 <td>0.33%</td><td class="dim">-0.47%</td><td class="good">0.80%</td>
-<td>0.70%</td><td>0.91%</td><td>69%</td><td>1.73</td><td class="dim">0.51</td>
+<td>0.70%</td><td>0.91%</td><td>69%</td><td>1.73</td><td class="dim">0.56</td>
 <td class="gwatch">觀察</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
 <td>1.96%</td><td class="dim">-1.06%</td><td class="good">3.02%</td>
 <td>2.85%</td><td>3.35%</td><td>88%</td><td>2.15</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">港股</td><td>5 日</td>
 <td>0.19%</td><td class="dim">-0.47%</td><td class="good">0.66%</td>
-<td>0.38%</td><td>0.98%</td><td>68%</td><td>1.47</td><td class="dim">0.72</td>
+<td>0.38%</td><td>0.98%</td><td>68%</td><td>1.47</td><td class="dim">0.80</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
 <td>1.89%</td><td class="dim">-1.06%</td><td class="good">2.95%</td>
 <td>2.46%</td><td>3.88%</td><td>91%</td><td>2.12</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>低波動</td><td class="dim">美股</td><td>5 日</td>
-<td>0.51%</td><td class="dim">0.03%</td><td class="good">0.48%</td>
-<td>-0.23%</td><td>1.29%</td><td>54%</td><td>0.94</td><td class="dim">1.00</td>
+<td>0.47%</td><td class="dim">-0.07%</td><td class="good">0.53%</td>
+<td>-0.23%</td><td>1.42%</td><td>55%</td><td>1.04</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>3.00%</td><td class="dim">0.65%</td><td class="good">2.35%</td>
-<td>0.00%</td><td>6.85%</td><td>64%</td><td>0.85</td><td class="dim">—</td>
+<td>2.96%</td><td class="dim">0.52%</td><td class="good">2.44%</td>
+<td>0.11%</td><td>6.99%</td><td>65%</td><td>0.89</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>回撤最淺（低 MDD）</td><td class="dim">美股</td><td>5 日</td>
-<td>0.43%</td><td class="dim">0.03%</td><td class="good">0.40%</td>
-<td>-0.06%</td><td>0.92%</td><td>57%</td><td>1.02</td><td class="dim">1.00</td>
+<td>0.38%</td><td class="dim">-0.07%</td><td class="good">0.45%</td>
+<td>-0.04%</td><td>1.01%</td><td>58%</td><td>1.11</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>2.78%</td><td class="dim">0.65%</td><td class="good">2.14%</td>
-<td>0.61%</td><td>5.06%</td><td>73%</td><td>1.09</td><td class="dim">—</td>
+<td>2.72%</td><td class="dim">0.52%</td><td class="good">2.20%</td>
+<td>0.69%</td><td>5.14%</td><td>74%</td><td>1.13</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">港股</td><td>5 日</td>
 <td>-0.68%</td><td class="dim">-0.47%</td><td class="bad">-0.21%</td>
 <td>-0.70%</td><td>0.35%</td><td>40%</td><td>-0.73</td><td class="dim">1.00</td>
@@ -327,11 +327,11 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <td>-2.17%</td><td class="dim">-1.06%</td><td class="bad">-1.11%</td>
 <td>0.31%</td><td>-3.76%</td><td>42%</td><td>-0.50</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>週反轉（上週最差）</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.42%</td><td class="dim">0.03%</td><td class="bad">-0.45%</td>
-<td>0.14%</td><td>-1.13%</td><td>38%</td><td>-0.72</td><td class="dim">1.00</td>
+<td>-0.50%</td><td class="dim">-0.07%</td><td class="bad">-0.44%</td>
+<td>0.12%</td><td>-1.08%</td><td>39%</td><td>-0.72</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-0.10%</td><td class="dim">0.65%</td><td class="bad">-0.74%</td>
-<td>0.57%</td><td>-3.24%</td><td>48%</td><td>-0.23</td><td class="dim">—</td>
+<td>-0.29%</td><td class="dim">0.52%</td><td class="bad">-0.81%</td>
+<td>0.65%</td><td>-3.68%</td><td>48%</td><td>-0.25</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>週反轉（上週最差）</td><td class="dim">港股</td><td>5 日</td>
 <td>-1.14%</td><td class="dim">-0.47%</td><td class="bad">-0.67%</td>
 <td>-0.30%</td><td>-1.08%</td><td>32%</td><td>-1.58</td><td class="dim">1.00</td>
@@ -339,27 +339,27 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 <td>-3.09%</td><td class="dim">-1.06%</td><td class="bad">-2.03%</td>
 <td>-0.50%</td><td>-4.89%</td><td>29%</td><td>-0.92</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>Sentinel 建議（可加倉 &gt; 觀望 &gt; 減持）</td><td class="dim">Sentinel 29 隻</td><td>5 日</td>
-<td>-1.23%</td><td class="dim">-0.42%</td><td class="bad">-0.81%</td>
-<td>-0.36%</td><td>-1.34%</td><td>37%</td><td>-0.95</td><td class="dim">—</td>
+<td>-1.37%</td><td class="dim">-0.68%</td><td class="bad">-0.69%</td>
+<td>-0.36%</td><td>-1.06%</td><td>39%</td><td>-0.80</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
 <td>-1.99%</td><td class="dim">0.34%</td><td class="bad">-2.34%</td>
 <td>-0.85%</td><td>-5.16%</td><td>28%</td><td>—</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>月動量</td><td class="dim">美股</td><td>5 日</td>
-<td>-0.92%</td><td class="dim">0.03%</td><td class="bad">-0.95%</td>
-<td>-0.54%</td><td>-1.42%</td><td>39%</td><td>-1.58</td><td class="dim">1.00</td>
+<td>-0.97%</td><td class="dim">-0.07%</td><td class="bad">-0.90%</td>
+<td>-0.55%</td><td>-1.31%</td><td>40%</td><td>-1.48</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-3.10%</td><td class="dim">0.65%</td><td class="bad">-3.75%</td>
-<td>-1.71%</td><td>-7.64%</td><td>34%</td><td>-0.91</td><td class="dim">—</td>
+<td>-3.16%</td><td class="dim">0.52%</td><td class="bad">-3.69%</td>
+<td>-1.77%</td><td>-7.43%</td><td>35%</td><td>-0.89</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr><tr><td>Sharpe 最高</td><td class="dim">美股</td><td>5 日</td>
-<td>-1.58%</td><td class="dim">0.03%</td><td class="bad">-1.61%</td>
-<td>-0.37%</td><td>-3.03%</td><td>32%</td><td>-1.59</td><td class="dim">1.00</td>
+<td>-1.70%</td><td class="dim">-0.07%</td><td class="bad">-1.63%</td>
+<td>-0.38%</td><td>-3.09%</td><td>31%</td><td>-1.63</td><td class="dim">1.00</td>
 <td class="gfail">未通過</td></tr><tr><td></td><td class="dim"></td><td>20 日</td>
-<td>-5.59%</td><td class="dim">0.65%</td><td class="bad">-6.23%</td>
-<td>-2.01%</td><td>-14.30%</td><td>28%</td><td>-1.06</td><td class="dim">—</td>
+<td>-5.79%</td><td class="dim">0.52%</td><td class="bad">-6.31%</td>
+<td>-2.15%</td><td>-14.46%</td><td>28%</td><td>-1.09</td><td class="dim">—</td>
 <td class="gfail">未通過</td></tr>
 </tbody></table>
 <p class="note">方法：訊號日之後第一個收市價入場，持有 5 / 20 個交易日，扣 0.2% 來回成本；每日揀頭 20%（Sentinel 用「可加倉」對「減持」），同當日全體等權比。
-樣本按日期切半做前半 / 後半。<b>通過</b> = 前後半都正 + t ≥ 2（全部日平均超額 ÷ 非重疊窗口標準誤，H 個起點平均，結果唔受揀邊日開始影響） + <b>Holm 校正</b>（同時測 10 個檢定，校正後單尾 p < 0.05）；<b>觀察</b> = 前後半都正但 t 只有 1.5–2，或 t ≥ 2 但校正後唔夠。持有期跨越數據缺口嘅窗口唔計。
+樣本按日期切半做前半 / 後半。<b>通過</b> = 前後半都正 + t ≥ 2（全部日平均超額 ÷ 非重疊窗口標準誤，H 個起點平均，結果唔受揀邊日開始影響） + <b>Holm 校正</b>（同時測 11 個檢定，校正後單尾 p < 0.05）；<b>觀察</b> = 前後半都正但 t 只有 1.5–2，或 t ≥ 2 但校正後唔夠。持有期跨越數據缺口嘅窗口唔計。
 非重疊窗口少於 8 個（現時 20 日通常只有 1–3 個）一律唔評級，t 只作參考；校正 p 一欄「—」= 窗口太少，唔算入檢定數。</p></div>
 
 <h2 id="s2b"><span class="n">2b</span>長樣本多因子掃描（本機跑，2026-10-28 13:38:17）</h2>
@@ -433,117 +433,117 @@ div.warn{color:var(--warn)}.scroll{overflow-x:auto}nav{font-size:13px;color:var(
 勝率 = 歷史前向追蹤同類卡（方向 × RR × 止損% × 入場/ATR 分層）嘅 target 比例，timeout 當輸，再向打和勝率 1/(1+RR) 收縮 4 個虛擬樣本，取 Wilson 單尾 90% 下界；
 EV = 勝率 × (RR + 1) − 1（R 單位），rank = (EV − 成本R) × 成交率。冇歷史樣本嘅類別勝率下界一定低過打和，即係 fail closed。</p>
 <details><summary>剔除嘅 36 個（排除原因）</summary><div class="scroll"><table><thead><tr><th>標的</th><th>方向</th><th>收市</th><th>限價 entry</th><th>入場/ATR</th><th>止損/ATR</th><th>RR</th><th>勝率下界</th><th>EV</th><th>rank</th><th>共識</th><th>狀態</th></tr></thead><tbody>
-<tr><td class="tk">PL=F<div class="dim" style="font-size:11.5px">鉑金期貨 (PL)</div></td>
+<tr><td class="tk">WDC<div class="dim" style="font-size:11.5px">WDC</div></td>
+<td class="bad">沽</td>
+<td>296.78</td><td>358.55</td><td>2.3</td><td>1.50</td><td>2.35</td>
+<td>16.9%<div class="dim" style="font-size:11px">打和 29.8% · 1/2</div></td>
+<td class="bad">-0.43R</td><td>-0.112</td>
+<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.3×ATR &gt; 1</td></tr><tr><td class="tk">STX<div class="dim" style="font-size:11.5px">STX</div></td>
+<td class="bad">沽</td>
+<td>521.39</td><td>622.20</td><td>2.1</td><td>1.50</td><td>2.23</td>
+<td>17.5%<div class="dim" style="font-size:11px">打和 31.0% · 1/2</div></td>
+<td class="bad">-0.44R</td><td>-0.112</td>
+<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.1×ATR &gt; 1</td></tr><tr><td class="tk">MU<div class="dim" style="font-size:11.5px">MU</div></td>
+<td class="bad">沽</td>
+<td>690.44</td><td>843.50</td><td>2.3</td><td>1.50</td><td>2.14</td>
+<td>17.8%<div class="dim" style="font-size:11px">打和 31.8% · 1/2</div></td>
+<td class="bad">-0.44R</td><td>-0.113</td>
+<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.3×ATR &gt; 1</td></tr><tr><td class="tk">PL=F<div class="dim" style="font-size:11.5px">鉑金期貨 (PL)</div></td>
 <td class="bad">沽</td>
 <td>1308.10</td><td>1435.72</td><td>3.9</td><td>1.50</td><td>4.77</td>
 <td>7.5%<div class="dim" style="font-size:11px">打和 17.3% · 1/5</div></td>
-<td class="bad">-0.57R</td><td>-0.156</td>
+<td class="bad">-0.57R</td><td>-0.155</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 3.9×ATR &gt; 1 / RR 4.77 唔喺 1.5–3</td></tr><tr><td class="tk">HG=F<div class="dim" style="font-size:11.5px">銅期貨 (HG)</div></td>
 <td class="bad">沽</td>
 <td>5.56</td><td>5.98</td><td>3.3</td><td>1.50</td><td>3.77</td>
 <td>8.5%<div class="dim" style="font-size:11px">打和 21.0% · 1/5</div></td>
-<td class="bad">-0.59R</td><td>-0.164</td>
+<td class="bad">-0.59R</td><td>-0.163</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 3.3×ATR &gt; 1 / RR 3.77 唔喺 1.5–3</td></tr><tr><td class="tk">0005.HK<div class="dim" style="font-size:11.5px">0005.HK</div></td>
 <td class="bad">沽</td>
 <td>129.20</td><td>139.15</td><td>3.2</td><td>1.50</td><td>3.01</td>
 <td>9.6%<div class="dim" style="font-size:11px">打和 25.0% · 1/5</div></td>
-<td class="bad">-0.61R</td><td>-0.169</td>
+<td class="bad">-0.61R</td><td>-0.167</td>
 <td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 3.2×ATR &gt; 1 / RR 3.01 唔喺 1.5–3</td></tr><tr><td class="tk">XAUUSD=X<div class="dim" style="font-size:11.5px">黃金現貨 (Gold)</div></td>
 <td class="bad">沽</td>
 <td>3586.95</td><td>3797.89</td><td>2.8</td><td>1.50</td><td>3.01</td>
 <td>9.6%<div class="dim" style="font-size:11px">打和 24.9% · 1/5</div></td>
-<td class="bad">-0.61R</td><td>-0.171</td>
-<td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.8×ATR &gt; 1 / RR 3.01 唔喺 1.5–3</td></tr><tr><td class="tk">MU<div class="dim" style="font-size:11.5px">MU</div></td>
+<td class="bad">-0.61R</td><td>-0.169</td>
+<td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.8×ATR &gt; 1 / RR 3.01 唔喺 1.5–3</td></tr><tr><td class="tk">LRCX<div class="dim" style="font-size:11.5px">LRCX</div></td>
 <td class="bad">沽</td>
-<td>690.44</td><td>843.50</td><td>2.3</td><td>1.50</td><td>2.14</td>
-<td>9.0%<div class="dim" style="font-size:11px">打和 31.8% · 0/1</div></td>
-<td class="bad">-0.72R</td><td>-0.183</td>
-<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.3×ATR &gt; 1</td></tr><tr><td class="tk">STX<div class="dim" style="font-size:11.5px">STX</div></td>
-<td class="bad">沽</td>
-<td>521.39</td><td>622.20</td><td>2.1</td><td>1.50</td><td>2.23</td>
-<td>8.7%<div class="dim" style="font-size:11px">打和 31.0% · 0/1</div></td>
-<td class="bad">-0.72R</td><td>-0.184</td>
-<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.1×ATR &gt; 1</td></tr><tr><td class="tk">WDC<div class="dim" style="font-size:11.5px">WDC</div></td>
-<td class="bad">沽</td>
-<td>296.78</td><td>358.55</td><td>2.3</td><td>1.50</td><td>2.35</td>
-<td>8.2%<div class="dim" style="font-size:11px">打和 29.8% · 0/1</div></td>
-<td class="bad">-0.73R</td><td>-0.186</td>
-<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.3×ATR &gt; 1</td></tr><tr><td class="tk">2269.HK<div class="dim" style="font-size:11.5px">2269.HK</div></td>
+<td>203.68</td><td>235.37</td><td>1.8</td><td>1.25</td><td>2.33</td>
+<td>17.0%<div class="dim" style="font-size:11px">打和 30.1% · 1/2</div></td>
+<td class="bad">-0.43R</td><td>-0.190</td>
+<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 1.8×ATR &gt; 1</td></tr><tr><td class="tk">2269.HK<div class="dim" style="font-size:11.5px">2269.HK</div></td>
 <td class="bad">沽</td>
 <td>40.96</td><td>46.80</td><td>2.1</td><td>1.20</td><td>2.66</td>
 <td>5.9%<div class="dim" style="font-size:11px">打和 27.3% · 0/2</div></td>
-<td class="bad">-0.78R</td><td>-0.203</td>
+<td class="bad">-0.78R</td><td>-0.201</td>
 <td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.1×ATR &gt; 1</td></tr><tr><td class="tk">GC=F<div class="dim" style="font-size:11.5px">黃金期貨 (GC)</div></td>
 <td class="bad">沽</td>
 <td>3590.30</td><td>3805.44</td><td>2.0</td><td>1.50</td><td>2.18</td>
 <td>7.3%<div class="dim" style="font-size:11px">打和 31.4% · 0/2</div></td>
-<td class="bad">-0.77R</td><td>-0.204</td>
+<td class="bad">-0.77R</td><td>-0.202</td>
 <td class="dim">0.75</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.0×ATR &gt; 1</td></tr><tr><td class="tk">SI=F<div class="dim" style="font-size:11.5px">白銀期貨 (SI)</div></td>
 <td class="bad">沽</td>
 <td>42.53</td><td>47.26</td><td>2.8</td><td>1.50</td><td>3.45</td>
 <td>4.3%<div class="dim" style="font-size:11px">打和 22.5% · 0/2</div></td>
-<td class="bad">-0.81R</td><td>-0.211</td>
+<td class="bad">-0.81R</td><td>-0.209</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.8×ATR &gt; 1 / RR 3.45 唔喺 1.5–3</td></tr><tr><td class="tk">SLV<div class="dim" style="font-size:11.5px">白銀ETF (SLV)</div></td>
 <td class="bad">沽</td>
 <td>39.64</td><td>43.91</td><td>2.8</td><td>1.50</td><td>3.41</td>
 <td>4.4%<div class="dim" style="font-size:11px">打和 22.7% · 0/2</div></td>
-<td class="bad">-0.81R</td><td>-0.211</td>
+<td class="bad">-0.81R</td><td>-0.209</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.8×ATR &gt; 1 / RR 3.41 唔喺 1.5–3</td></tr><tr><td class="tk">PA=F<div class="dim" style="font-size:11.5px">鈀金期貨 (PA)</div></td>
 <td class="bad">沽</td>
 <td>907.00</td><td>982.38</td><td>2.6</td><td>1.50</td><td>3.78</td>
 <td>3.9%<div class="dim" style="font-size:11px">打和 20.9% · 0/2</div></td>
-<td class="bad">-0.82R</td><td>-0.215</td>
+<td class="bad">-0.82R</td><td>-0.213</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.6×ATR &gt; 1 / RR 3.78 唔喺 1.5–3</td></tr><tr><td class="tk">2840.HK<div class="dim" style="font-size:11.5px">SPDR金ETF (2840)</div></td>
 <td class="bad">沽</td>
 <td>2566.00</td><td>2725.25</td><td>2.4</td><td>1.50</td><td>2.65</td>
 <td>5.1%<div class="dim" style="font-size:11px">打和 27.4% · 0/3</div></td>
-<td class="bad">-0.82R</td><td>-0.218</td>
+<td class="bad">-0.82R</td><td>-0.216</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.4×ATR &gt; 1</td></tr><tr><td class="tk">2388.HK<div class="dim" style="font-size:11.5px">2388.HK</div></td>
 <td class="bad">沽</td>
 <td>46.50</td><td>49.89</td><td>3.1</td><td>1.50</td><td>2.76</td>
 <td>4.8%<div class="dim" style="font-size:11px">打和 26.6% · 0/3</div></td>
-<td class="bad">-0.82R</td><td>-0.220</td>
+<td class="bad">-0.82R</td><td>-0.218</td>
 <td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 3.1×ATR &gt; 1</td></tr><tr><td class="tk">GBPUSD=X<div class="dim" style="font-size:11.5px">英鎊/美元 (GBP/USD)</div></td>
 <td class="bad">沽</td>
 <td>1.31</td><td>1.33</td><td>2.1</td><td>1.50</td><td>2.55</td>
 <td>8.5%<div class="dim" style="font-size:11px">打和 28.2% · 1/7</div></td>
-<td class="bad">-0.70R</td><td>-0.223</td>
+<td class="bad">-0.70R</td><td>-0.221</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.1×ATR &gt; 1</td></tr><tr><td class="tk">EURJPY=X<div class="dim" style="font-size:11.5px">歐元/日圓 (EUR/JPY)</div></td>
 <td class="bad">沽</td>
 <td>174.09</td><td>176.94</td><td>2.4</td><td>1.50</td><td>2.78</td>
 <td>8.1%<div class="dim" style="font-size:11px">打和 26.5% · 1/7</div></td>
-<td class="bad">-0.69R</td><td>-0.223</td>
+<td class="bad">-0.69R</td><td>-0.221</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.4×ATR &gt; 1</td></tr><tr><td class="tk">EURUSD=X<div class="dim" style="font-size:11.5px">歐元/美元 (EUR/USD)</div></td>
 <td class="bad">沽</td>
 <td>1.10</td><td>1.11</td><td>2.2</td><td>1.50</td><td>2.66</td>
 <td>8.3%<div class="dim" style="font-size:11px">打和 27.4% · 1/7</div></td>
-<td class="bad">-0.69R</td><td>-0.224</td>
+<td class="bad">-0.69R</td><td>-0.222</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.2×ATR &gt; 1</td></tr><tr><td class="tk">2359.HK<div class="dim" style="font-size:11.5px">2359.HK</div></td>
 <td class="bad">沽</td>
 <td>181.50</td><td>208.99</td><td>2.4</td><td>0.50</td><td>6.65</td>
 <td>2.1%<div class="dim" style="font-size:11px">打和 13.1% · 0/1</div></td>
-<td class="bad">-0.84R</td><td>-0.228</td>
+<td class="bad">-0.84R</td><td>-0.226</td>
 <td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.4×ATR &gt; 1 / 止損 0.50×ATR &lt; 1 / RR 6.65 唔喺 1.5–3</td></tr><tr><td class="tk">GBPJPY=X<div class="dim" style="font-size:11.5px">英鎊/日圓 (GBP/JPY)</div></td>
 <td class="bad">沽</td>
 <td>208.15</td><td>211.72</td><td>2.7</td><td>1.50</td><td>3.11</td>
 <td>2.9%<div class="dim" style="font-size:11px">打和 24.3% · 0/6</div></td>
-<td class="bad">-0.88R</td><td>-0.273</td>
+<td class="bad">-0.88R</td><td>-0.271</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.7×ATR &gt; 1 / RR 3.11 唔喺 1.5–3</td></tr><tr><td class="tk">CADJPY=X<div class="dim" style="font-size:11.5px">加元/日圓 (CAD/JPY)</div></td>
 <td class="bad">沽</td>
 <td>110.89</td><td>112.70</td><td>2.7</td><td>1.50</td><td>3.60</td>
 <td>2.4%<div class="dim" style="font-size:11px">打和 21.7% · 0/6</div></td>
-<td class="bad">-0.89R</td><td>-0.278</td>
+<td class="bad">-0.89R</td><td>-0.276</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.7×ATR &gt; 1 / RR 3.60 唔喺 1.5–3</td></tr><tr><td class="tk">DX-Y.NYB<div class="dim" style="font-size:11.5px">美元指數 (DXY)</div></td>
 <td class="good">買</td>
 <td>103.89</td><td>102.45</td><td>2.7</td><td>3.74</td><td>1.35</td>
 <td>18.0%<div class="dim" style="font-size:11px">打和 42.6% · 0/0</div></td>
 <td class="bad">-0.58R</td><td>-0.308</td>
-<td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.7×ATR &gt; 1 / RR 1.35 唔喺 1.5–3</td></tr><tr><td class="tk">LRCX<div class="dim" style="font-size:11.5px">LRCX</div></td>
-<td class="bad">沽</td>
-<td>203.68</td><td>235.37</td><td>1.8</td><td>1.25</td><td>2.33</td>
-<td>8.3%<div class="dim" style="font-size:11px">打和 30.1% · 0/1</div></td>
-<td class="bad">-0.73R</td><td>-0.311</td>
-<td class="dim">-0.25</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 1.8×ATR &gt; 1</td></tr><tr><td class="tk">BTC-USD<div class="dim" style="font-size:11.5px">比特幣 (BTC)</div></td>
+<td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">入場離市價 2.7×ATR &gt; 1 / RR 1.35 唔喺 1.5–3</td></tr><tr><td class="tk">BTC-USD<div class="dim" style="font-size:11.5px">比特幣 (BTC)</div></td>
 <td class="bad">沽</td>
 <td>61778.73</td><td>65187.96</td><td>1.3</td><td>1.50</td><td>2.24</td>
 <td>8.6%<div class="dim" style="font-size:11px">打和 30.9% · 0/1</div></td>
@@ -615,29 +615,29 @@ EV = 勝率 × (RR + 1) − 1（R 單位），rank = (EV − 成本R) × 成交�
 <td class="bad">—R</td><td>—</td>
 <td class="dim">0.00</td><td class="tEXCLUDED">剔除</td></tr><tr><td colspan="12" class="bad" style="text-align:left;font-size:12.5px">RR 無效 (rr_valid=false) / 淨 RR 無效 (net_rr_valid=false) / RR &lt; 1 / net_ev ≤ 0</td></tr>
 </tbody></table></div></details>
-<div class="dim" style="font-size:12.5px">修正後（2026-10-17 起）乾淨訊號結算 8/20 筆獨立交易（原始 24 行，重發訊號合併），平均 -0.55R（未夠，未確認）。</div></div>
+<div class="dim" style="font-size:12.5px">修正後（2026-10-17 起）乾淨訊號結算 10/20 筆獨立交易（原始 26 行，重發訊號合併），平均 -0.01R（未夠，未確認）。</div></div>
 
 <h2 id="s5"><span class="n">5</span>PMFX 前向追蹤 — 訊號之後實際發生咩事</h2>
 <div class="card"><div class="grid">
 <div class="kv"><span>追蹤訊號（獨立）</span><b>365</b><span class="dim">原始 2104 行</span></div>
 <div class="kv"><span>限價有成交（獨立持倉）</span><b>122</b><span class="dim">原始 724 行</span></div>
-<div class="kv"><span>20 日內冇成交</span><b class="dim">174</b></div>
-<div class="kv"><span>到目標 / 止損</span><b><span class="good">7</span> / <span class="bad">74</span></b></div>
+<div class="kv"><span>20 日內冇成交</span><b class="dim">175</b></div>
+<div class="kv"><span>到目標 / 止損</span><b><span class="good">9</span> / <span class="bad">74</span></b></div>
 <div class="kv"><span>平均 5 日（扣成本）</span><b class="bad">-0.06%</b></div>
-<div class="kv"><span>每筆實現 R 中位（已結算）</span><b class="bad">-1.25R</b></div>
+<div class="kv"><span>每筆實現 R 中位（已結算）</span><b class="bad">-1.24R</b></div>
 </div>
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>組別 / 累加 gate</th><th>訊號行</th><th>獨立持倉</th><th>已結算</th><th>勝率</th><th>平均 5 日</th><th>平均 20 日</th></tr></thead><tbody>
-<tr><td>全部有 EV 訊號</td><td class="dim">2104</td><td>122</td><td>81</td>
-<td class="bad">8.6%</td><td>-0.06%</td><td>-2.48%</td></tr><tr><td>net_ev &gt; 0</td><td class="dim">2104</td><td>122</td><td>81</td>
-<td class="bad">8.6%</td><td>-0.06%</td><td>-2.48%</td></tr><tr><td>+ rr_valid</td><td class="dim">1840</td><td>118</td><td>77</td>
-<td class="bad">7.8%</td><td>-0.33%</td><td>-3.29%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td class="dim">1840</td><td>118</td><td>77</td>
-<td class="bad">7.8%</td><td>-0.33%</td><td>-3.29%</td></tr><tr><td>+ 引擎無 error</td><td class="dim">541</td><td>21</td><td>8</td>
-<td class="bad">12.5%</td><td>1.31%</td><td>—</td></tr><tr><td>+ 止損 ≤ 5%</td><td class="dim">385</td><td>12</td><td>5</td>
-<td class="bad">20%</td><td>2.01%</td><td>—</td></tr><tr><td>每日 net_ev 頭 1 名</td><td class="dim">90</td><td>9</td><td>8</td>
+<tr><td>全部有 EV 訊號</td><td class="dim">2104</td><td>122</td><td>83</td>
+<td class="bad">10.8%</td><td>-0.06%</td><td>-2.48%</td></tr><tr><td>net_ev &gt; 0</td><td class="dim">2104</td><td>122</td><td>83</td>
+<td class="bad">10.8%</td><td>-0.06%</td><td>-2.48%</td></tr><tr><td>+ rr_valid</td><td class="dim">1840</td><td>118</td><td>79</td>
+<td class="bad">10.1%</td><td>-0.33%</td><td>-3.29%</td></tr><tr><td>+ 止損 ≥ 0.3%</td><td class="dim">1840</td><td>118</td><td>79</td>
+<td class="bad">10.1%</td><td>-0.33%</td><td>-3.29%</td></tr><tr><td>+ 引擎無 error</td><td class="dim">541</td><td>21</td><td>10</td>
+<td class="bad">30%</td><td>1.31%</td><td>-1.33%</td></tr><tr><td>+ 止損 ≤ 5%</td><td class="dim">385</td><td>12</td><td>5</td>
+<td class="bad">20%</td><td>2.01%</td><td>-1.33%</td></tr><tr><td>每日 net_ev 頭 1 名</td><td class="dim">90</td><td>9</td><td>8</td>
 <td class="bad">0%</td><td>2.53%</td><td>0.54%</td></tr><tr><td>每日 net_ev 尾 1 名</td><td class="dim">90</td><td>8</td><td>4</td>
 <td class="bad">0%</td><td>-0.84%</td><td>-0.49%</td></tr><tr><td>全部做多</td><td class="dim">877</td><td>73</td><td>46</td>
-<td class="bad">4.3%</td><td>-1.13%</td><td>-4.46%</td></tr><tr><td>全部做空</td><td class="dim">1227</td><td>49</td><td>35</td>
-<td class="bad">14.3%</td><td>1.53%</td><td>1.15%</td></tr>
+<td class="bad">4.3%</td><td>-1.13%</td><td>-4.46%</td></tr><tr><td>全部做空</td><td class="dim">1227</td><td>49</td><td>37</td>
+<td class="bad">18.9%</td><td>1.53%</td><td>1.03%</td></tr>
 </tbody></table></div>
 <p class="note">回報由限價 entry <b>成交之後</b>先計（收市價觸及 entry 先算成交，20 個交易日內冇觸及 = 冇成交）。
 出場用 stop-first：每日（包括成交當日）先查止損再查目標，止損用嗰日實際收市出場（跳空會蝕多過 1R）。repo 只有日收市，盤中觸及嘅止損漏計，所以結果仍然偏樂觀。加 gate 之後勝率或回報下跌 = gate 冇用。
@@ -771,7 +771,7 @@ PMFX 每日重發同一筆交易：「獨立持倉」= 同 ticker＋方向持倉
 <div class="card">
 <p><b>未解決 0 項</b>（有補回或修復路徑，見各項說明）</p><div class="dim" style="font-size:13.5px">冇</div><p style="margin-top:10px"><b>已知限制 6 項</b>（補唔到或補咗都用唔到；已寫明原因同對結論嘅影響，唔係被隱藏）</p><div class="dim" style="font-size:13.5px;margin:3px 0">⊘ <b>sentinel</b>：2026-07-10 → 2026-07-31 缺 21 日數據：本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計</div><div class="dim" style="font-size:13.5px;margin:3px 0">⊘ <b>sentinel</b>：2026-09-01 → 2026-09-09 缺 8 日數據：本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計</div><div class="dim" style="font-size:13.5px;margin:3px 0">⊘ <b>pmfx</b>：2026-07-16 → 2026-07-31 缺 15 日 PMFX 數據；呢段喺上游 bug 時期（至 2026-10-16，行內 error 欄非空，gate 一律排除），即使補到原檔都用唔到，所以唔補</div><div class="dim" style="font-size:13.5px;margin:3px 0">⊘ <b>macro</b>：2026-07-10 → 2026-07-31 缺 21 日數據：macro 抽自 Sentinel summary，同批缺口；本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計</div><div class="dim" style="font-size:13.5px;margin:3px 0">⊘ <b>macro</b>：2026-09-01 → 2026-09-09 缺 8 日數據：macro 抽自 Sentinel summary，同批缺口；本機 mirror／iCloud archive／Obsidian vault（94 檔，最早 2026-09-22，只有摘要筆記）搵唔到原檔，成因未證實（已喺本機搜過確認，見 data/known_gaps.csv）；跨越呢段嘅持有期唔計</div><div class="dim" style="font-size:13.5px;margin:3px 0">⊘ <b>pmfx</b>：2304/3240 行 error 欄非空（2026-06-18 至 2026-10-16，上游 bug，已修；最新一日 2026-11-20 已冇 error）。歷史行冇得重新判斷：error 行嘅風險欄缺失、止損距離亦受影響，gate 一律排除。放寬測試：error 行但通過其餘 gate 規則嘅 1147 個訊號，成交 88，5 日平均 -0.71%，29/88 為正 → 放寬都冇 edge，gate 唔算過嚴。乾淨樣本要等新數據累積</div><p style="margin-top:10px"><b>已處理 6 項</b>（數據有缺陷，但已喺計算入面修正或排除）</p><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：APH 2026-09-03 → 2026-09-09 疑似 2:1 拆股（單日跌幅 &gt; 30% 而且前後價比 ≈ 2），前向回報已按拆股調整</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>hk</b>：87 行收市價已由 data/backfill/corrections.csv 更正（2026-06-26 上游抓咗上一交易日收市；原始 CSV 不動）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>hk</b>：2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 12 日，持有期可計（呢段冇訊號、冇 mdd 等欄；唔事後重建，會用到未來數據；本機搵到原檔先可還原：node scripts/gap_sources.mjs）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：2026-07-16 → 2026-07-31 缺 15 日訊號數據；收市價已由 backfill 補 12 日，持有期可計（呢段冇訊號、冇 mdd 等欄；唔事後重建，會用到未來數據；本機搵到原檔先可還原：node scripts/gap_sources.mjs）</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>pmfx</b>：44/770 行 close 同 quant 相差 &gt; 1%（2026-06-26、2026-07-06、2026-08-04、2026-08-18、2026-09-23、2026-10-16、2026-10-17、2026-10-22、2026-10-28、2026-11-05、2026-11-09），係上一行數據；前向追蹤已改用 quant 收市價</div><div class="dim" style="font-size:13.5px;margin:3px 0">✓ <b>us</b>：94 行 close 為空（2026-07-15，上游當日抓價失敗）；已由 backfill 補返，只影響用呢日做入場／出場價嘅窗口</div>
 <div class="scroll"><table style="margin-top:10px"><thead><tr><th>來源</th><th>行數</th><th>日數</th><th>首日</th><th>末日</th><th>重複</th></tr></thead><tbody>
-<tr><td>hk</td><td>8526</td><td>87</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>us</td><td>8415</td><td>85</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>sentinel</td><td>1102</td><td>38</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>pmfx</td><td>3240</td><td>90</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>macro</td><td>38</td><td>38</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr>
+<tr><td>hk</td><td>8526</td><td>87</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>us</td><td>8514</td><td>86</td><td>2026-06-18</td><td>2026-11-21</td><td class="dim">0</td></tr><tr><td>sentinel</td><td>1102</td><td>38</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>pmfx</td><td>3240</td><td>90</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr><tr><td>macro</td><td>38</td><td>38</td><td>2026-06-18</td><td>2026-11-20</td><td class="dim">0</td></tr>
 </tbody></table></div>
 <div class="dim" style="font-size:12.5px;margin-top:10px">PMFX 每日 error 行比例（紅 = 有異常）</div>
 <div class="spark"><i class="e" style="height:100%" title="2026-08-31: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-03: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-04: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-10: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-11: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-16: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-17: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-18: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-21: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-22: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-23: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-24: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-25: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-28: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-29: 36/36 異常"></i><i class="e" style="height:100%" title="2026-09-30: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-01: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-02: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-05: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-06: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-07: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-08: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-09: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-12: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-13: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-14: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-15: 36/36 異常"></i><i class="e" style="height:100%" title="2026-10-16: 36/36 異常"></i><i class="" style="height:2%" title="2026-10-17: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-19: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-20: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-21: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-22: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-23: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-26: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-27: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-28: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-29: 0/36 異常"></i><i class="" style="height:2%" title="2026-10-30: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-02: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-03: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-04: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-05: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-06: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-09: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-10: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-11: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-12: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-13: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-16: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-17: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-18: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-19: 0/36 異常"></i><i class="" style="height:2%" title="2026-11-20: 0/36 異常"></i></div>
